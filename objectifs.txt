@@ -1,0 +1,43 @@
+
+template eCommerce
+ 
+responsive
+
+un menu 
+
+un espace pour le logo 
+
+un entete
+
+un carroussel 
+
+page descriptif d'activité // message sympe en mode je vend tel produit 
+
+page mentions légales
+
+
+3 tailles  grande(pc) moyenne(tablette) petite(téléphone)
+
+PC : 1025+
+
+categories cards  192x192 separations 48px 6 elements par ligne
+
+item-cards  320 x 448px image 320x256x title center  stars 0.5rem depuis la gauche; séparation 1rem puis 0.5rem a droite boutton price center
+
+
+
+
+tablet : 768-1024px   1024*576
+
+mobile : 767-         767*431
+
+
+
+
+
+PAGE D ACCUEIL - done 
+
+page panier - à faire
+
+page dedails - en cours
+
