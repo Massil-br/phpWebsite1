@@ -1,6 +1,4 @@
-<?php require_once './includes/header.php'; 
-    require_once './includes/footer.php';
-?>
+
 
 
 <!DOCTYPE html>
@@ -9,12 +7,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Template</title>
-    <link rel="stylesheet" href="./style.css">
-    <link rel="icon" href="">
-    
+    <link rel="icon" href="./assets/logo.png">
+    <link rel="stylesheet" href="./static/style.css">
 </head>
 <body>
     
+    <?php require_once './includes/header.php'; ?>
         <!-- categories -->
     <div>
         <div class="categories">
@@ -164,10 +162,7 @@
         </div>
  
     </div>
-
-
-
-
+    <?php require_once './includes/footer.php'; ?>
 
 </body>
 </html>

@@ -12,6 +12,7 @@
     --card-color:#f6f6f6;
     --bouton-color:#ffcb74;
     --card-text-color:#111111;
+    --details-background: #1f1f1f;
 
     /* text sizes*/
 
@@ -71,7 +72,7 @@ h3{
 }
 
 header, footer{
-    width:99vw;
+    width:100vw;
     background-color: var(--header-footer-color);
 }
 

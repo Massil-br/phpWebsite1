@@ -1,7 +1,6 @@
 
 
 
-
 <!-- header  -->
 <header class="headContainer">
 
@@ -37,7 +36,7 @@
     <!-- bottom header -->
     <div class="flex-container">
         <a class="navItem" href="./index.php">HOME</a>
-        <a class="navItem" href="./index.php">HOME</a>
+        <a class="navItem" href="./product.php">PRODUCT</a>
         <a class="navItem" href="./index.php">HOME</a>
     </div>
 
