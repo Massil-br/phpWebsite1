@@ -57,5 +57,5 @@
 
 
 <script src="./static/product.js" defer></script>
-
+<script src="./static/backGroundAnimation.js"></script>
 </html>

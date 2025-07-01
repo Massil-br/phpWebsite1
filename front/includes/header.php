@@ -2,6 +2,7 @@
 
 
 <!-- header  -->
+ <canvas id="background"></canvas>
 <header class="headContainer">
 
     <!-- top header -->
@@ -39,5 +40,7 @@
         <a class="navItem" href="./product.php">PRODUCT</a>
         <a class="navItem" href="./index.php">HOME</a>
     </div>
+
+  
 
 </header>

@@ -160,9 +160,9 @@
                 </div>
             </div>
         </div>
- 
+
     </div>
     <?php require_once './includes/footer.php'; ?>
-
+    <script src="./static/backGroundAnimation.js" defer></script>
 </body>
 </html>

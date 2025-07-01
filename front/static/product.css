@@ -93,10 +93,11 @@
     border-radius: 15px;
     border: transparent, 4px;
     cursor:pointer;
-    transition:transform 1s ease;
+    transition:transform 0.5s ease;
 }
 .bot-right-buy button:hover{
     border:solid;
     transform: scale(1.1);
+    transform: rotateX(360deg);
     animation: borderColorCycle 8s linear infinite;
 }
