@@ -1,6 +1,3 @@
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,10 +8,10 @@
     <link rel="stylesheet" href="./static/style.css">
 </head>
 <body>
-    
     <?php require_once './includes/header.php'; ?>
+        
         <!-- categories -->
-    <div>
+    <div id="main">
         <div class="categories">
             <div class="category">
                 <a href="./products/category=category1">
@@ -53,116 +50,113 @@
                 </a>
             </div>
         </div>
-        
         <!-- products suggestions-->
-
-        <div>
-            <div class="products-container">
-                <div class="product">
-                    <a href="./products/id=?">
-                        <img src="./assets/shoes.png" alt="shoes">
-                        <h3>Shoes Jordan</h3>
-                        <div class="stars">
-                            <img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/star-half.png" alt=""><img src="./assets/starEmpty.png" alt="">
-                        </div>
-                        <h2>199$</h2>
-                    </a>
-                </div>
-                <div class="product">
-                    <a href="./products/id=?">
-                        <img src="./assets/shoes.png" alt="shoes">
-                        <h3>Shoes Jordan</h3>
-                        <div class="stars">
-                            <img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/star-half.png" alt=""><img src="./assets/starEmpty.png" alt="">
-                        </div>
-                        <h2>199$</h2>
-                    </a>
-                </div>
-                <div class="product">
-                    <a href="./products/id=?">
-                        <img src="./assets/shoes.png" alt="shoes">
-                        <h3>Shoes Jordan</h3>
-                        <div class="stars">
-                            <img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/star-half.png" alt=""><img src="./assets/starEmpty.png" alt="">
-                        </div>
-                        <h2>199$</h2>
-                    </a>
-                </div>
-                <div class="product">
-                    <a href="./products/id=?">
-                        <img src="./assets/shoes.png" alt="shoes">
-                        <h3>Shoes Jordan</h3>
-                        <div class="stars">
-                            <img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/star-half.png" alt=""><img src="./assets/starEmpty.png" alt="">
-                        </div>
-                        <h2>199$</h2>
-                    </a>
-                </div>
-                <div class="product">
-                    <a href="./products/id=?">
-                        <img src="./assets/shoes.png" alt="shoes">
-                        <h3>Shoes Jordan</h3>
-                        <div class="stars">
-                            <img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/star-half.png" alt=""><img src="./assets/starEmpty.png" alt="">
-                        </div>
-                        <h2>199$</h2>
-                    </a>
-                </div>
-                <div class="product">
-                    <a href="./products/id=?">
-                        <img src="./assets/shoes.png" alt="shoes">
-                        <h3>Shoes Jordan</h3>
-                        <div class="stars">
-                            <img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/star-half.png" alt=""><img src="./assets/starEmpty.png" alt="">
-                        </div>
-                        <h2>199$</h2>
-                    </a>
-                </div>
-                <div class="product">
-                    <a href="./products/id=?">
-                        <img src="./assets/shoes.png" alt="shoes">
-                        <h3>Shoes Jordan</h3>
-                        <div class="stars">
-                            <img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/star-half.png" alt=""><img src="./assets/starEmpty.png" alt="">
-                        </div>
-                        <h2>199$</h2>
-                    </a>
-                </div>
-                <div class="product">
-                    <a href="./products/id=?">
-                        <img src="./assets/shoes.png" alt="shoes">
-                        <h3>Shoes Jordan</h3>
-                        <div class="stars">
-                            <img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/star-half.png" alt=""><img src="./assets/starEmpty.png" alt="">
-                        </div>
-                        <h2>199$</h2>
-                    </a>
-                </div>
-                <div class="product">
-                    <a href="./products/id=?">
-                        <img src="./assets/shoes.png" alt="shoes">
-                        <h3>Shoes Jordan</h3>
-                        <div class="stars">
-                            <img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/star-half.png" alt=""><img src="./assets/starEmpty.png" alt="">
-                        </div>
-                        <h2>199$</h2>
-                    </a>
-                </div>
-                <div class="product">
-                    <a href="./products/id=?">
-                        <img src="./assets/shoes.png" alt="shoes">
-                        <h3>Shoes Jordan</h3>
-                        <div class="stars">
-                            <img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/star-half.png" alt=""><img src="./assets/starEmpty.png" alt="">
-                        </div>
-                        <h2>199$</h2>
-                    </a>
-                </div>
+        <div class="products-container">
+            <div class="product">
+                <a href="./products/id=?">
+                    <img src="./assets/shoes.png" alt="shoes">
+                    <h3>Shoes Jordan</h3>
+                    <div class="stars">
+                        <img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/star-half.png" alt=""><img src="./assets/starEmpty.png" alt="">
+                    </div>
+                    <h2>199$</h2>
+                </a>
+            </div>
+            <div class="product">
+                <a href="./products/id=?">
+                    <img src="./assets/shoes.png" alt="shoes">
+                    <h3>Shoes Jordan</h3>
+                    <div class="stars">
+                        <img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/star-half.png" alt=""><img src="./assets/starEmpty.png" alt="">
+                    </div>
+                    <h2>199$</h2>
+                </a>
+            </div>
+            <div class="product">
+                <a href="./products/id=?">
+                    <img src="./assets/shoes.png" alt="shoes">
+                    <h3>Shoes Jordan</h3>
+                    <div class="stars">
+                        <img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/star-half.png" alt=""><img src="./assets/starEmpty.png" alt="">
+                    </div>
+                    <h2>199$</h2>
+                </a>
+            </div>
+            <div class="product">
+                <a href="./products/id=?">
+                    <img src="./assets/shoes.png" alt="shoes">
+                    <h3>Shoes Jordan</h3>
+                    <div class="stars">
+                        <img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/star-half.png" alt=""><img src="./assets/starEmpty.png" alt="">
+                    </div>
+                    <h2>199$</h2>
+                </a>
+            </div>
+            <div class="product">
+                <a href="./products/id=?">
+                    <img src="./assets/shoes.png" alt="shoes">
+                    <h3>Shoes Jordan</h3>
+                    <div class="stars">
+                        <img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/star-half.png" alt=""><img src="./assets/starEmpty.png" alt="">
+                    </div>
+                    <h2>199$</h2>
+                </a>
+            </div>
+            <div class="product">
+                <a href="./products/id=?">
+                    <img src="./assets/shoes.png" alt="shoes">
+                    <h3>Shoes Jordan</h3>
+                    <div class="stars">
+                        <img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/star-half.png" alt=""><img src="./assets/starEmpty.png" alt="">
+                    </div>
+                    <h2>199$</h2>
+                </a>
+            </div>
+            <div class="product">
+                <a href="./products/id=?">
+                    <img src="./assets/shoes.png" alt="shoes">
+                    <h3>Shoes Jordan</h3>
+                    <div class="stars">
+                        <img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/star-half.png" alt=""><img src="./assets/starEmpty.png" alt="">
+                    </div>
+                    <h2>199$</h2>
+                </a>
+            </div>
+            <div class="product">
+                <a href="./products/id=?">
+                    <img src="./assets/shoes.png" alt="shoes">
+                    <h3>Shoes Jordan</h3>
+                    <div class="stars">
+                        <img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/star-half.png" alt=""><img src="./assets/starEmpty.png" alt="">
+                    </div>
+                    <h2>199$</h2>
+                </a>
+            </div>
+            <div class="product">
+                <a href="./products/id=?">
+                    <img src="./assets/shoes.png" alt="shoes">
+                    <h3>Shoes Jordan</h3>
+                    <div class="stars">
+                        <img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/star-half.png" alt=""><img src="./assets/starEmpty.png" alt="">
+                    </div>
+                    <h2>199$</h2>
+                </a>
+            </div>
+            <div class="product">
+                <a href="./products/id=?">
+                    <img src="./assets/shoes.png" alt="shoes">
+                    <h3>Shoes Jordan</h3>
+                    <div class="stars">
+                        <img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/star-half.png" alt=""><img src="./assets/starEmpty.png" alt="">
+                    </div>
+                    <h2>199$</h2>
+                </a>
             </div>
         </div>
 
     </div>
     <?php require_once './includes/footer.php'; ?>
     <script src="./static/backGroundAnimation.js" defer></script>
+    <script src="./static/toggleNavBar.js" defer></script>
 </body>
 </html>

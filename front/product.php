@@ -1,8 +1,3 @@
-<?php
-    require_once './includes/header.php';
-    
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,15 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product detail</title>
     <link rel="icon" href="./assets/logo.png">
-    <link rel="stylesheet" href="./static/product.css">
+    <link rel="stylesheet" href="./static/style.css">
 </head>
 
 <body>
-    
+<?php require_once './includes/header.php';?>
+<div id="main">
     <!-- carroussel -->
-    <div class="flex-container">
-
-    
+    <div class="flex-container wrap">
         <div id="carrousel">
         <div id="carrousel-container">
             <img src="./assets/carrousel/im1.webp" alt="">
@@ -48,14 +42,14 @@
          </div>
 
     </div>
+</div>
     
-
-
 <?php require_once './includes/footer.php'; ?>
 </body>
 
 
 
-<script src="./static/product.js" defer></script>
+<script src="./static/carrousel.js" defer></script>
+<script src="./static/toggleNavBar.js"></script>
 <script src="./static/backGroundAnimation.js"></script>
 </html>
