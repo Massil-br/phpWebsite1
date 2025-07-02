@@ -9,35 +9,66 @@ un espace pour le logo
 
 un entete
 
-un carroussel 
-
-page descriptif d'activité // message sympe en mode je vend tel produit 
-
-page mentions légales
 
 
-3 tailles  grande(pc) moyenne(tablette) petite(téléphone)
-
-PC : 1025+
-
-categories cards  192x192 separations 48px 6 elements par ligne
-
-item-cards  320 x 448px image 320x256x title center  stars 0.5rem depuis la gauche; séparation 1rem puis 0.5rem a droite boutton price center
+classification par catégories : 
 
 
+Grandes catégories
+ex vetement
 
 
-tablet : 768-1024px   1024*576
+sous catégroies 1 :
+haut
 
-mobile : 767-         767*431
+sous catégorie 2:
+polo, t-shirt 
+
+filtres: 
+été
 
 
 
 
 
-PAGE D ACCUEIL - done 
 
-page panier - à faire
 
-page dedails - en cours
 
+
+catalogue guide de tailles
+
+
+comparateurs de prix / ou autres
+
+
+
+user : massil
+
+address( reliée a un user id )
+
+id- massil.id 45rue du jspquoi
+
+
+category
+
+vetement
+
+
+subcategory (reliée a category)
+
+haut - vetement.id
+
+product ( reliée a subcategory)
+
+polo - haut.id
+
+product_image(reliée a product)
+    image1 - polo.id
+
+attribute
+
+couleur 
+
+product_attribute( reliée a un attribute et un product)
+
+jaune - couleur.id && polo.id
