@@ -56,8 +56,15 @@
 
 
 body,html{
+    display: flex;
+    flex-direction: column;
     background: transparent;
     color:var(--text-color);
+    min-height: 100vh;
+}
+
+#main{
+    flex-grow: 1;
 }
 
 #background {
@@ -434,6 +441,29 @@ a{
 
 .wrap{
     flex-wrap: wrap;
+}
+
+.legal{
+    display: flex;
+    flex-direction: column;
+    margin-left:2rem;
+    margin-right: 2rem;
+
+}
+
+.legal h1{
+    margin-bottom: 4rem;
+}
+.legal h2{
+    margin-top :1rem;
+    margin-bottom: 2rem;
+}
+.legal p{
+    margin-bottom :1rem;
+}
+
+.legal a{
+    color:var(--bouton-color);
 }
 
 
