@@ -3,7 +3,8 @@
 const canvas= document.getElementById('background');
 /** @type {CanvasRenderingContext2D} */
 const ctx = canvas.getContext('2d');
-
+const rootStyles = getComputedStyle(document.documentElement);
+const backgroundColor = rootStyles.getPropertyValue('--background-color').trim();
 
 function resizeCanva(){
     canvas.width = window.innerWidth;
@@ -67,7 +68,7 @@ function animate(now){
     const deltaTime = deltaMs /1000;
     lastTime = now;
 
-    ctx.fillStyle = '#C99383';
+    ctx.fillStyle = backgroundColor;
     ctx.fillRect(0,0,canvas.width, canvas.height);
     for(const line of lines){
         line.update(deltaTime);

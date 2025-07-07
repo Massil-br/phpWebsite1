@@ -9,8 +9,37 @@
     --color-clay:#C99383;
     --text-color:#f6f6f6;
     --color-kaki-green : #9caf88;
-    --header-footer-color:#9CAF88;
-    --background-color:#F7F5F3;
+
+
+    --color-deep-dark-blue:#0F172A;
+    --color-ardoise-grey:#1E293B;
+    --color-bright-blue:#3B82F6;
+
+    --color-very-light-grey:#FAFAFA;
+    --color-coal-grey:#1F2937;
+    --color-emeral-green:#10B981;
+
+    --color-hot-beige:#FEF7F0;
+    --color-dirt-brown:#7C2D12;
+    --color-amber-orange:#F59E0B;
+
+    --color-anthracite-grey:#111827;
+    --color-middle-green:#374151;
+    --color-modern-purple:#8B5CF6;
+
+    --color-very-pale-green:#F0FDF4;
+    --color-forest-green:#14532D;
+    --color-ocean-green:#059669;
+
+
+    --color-off-white:#F8FAFC;
+    --color-marine-blue:#0f172A;
+    --coor-sky-blue:#0EA5E9;
+
+
+
+    --header-footer-color:var(--color-deep-dark-blue);
+    --background-color:var(--color-ardoise-grey);
     --card-color:#f6f6f6;
     --bouton-color:#ffcb74;
     --card-text-color:#111111;
@@ -115,7 +144,7 @@ body,html{
 
 
 #background {
-    background-color: var(--color-clay);
+    background-color: var(--background-color);
     position: fixed;
     top: 0;
     left: 0;
@@ -138,15 +167,19 @@ h3{
 
 header, footer{
     width:100%;
-    background-color: var(--color-kaki-green);
+    background-color: var(--header-footer-color);
 }
 
-bg-kaki-green{
-    background-color: var(--color-kaki-green) !important;
+header-footer-bg-color{
+    background-color: var(--header-footer-color);
 }
+
+
+
+
 
 .offcanvas{
-    background-color: var(--color-kaki-green) !important;
+    background-color: var(--header-footer-color) !important;
 }
 
 
@@ -186,7 +219,6 @@ bg-kaki-green{
 
 .caroussel-max-height-500px{
     height:500px;
-    width: auto;
     max-width: 800px;
    
 }
@@ -231,7 +263,7 @@ w-400px{
 
 
 .carousel-img-fixed{
-    width: 100% ;
+    width: 100%;
     height: 500px;
     object-fit: cover;
 }
@@ -257,26 +289,6 @@ a{
 
 
 
-#carrousel {
-    display: flex;
-    border: solid 10px red;
-    max-width: 800px;
-    min-height: 510px;
-    position: relative;
-    overflow: hidden;
-    }
-
-#carrousel-container {
-    max-width: 800px;
-    max-height: 510px;
-    display: flex; 
-}
-#carrousel-container img {
-    flex: 0 0 100%;
-    width: 100%;
-    height: 100%;
-    object-fit: cover; 
-}
 
 .bouton {
     position: absolute;
