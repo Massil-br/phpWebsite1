@@ -4,7 +4,7 @@
 <!-- footer -->
 <footer style="margin-top:5rem">
     <div class="d-flex align-items-center justify-content-center flex-column">
-        <h3>Company name , all rights reserved</h3>
+        <h3 class="text-white">Company name , all rights reserved</h3>
         <div class="d-flex align-items-center justify-content-center flex-row flex-wrap flex-grow-0">
             <a href="./mentions-legales.php">Mentions légales</a> |
             <a href="./cgv.php">CGV</a> |

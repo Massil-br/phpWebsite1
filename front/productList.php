@@ -39,77 +39,70 @@
             </div>
 
 
-            
-
-            <div class="offcanvas offcanvas-start " tabindex="-1" id="Filter" aria-labelledby="FilterLabel">
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title underline-title text-white" id="FilterLabel">Filtres</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body   underline-text" >
-                    
-                    <div class="dropdown me-3 mb-3">
-                        <button class="btn btn-light dropdown-toggle" type="button" id="dropdownFilter1" data-bs-toggle="dropdown" aria-expanded="false">
-                            Genre
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-dark bg-white" aria-labelledby="dropdownFilter1" style="min-width: 220px;">
-                            <li>
-                            <div class="form-check dropdown-item d-flex align-items-center">
-                                <input class="form-check-input me-2" type="radio" name="filter1Options" id="filter1Option0" value="none" checked />
-                                <label class="form-check-label mb-0  text-black" for="filter1Option0">Désactivé</label>
-                            </div>
-                            </li>
-                            <li>
-                            <div class="form-check dropdown-item d-flex align-items-center">
-                                <input class="form-check-input me-2" type="radio" name="filter1Options" id="filter1Option1" value="hommes" />
-                                <label class="form-check-label mb-0  text-black" for="filter1Option1">Vêtements Hommes</label>
-                            </div>
-                            </li>
-                            <li>
-                            <div class="form-check dropdown-item d-flex align-items-center">
-                                <input class="form-check-input me-2" type="radio" name="filter1Options" id="filter1Option2" value="femmes" />
-                                <label class="form-check-label mb-0  text-black" for="filter1Option2">Vêtements Femmes</label>
-                            </div>
-                            </li>
-                        </ul>
+            <div class="dropdown m-3 " data-bs-auto-close="outside">
+                <button class="btn btn-light dropdown-toggle" type="button" id="dropdownFilters" data-bs-toggle="dropdown" aria-expanded="false">
+                    Filtres
+                </button>
+                 <!-- CONTENU DU GROS DROPDOWN -->
+                <div class="dropdown-menu p-3 scrollable-dropdown" aria-labelledby="dropdownFilters" style="min-width: 300px;">
+                    <!-- Trier par -->
+                    <h6 class="dropdown-header"><strong>Trier par</strong></h6>
+                    <div class="form-check mb-2">
+                        <input type="radio" name="filter0Options" id="filter0Option0" value="none" checked class="form-check-input">
+                        <label for="filter0Option0" class="form-check-label">Pertinence</label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input type="radio" name="filter0Options" id="filter0Option1" value="none" class="form-check-input">
+                        <label for="filter0Option1" class="form-check-label">Prix croissant</label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input type="radio" name="filter0Options" id="filter0Option2" value="none" class="form-check-input">
+                        <label for="filter0Option2" class="form-check-label">Prix décroissant</label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input type="radio" name="filter0Options" id="filter0Option3" value="none" class="form-check-input">
+                        <label for="filter0Option3" class="form-check-label">Date d'ajout croissant</label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input type="radio" name="filter0Options" id="filter0Option4" value="none" class="form-check-input">
+                        <label for="filter0Option4" class="form-check-label">Date d'ajout décroissant</label>
+                    </div>
+                                    
+                    <!-- GENRE -->
+                    <h6 class="dropdown-header"><strong>Genre</strong></h6>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" name="filter1Options" id="filter1Option0" value="none" checked>
+                        <label class="form-check-label" for="filter1Option0">Désactivé</label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" name="filter1Options" id="filter1Option1" value="hommes">
+                        <label class="form-check-label" for="filter1Option1">Vêtements Hommes</label>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="radio" name="filter1Options" id="filter1Option2" value="femmes">
+                        <label class="form-check-label" for="filter1Option2">Vêtements Femmes</label>
                     </div>
 
-                    <div class="dropdown me-3 mb-3">
-                        <button class="btn btn-light dropdown-toggle" type="button" id="dropdownFilter2" data-bs-toggle="dropdown" aria-expanded="false">
-                            Couleur
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-dark bg-white" aria-labelledby="dropdownFilter2" style="min-width: 220px;">
-                            <li>
-                            <div class="form-check dropdown-item d-flex align-items-center ">
-                                <input class="form-check-input me-2 " type="radio" name="filter2Options" id="filter2Option0" value="none" checked />
-                                <label class="form-check-label mb-0 text-black" for="filter2Option0">Désactivé</label>
-                            </div>
-                            </li>
-                            <li>
-                            <div class="form-check dropdown-item d-flex align-items-center">
-                                <input class="form-check-input me-2" type="radio" name="filter2Options" id="filter2Option1" value="rouge" />
-                                <label class="form-check-label mb-0  text-black" for="filter2Option1">Rouge</label>
-                            </div>
-                            </li>
-                            <li>
-                            <div class="form-check dropdown-item d-flex align-items-center">
-                                <input class="form-check-input me-2" type="radio" name="filter2Options" id="filter2Option2" value="vert" />
-                                <label class="form-check-label mb-0  text-black" for="filter2Option2">Vert</label>
-                            </div>
-                            </li>
-                            <li>
-                            <div class="form-check dropdown-item d-flex align-items-center">
-                                <input class="form-check-input me-2" type="radio" name="filter2Options" id="filter2Option3" value="bleu" />
-                                <label class="form-check-label mb-0  text-black" for="filter2Option3">Bleu</label>
-                            </div>
-                            </li>
-                        </ul>
+                    <!-- COULEUR -->
+                    <h6 class="dropdown-header"><strong>Couleur</strong></h6>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" name="filter2Options" id="filter2Option0" value="none" checked>
+                        <label class="form-check-label" for="filter2Option0">Désactivé</label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" name="filter2Options" id="filter2Option1" value="rouge">
+                        <label class="form-check-label" for="filter2Option1">Rouge</label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" name="filter2Options" id="filter2Option2" value="vert">
+                        <label class="form-check-label" for="filter2Option2">Vert</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="filter2Options" id="filter2Option3" value="bleu">
+                        <label class="form-check-label" for="filter2Option3">Bleu</label>
                     </div>
                 </div>
             </div>
-
-
-            <button class=" dropdown-toggle btn btn-light m-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#Filter" aria-controls="Filter">filtres</button>
 
             <div class="row row-cols-1 row-cols-md-3 g-4 p-3">
                 <div class="col">
@@ -213,5 +206,15 @@
 
     </div>
     <?php include './includes/footer.php'?>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const dropdownMenu = document.querySelector('#dropdownFilters + .dropdown-menu');
+            if (dropdownMenu) {
+            dropdownMenu.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+            }
+        });
+    </script>
 </body>
 </html>

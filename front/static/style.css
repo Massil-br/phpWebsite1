@@ -138,6 +138,12 @@ body,html{
     display :none;
 }
 
+.scrollable-dropdown{
+    min-width: 300px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
 
 
 
