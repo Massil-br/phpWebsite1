@@ -14,16 +14,6 @@
         
     <div id="main">
         <div class="d-flex align-items-center justify-content-center mx-4  pt-3 gap-4 flex-wrap ">
-            <div class="card text-bg-white">
-                <a class="text-decoration-none text-black" href="./products/id">
-                <img src="./assets/vetementPhoto.webp" class="card-img h-300px  w-400px  img-cover" alt="...">
-                <div class="card-img-overlay">
-                    <h5 class="card-title text-black">
-                    <strong class="bg-white">Card title</strong>
-                    </h5>
-                </div>
-                </a>
-            </div>
             <div id="mainPageCarousel" class=" carousel slide   caroussel-max-height-500px ">
                 <div class="carousel-indicators">
                     <button type="button" data-bs-target="#mainPageCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
@@ -32,22 +22,21 @@
                 </div>
                 <div class="carousel-inner ">
                     <div class="carousel-item active  ">
-                    <img src="./assets/robe1.webp" class="d-block img-contain  
-                    " alt="...">
+                    <img src="./assets/robe1.webp" class="d-block  carousel-img-fixed" alt="...">
                     <div class="carousel-caption d-none d-md-block ">
                         <h5>Robe rouge</h5>
                         <p>Découvrez nos nouvelles robes de soirées</p>
                     </div>
                     </div>
                     <div class="carousel-item">
-                    <img src="./assets/polo1.webp" class="d-block " alt="...">
+                    <img src="./assets/polo1.webp" class="d-block  carousel-img-fixed" alt="...">
                     <div class="carousel-caption d-none d-md-block text-black">
                         <h5>Polo</h5>
                         <p>L'été est arrivé, il est temps de sortir votre nouveau polo</p>
                     </div>
                     </div>
                     <div class="carousel-item ">
-                    <img src="./assets/chaussure1.webp" class="d-block " alt="...">
+                    <img src="./assets/chaussure1.webp" class="d-block  carousel-img-fixed" alt="...">
                     <div class="carousel-caption d-none d-md-block blue text-black">
                         <h5>Chaussure</h5>
                         <p>Quoi de mieux que de nouvelles chaussures légères en ce temps chaud ?</p>
@@ -63,17 +52,6 @@
                     <span class="visually-hidden">Next</span>
                 </button>
             </div>
-            <div class="card text-bg-white">
-                <a class="text-decoration-none text-black" href="./products/id">
-                <img src="./assets/vetementPhoto.webp" class="card-img h-300px w-400px img-cover" alt="...">
-                <div class="card-img-overlay">
-                    <h5 class="card-title text-black">
-                    <strong class="bg-white">Card title</strong>
-                    </h5>
-                </div>
-                </a>
-            </div>
-            
         </div>
 
         <!-- catégories recommandées-->
