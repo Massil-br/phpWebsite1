@@ -41,8 +41,7 @@
         </div>
     </div>
 
-<?php  include './includes/footer.php'?>
-<script src="./static/backGroundAnimation.js" defer></script>
-<script src="./static/toggleNavBar.js" defer></script>
+<?php  include './includes/footerNoJs.php'?>
+
 </body>
 </html>

@@ -50,6 +50,4 @@
 
 
 <script src="./static/carrousel.js" defer></script>
-<script src="./static/toggleNavBar.js"></script>
-<script src="./static/backGroundAnimation.js"></script>
 </html>

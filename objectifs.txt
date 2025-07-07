@@ -11,6 +11,10 @@ un entete
 
 
 
+GRADER 3 COULEURS SUR TOUT LE SITE
+
+
+
 classification par catégories : 
 
 
@@ -72,3 +76,38 @@ couleur
 product_attribute( reliée a un attribute et un product)
 
 jaune - couleur.id && polo.id
+
+
+
+
+
+
+Commande sql pour tables cart et cart_product
+create table cart (
+	id int AUTO_INCREMENT primary key,
+    user_id int not null,
+    FOREIGN KEY (user_id) REFERENCES user(id) on delete cascade
+);
+
+create table cart_product(
+	id int AUTO_INCREMENT primary key,
+    cart_id int not null,
+    product_id int not null,
+    quantity int not null
+);
+
+
+
+
+Activer animation background ou pas en fonction d'un bouton :
+
+if (activated){
+    include 'footer.php';
+}else{
+    include 'footerNoJs.php';
+}
+
+
+proposer duex solution pour les details ;
+
+un carousel : images du produits , avec interraction pou rafficher en grand écran

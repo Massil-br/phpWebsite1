@@ -1,162 +1,214 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Template</title>
     <link rel="icon" href="./assets/logo.png">
     <link rel="stylesheet" href="./static/style.css">
+    
 </head>
 <body>
     <?php require_once './includes/header.php'; ?>
         
-        <!-- categories -->
+        
     <div id="main">
-        <div class="categories">
-            <div class="category">
-                <a href="./products/category=category1">
-                    <img src="./assets/category logo.png" alt="category1">
-                <h2>Category1</h2>
+        <div class="d-flex align-items-center justify-content-center mx-4  pt-3 gap-4 flex-wrap ">
+            <div class="card text-bg-white">
+                <a class="text-decoration-none text-black" href="./products/id">
+                <img src="./assets/vetementPhoto.webp" class="card-img h-300px  w-400px  img-cover" alt="...">
+                <div class="card-img-overlay">
+                    <h5 class="card-title text-black">
+                    <strong class="bg-white">Card title</strong>
+                    </h5>
+                </div>
                 </a>
             </div>
-             <div class="category">
-                <a href="./products/category=category1">
-                    <img src="./assets/category logo.png" alt="category2">
-                <h2>Category2</h2>
+            <div id="mainPageCarousel" class=" carousel slide   caroussel-max-height-500px ">
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#mainPageCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                    <button type="button" data-bs-target="#mainPageCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#mainPageCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                </div>
+                <div class="carousel-inner ">
+                    <div class="carousel-item active  ">
+                    <img src="./assets/robe1.webp" class="d-block img-contain  
+                    " alt="...">
+                    <div class="carousel-caption d-none d-md-block ">
+                        <h5>Robe rouge</h5>
+                        <p>Découvrez nos nouvelles robes de soirées</p>
+                    </div>
+                    </div>
+                    <div class="carousel-item">
+                    <img src="./assets/polo1.webp" class="d-block " alt="...">
+                    <div class="carousel-caption d-none d-md-block text-black">
+                        <h5>Polo</h5>
+                        <p>L'été est arrivé, il est temps de sortir votre nouveau polo</p>
+                    </div>
+                    </div>
+                    <div class="carousel-item ">
+                    <img src="./assets/chaussure1.webp" class="d-block " alt="...">
+                    <div class="carousel-caption d-none d-md-block blue text-black">
+                        <h5>Chaussure</h5>
+                        <p>Quoi de mieux que de nouvelles chaussures légères en ce temps chaud ?</p>
+                    </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#mainPageCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon bg-black" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#mainPageCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon bg-black" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+            <div class="card text-bg-white">
+                <a class="text-decoration-none text-black" href="./products/id">
+                <img src="./assets/vetementPhoto.webp" class="card-img h-300px w-400px img-cover" alt="...">
+                <div class="card-img-overlay">
+                    <h5 class="card-title text-black">
+                    <strong class="bg-white">Card title</strong>
+                    </h5>
+                </div>
                 </a>
             </div>
-             <div class="category">
-                <a href="./products/category=category1">
-                    <img src="./assets/category logo.png" alt="category3">
-                <h2>Category3</h2>
-                </a>
-            </div>
-             <div class="category">
-                <a href="./products/category=category1">
-                    <img src="./assets/category logo.png" alt="category4">
-                <h2>Category4</h2>
-                </a>
-            </div>
-             <div class="category">
-                <a href="./products/category=category1">
-                    <img src="./assets/category logo.png" alt="category5">
-                <h2>Category5</h2>
-                </a>
-            </div>
-             <div class="category">
-                <a href="./products/category=category1">
-                    <img src="./assets/category logo.png" alt="category6">
-                <h2>Category6</h2>
-                </a>
-            </div>
+            
         </div>
-        <!-- products suggestions-->
-        <div class="products-container">
-            <div class="product">
-                <a href="./products/id=?">
-                    <img src="./assets/shoes.png" alt="shoes">
-                    <h3>Shoes Jordan</h3>
-                    <div class="stars">
-                        <img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/star-half.png" alt=""><img src="./assets/starEmpty.png" alt="">
-                    </div>
-                    <h2>199$</h2>
-                </a>
-            </div>
-            <div class="product">
-                <a href="./products/id=?">
-                    <img src="./assets/shoes.png" alt="shoes">
-                    <h3>Shoes Jordan</h3>
-                    <div class="stars">
-                        <img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/star-half.png" alt=""><img src="./assets/starEmpty.png" alt="">
-                    </div>
-                    <h2>199$</h2>
-                </a>
-            </div>
-            <div class="product">
-                <a href="./products/id=?">
-                    <img src="./assets/shoes.png" alt="shoes">
-                    <h3>Shoes Jordan</h3>
-                    <div class="stars">
-                        <img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/star-half.png" alt=""><img src="./assets/starEmpty.png" alt="">
-                    </div>
-                    <h2>199$</h2>
-                </a>
-            </div>
-            <div class="product">
-                <a href="./products/id=?">
-                    <img src="./assets/shoes.png" alt="shoes">
-                    <h3>Shoes Jordan</h3>
-                    <div class="stars">
-                        <img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/star-half.png" alt=""><img src="./assets/starEmpty.png" alt="">
-                    </div>
-                    <h2>199$</h2>
-                </a>
-            </div>
-            <div class="product">
-                <a href="./products/id=?">
-                    <img src="./assets/shoes.png" alt="shoes">
-                    <h3>Shoes Jordan</h3>
-                    <div class="stars">
-                        <img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/star-half.png" alt=""><img src="./assets/starEmpty.png" alt="">
-                    </div>
-                    <h2>199$</h2>
-                </a>
-            </div>
-            <div class="product">
-                <a href="./products/id=?">
-                    <img src="./assets/shoes.png" alt="shoes">
-                    <h3>Shoes Jordan</h3>
-                    <div class="stars">
-                        <img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/star-half.png" alt=""><img src="./assets/starEmpty.png" alt="">
-                    </div>
-                    <h2>199$</h2>
-                </a>
-            </div>
-            <div class="product">
-                <a href="./products/id=?">
-                    <img src="./assets/shoes.png" alt="shoes">
-                    <h3>Shoes Jordan</h3>
-                    <div class="stars">
-                        <img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/star-half.png" alt=""><img src="./assets/starEmpty.png" alt="">
-                    </div>
-                    <h2>199$</h2>
-                </a>
-            </div>
-            <div class="product">
-                <a href="./products/id=?">
-                    <img src="./assets/shoes.png" alt="shoes">
-                    <h3>Shoes Jordan</h3>
-                    <div class="stars">
-                        <img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/star-half.png" alt=""><img src="./assets/starEmpty.png" alt="">
-                    </div>
-                    <h2>199$</h2>
-                </a>
-            </div>
-            <div class="product">
-                <a href="./products/id=?">
-                    <img src="./assets/shoes.png" alt="shoes">
-                    <h3>Shoes Jordan</h3>
-                    <div class="stars">
-                        <img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/star-half.png" alt=""><img src="./assets/starEmpty.png" alt="">
-                    </div>
-                    <h2>199$</h2>
-                </a>
-            </div>
-            <div class="product">
-                <a href="./products/id=?">
-                    <img src="./assets/shoes.png" alt="shoes">
-                    <h3>Shoes Jordan</h3>
-                    <div class="stars">
-                        <img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/starFull.png" alt=""><img src="./assets/star-half.png" alt=""><img src="./assets/starEmpty.png" alt="">
-                    </div>
-                    <h2>199$</h2>
-                </a>
-            </div>
+
+        <!-- catégories recommandées-->
+        <div class="d-flex align-items-center justify-content-center  text-black mt-3 ">
+            <h1 class="text-white">Catégories recommandées</h1>
         </div>
+
+
+        <div class="card-group  d-flex align-items-center justify-content-center gap-4 p-3 ">
+
+            <!-- Carte 1 -->
+            <div class="card text-bg-white rounded-3">
+                <a class="text-decoration-none text-black" href="./products/id">
+                <img src="./assets/vetementPhoto.webp" class="card-img h-300px img-cover" alt="...">
+                <div class="card-img-overlay">
+                    <h5 class="card-title text-black">
+                    <strong class="bg-white">Card title</strong>
+                    </h5>
+                </div>
+                </a>
+            </div>
+
+            <!-- Carte 2 -->
+            <div class="card text-bg-white rounded-3">
+                <a class="text-decoration-none text-black" href="./products/id">
+                <img src="./assets/vetementPhoto.webp" class="card-img h-300px img-cover" alt="...">
+                <div class="card-img-overlay">
+                    <h5 class="card-title text-black">
+                    <strong class="bg-white">Card title</strong>
+                    </h5>
+                </div>
+                </a>
+            </div>
+            
+            <!-- Carte 3 -->
+            <div class="card text-bg-white rounded-3">
+                <a class="text-decoration-none text-black" href="./products/id">
+                <img src="./assets/vetementPhoto.webp" class="card-img h-300px img-cover" alt="...">
+                <div class="card-img-overlay">
+                    <h5 class="card-title text-black">
+                    <strong class="bg-white">Card title</strong>
+                    </h5>
+                </div>
+                </a>
+            </div>
+
+        </div>
+
+
+        <!-- Produits Recommandés-->
+        <div class="d-flex align-items-center justify-content-center  text-black mt-3 ">
+            <h1 class="text-white">Produits recommandées</h1>
+        </div>
+
+
+         <div class="row row-cols-1 row-cols-md-3 g-4 p-3">
+            <div class="col">
+                <div class="card rounded-5">
+                    <a class="text-decoration-none text-black" href="./products/id">
+                    <img src="./assets/chaussure1.webp" class="card-img-top h-300px img-cover  rounded-5" alt="...">
+                    <div class="card-body">
+                    <h5 class="card-title">Chaussure</h5>
+                    <p class="card-text">idéalement en jaune, mais peut prendre différentes couleurs</p>
+                    <p class="card-text" style="color: red; font-size: 2rem;"><strong>199$</strong></p>
+                    </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col">
+
+                <div class="card rounded-5">
+                    <a class="text-decoration-none text-black" href="./products/id">
+                    <img src="./assets/chaussure1.webp" class="card-img-top h-300px img-cover rounded-5" alt="...">
+                    <div class="card-body">
+                    <h5 class="card-title">Chaussure</h5>
+                    <p class="card-text">idéalement en jaune, mais peut prendre différentes couleurs</p>
+                    <p class="card-text" style="color: red; font-size: 2rem;"><strong>199$</strong></p>
+                    </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card rounded-5">
+                    <a class="text-decoration-none text-black" href="./products/id">
+                    <img src="./assets/chaussure1.webp" class="card-img-top h-300px img-cover rounded-5" alt="...">
+                    <div class="card-body">
+                    <h5 class="card-title">Chaussure</h5>
+                    <p class="card-text">idéalement en jaune, mais peut prendre différentes couleurs</p>
+                    <p class="card-text" style="color: red; font-size: 2rem;"><strong>199$</strong></p>
+                    </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card rounded-5">
+                    <a class="text-decoration-none text-black" href="./products/id">
+                    <img src="./assets/chaussure1.webp" class="card-img-top h-300px img-cover rounded-5" alt="...">
+                    <div class="card-body">
+                    <h5 class="card-title">Chaussure</h5>
+                    <p class="card-text">idéalement en jaune, mais peut prendre différentes couleurs</p>
+                    <p class="card-text" style="color: red; font-size: 2rem;"><strong>199$</strong></p>
+                    </div>
+                    </a>
+                </div>
+            </div>
+             <div class="col">
+                <div class="card rounded-5">
+                    <a class="text-decoration-none text-black" href="./products/id">
+                    <img src="./assets/chaussure1.webp" class="card-img-top h-300px img-cover rounded-5" alt="...">
+                    <div class="card-body">
+                    <h5 class="card-title">Chaussure</h5>
+                    <p class="card-text">idéalement en jaune, mais peut prendre différentes couleurs</p>
+                    <p class="card-text" style="color: red; font-size: 2rem;"><strong>199$</strong></p>
+                    </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card rounded-5">
+                    <a class="text-decoration-none text-black" href="./products/id">
+                    <img src="./assets/chaussure1.webp" class="card-img-top h-300px img-cover rounded-5" alt="...">
+                    <div class="card-body">
+                    <h5 class="card-title">Chaussure</h5>
+                    <p class="card-text">idéalement en jaune, mais peut prendre différentes couleurs</p>
+                    <p class="card-text" style="color: red; font-size: 2rem;"><strong>199$</strong></p>
+                    </div>
+                    </a>
+                </div>
+            </div>
+            
+        </div>
+
+
 
     </div>
     <?php require_once './includes/footer.php'; ?>
-    <script src="./static/backGroundAnimation.js" defer></script>
-    <script src="./static/toggleNavBar.js" defer></script>
 </body>
 </html>

@@ -1,4 +1,7 @@
+
+/** @type {HTMLCanvasElement} */
 const canvas= document.getElementById('background');
+/** @type {CanvasRenderingContext2D} */
 const ctx = canvas.getContext('2d');
 
 
@@ -16,13 +19,14 @@ class Line{
         this.x = Math.random()*canvas.width;
         this.y = Math.random()*canvas.height;
         this.dir = Math.random() < 0.5 ? 0 : Math.PI /2;
-        this.speed = 2+Math.random() *0.5;
-        this.length = 20;
+        this.speed = 2+Math.random() *300;
+        this.length = 30;
     }
 
-    update(){
-        this.x +=Math.cos(this.dir) * this.speed;
-        this.y += Math.sin(this.dir) * this.speed;
+    update(deltaTime){
+        const distance = this.speed * deltaTime;
+        this.x +=Math.cos(this.dir) * distance;
+        this.y += Math.sin(this.dir) * distance;
 
         if (Math.random()<0.001){
             this.dir += Math.PI/2;
@@ -41,7 +45,7 @@ class Line{
             this.x + Math.cos(this.dir) * this.length,
             this.y + Math.sin(this.dir) * this.length
         );
-        ctx.strokeStyle = 'white';
+        ctx.strokeStyle = 'black';
         ctx.lineWidth = 2;
         ctx.stroke();
     }
@@ -49,15 +53,29 @@ class Line{
 
 const lines = Array.from({length : 15}, () =>new Line());
 
-function animate(){
-    ctx.fillStyle = 'rgba(0,0,0,0.1)';
+let lastTime = 0;
+
+const fps = 60;
+const interval = 1000/fps;
+
+
+function animate(now){
+    requestAnimationFrame(animate);
+    const deltaMs = now - lastTime;
+    if (deltaMs < interval) return;
+
+    const deltaTime = deltaMs /1000;
+    lastTime = now;
+
+    ctx.fillStyle = '#C99383';
     ctx.fillRect(0,0,canvas.width, canvas.height);
     for(const line of lines){
-        line.update();
+        line.update(deltaTime);
         line.draw();
     }
 
-    requestAnimationFrame(animate);
+   
 }
 
-animate();
+ requestAnimationFrame(animate);
+

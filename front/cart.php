@@ -15,7 +15,5 @@
         </div>
     </div>
     <?php include './includes/footer.php' ; ?>
-    <script src="./static/backGroundAnimation.js" defer></script>
-    <script src="toggleNavBar.js" defer></script>
 </body>
 </html>
