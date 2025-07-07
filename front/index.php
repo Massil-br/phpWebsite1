@@ -146,42 +146,48 @@
                     </div>
                 </div>
                 <div class="col">
+                    <div class="card rounded-5">
+                        <a class="text-decoration-none text-black" href="./products/id">
+                        <img src="./assets/chaussure1.webp" class="card-img-top h-300px img-cover rounded-5" alt="...">
+                        <div class="card-body">
+                        <h5 class="card-title">Chaussure</h5>
+                        <p class="card-text">idéalement en jaune, mais peut prendre différentes couleurs</p>
+                        <p class="card-text" style="color: red; font-size: 2rem;"><strong>199$</strong></p>
+                        </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card rounded-5">
+                        <a class="text-decoration-none text-black" href="./products/id">
+                        <img src="./assets/chaussure1.webp" class="card-img-top h-300px img-cover rounded-5" alt="...">
+                        <div class="card-body">
+                        <h5 class="card-title">Chaussure</h5>
+                        <p class="card-text">idéalement en jaune, mais peut prendre différentes couleurs</p>
+                        <p class="card-text" style="color: red; font-size: 2rem;"><strong>199$</strong></p>
+                        </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card rounded-5">
+                        <a class="text-decoration-none text-black" href="./products/id">
+                        <img src="./assets/chaussure1.webp" class="card-img-top h-300px img-cover rounded-5" alt="...">
+                        <div class="card-body">
+                        <h5 class="card-title">Chaussure</h5>
+                        <p class="card-text">idéalement en jaune, mais peut prendre différentes couleurs</p>
+                        <p class="card-text" style="color: red; font-size: 2rem;"><strong>199$</strong></p>
+                        </div>
+                        </a>
+                    </div>
+                </div>
 
-                    <div class="card rounded-5">
-                        <a class="text-decoration-none text-black" href="./products/id">
-                        <img src="./assets/chaussure1.webp" class="card-img-top h-300px img-cover rounded-5" alt="...">
-                        <div class="card-body">
-                        <h5 class="card-title">Chaussure</h5>
-                        <p class="card-text">idéalement en jaune, mais peut prendre différentes couleurs</p>
-                        <p class="card-text" style="color: red; font-size: 2rem;"><strong>199$</strong></p>
-                        </div>
-                        </a>
+                <div class="col mobile">
+                    <div class="mobile-ad">
+                        <img src="./assets/polo1.webp" alt="" class="img-cover w-100">
                     </div>
                 </div>
-                <div class="col">
-                    <div class="card rounded-5">
-                        <a class="text-decoration-none text-black" href="./products/id">
-                        <img src="./assets/chaussure1.webp" class="card-img-top h-300px img-cover rounded-5" alt="...">
-                        <div class="card-body">
-                        <h5 class="card-title">Chaussure</h5>
-                        <p class="card-text">idéalement en jaune, mais peut prendre différentes couleurs</p>
-                        <p class="card-text" style="color: red; font-size: 2rem;"><strong>199$</strong></p>
-                        </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card rounded-5">
-                        <a class="text-decoration-none text-black" href="./products/id">
-                        <img src="./assets/chaussure1.webp" class="card-img-top h-300px img-cover rounded-5" alt="...">
-                        <div class="card-body">
-                        <h5 class="card-title">Chaussure</h5>
-                        <p class="card-text">idéalement en jaune, mais peut prendre différentes couleurs</p>
-                        <p class="card-text" style="color: red; font-size: 2rem;"><strong>199$</strong></p>
-                        </div>
-                        </a>
-                    </div>
-                </div>
+
                 <div class="col">
                     <div class="card rounded-5">
                         <a class="text-decoration-none text-black" href="./products/id">

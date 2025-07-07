@@ -237,6 +237,11 @@ w-400px{
 }
 
 
+.mobile{
+    display:none;
+}
+
+
 footer{
     display :flex;
     align-items: center;
@@ -505,5 +510,15 @@ cart-item{
         min-height: 200px;
         background: #eee;
     }
+    .mobile {
+        display: block;
+    }
+    
+
+    .col{
+        min-width: 70%;
+        margin:0 auto;
+    }
+
 
 }

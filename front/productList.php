@@ -125,7 +125,6 @@
                     </div>
                 </div>
                 <div class="col">
-
                     <div class="card rounded-5">
                         <a class="text-decoration-none text-black" href="./products/id">
                         <img src="./assets/chaussure1.webp" class="card-img-top h-300px img-cover rounded-5" alt="...">
@@ -138,7 +137,7 @@
                     </div>
                 </div>
                 
-                <div class="col">
+                <div class="col mobile">
                     <div class="mobile-ad">
                         <img src="./assets/polo1.webp" alt="" class="img-cover w-100">
                     </div>
@@ -182,7 +181,7 @@
                     </div>
                 </div>
 
-                <div class="col">
+                <div class="col mobile">
                     <div class="mobile-ad">
                         <img src="./assets/polo1.webp" alt="" class="img-cover w-100">
                     </div>
