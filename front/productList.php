@@ -21,17 +21,17 @@
         <div class="center">
             <div class="offcanvas offcanvas-start " tabindex="-1" id="subcategory" aria-labelledby="subcategoryLabel">
                 <div class="offcanvas-header">
-                    <h5 class="offcanvas-title underline-title text-white" id="subcategoryLabel">Sous Catégories</h5>
+                    <h5 class="offcanvas-title underline-title text-color" id="subcategoryLabel">Sous Catégories</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body   underline-text" >
                     <div class="d-flex flex-column ">
-                        <a class="text-decoration-none text-white nav-link" href="./category/subcategory/products">T-shirts</a>
-                        <a class="text-decoration-none text-white nav-link" href="./category/subcategory/products">Pantalons</a>
-                        <a class="text-decoration-none text-white nav-link" href="./category/subcategory/products">Shorts</a>
-                        <a class="text-decoration-none text-white nav-link" href="./category/subcategory/products">Robes</a>
-                        <a class="text-decoration-none text-white nav-link" href="./category/subcategory/products">sweatShirts</a>
-                        <a class="text-decoration-none text-white nav-link" href="./category/subcategory/products">casquettes</a>
+                        <a class="text-decoration-none text-color nav-link" href="./category/subcategory/products">T-shirts</a>
+                        <a class="text-decoration-none text-color nav-link" href="./category/subcategory/products">Pantalons</a>
+                        <a class="text-decoration-none text-color nav-link" href="./category/subcategory/products">Shorts</a>
+                        <a class="text-decoration-none text-color nav-link" href="./category/subcategory/products">Robes</a>
+                        <a class="text-decoration-none text-color nav-link" href="./category/subcategory/products">sweatShirts</a>
+                        <a class="text-decoration-none text-color nav-link" href="./category/subcategory/products">casquettes</a>
 
                     </div>
 
@@ -107,7 +107,7 @@
             <div class="row row-cols-1 row-cols-md-3 g-4 p-3">
                 <div class="col">
                     <div class="card rounded-5">
-                        <a class="text-decoration-none text-black" href="./products/id">
+                        <a class="text-decoration-none text-color-light-bg" href="./products/id">
                         <img src="./assets/chaussure1.webp" class="card-img-top h-300px img-cover  rounded-5" alt="...">
                         <div class="card-body">
                         <h5 class="card-title">Chaussure</h5>
@@ -119,7 +119,7 @@
                 </div>
                 <div class="col">
                     <div class="card rounded-5">
-                        <a class="text-decoration-none text-black" href="./products/id">
+                        <a class="text-decoration-none text-color-light-bg" href="./products/id">
                         <img src="./assets/chaussure1.webp" class="card-img-top h-300px img-cover rounded-5" alt="...">
                         <div class="card-body">
                         <h5 class="card-title">Chaussure</h5>
@@ -139,7 +139,7 @@
 
                 <div class="col">
                     <div class="card rounded-5">
-                        <a class="text-decoration-none text-black" href="./products/id">
+                        <a class="text-decoration-none text-color-light-bg" href="./products/id">
                         <img src="./assets/chaussure1.webp" class="card-img-top h-300px img-cover rounded-5" alt="...">
                         <div class="card-body">
                         <h5 class="card-title">Chaussure</h5>
@@ -151,7 +151,7 @@
                 </div>
                 <div class="col">
                     <div class="card rounded-5">
-                        <a class="text-decoration-none text-black" href="./products/id">
+                        <a class="text-decoration-none text-color-light-bg" href="./products/id">
                         <img src="./assets/chaussure1.webp" class="card-img-top h-300px img-cover rounded-5" alt="...">
                         <div class="card-body">
                         <h5 class="card-title">Chaussure</h5>
@@ -163,7 +163,7 @@
                 </div>
                 <div class="col">
                     <div class="card rounded-5">
-                        <a class="text-decoration-none text-black" href="./products/id">
+                        <a class="text-decoration-none text-color-light-bg" href="./products/id">
                         <img src="./assets/chaussure1.webp" class="card-img-top h-300px img-cover rounded-5" alt="...">
                         <div class="card-body">
                         <h5 class="card-title">Chaussure</h5>
@@ -182,7 +182,7 @@
 
                 <div class="col">
                     <div class="card rounded-5">
-                        <a class="text-decoration-none text-black" href="./products/id">
+                        <a class="text-decoration-none text-color-light-bg" href="./products/id">
                         <img src="./assets/chaussure1.webp" class="card-img-top h-300px img-cover rounded-5" alt="...">
                         <div class="card-body">
                         <h5 class="card-title">Chaussure</h5>

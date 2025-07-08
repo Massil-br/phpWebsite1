@@ -40,6 +40,9 @@
                 <li class="nav-item ">
                 <a class="nav-link active" href="./productList.php">ProductList</a>
                 </li>
+                <li class="nav-item ">
+                <a class="nav-link active" href="./product.php">Product Detail</a>
+                </li>
             </ul>
             <form class="d-flex" role="search">
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
@@ -57,24 +60,24 @@
     </div>
     <div class="offcanvas-body offcanvas-row underline-text " >
         
-        <a class="text-decoration-none text-white nav-link" href="./category?/products">Vêtements</a>
-        <a class="text-decoration-none text-white nav-link" href="./category?/products">Electronique</a>
-        <a class="text-decoration-none text-white nav-link" href="./category?/products">Meubles</a>
-        <a class="text-decoration-none text-white nav-link" href="./category?/products">Vêtements</a>
-        <a class="text-decoration-none text-white nav-link" href="./category?/products">Electronique</a>
-        <a class="text-decoration-none text-white nav-link" href="./category?/products">Meubles</a>
-        <a class="text-decoration-none text-white nav-link" href="./category?/products">Vêtements</a>
-        <a class="text-decoration-none text-white nav-link" href="./category?/products">Electronique</a>
-        <a class="text-decoration-none text-white nav-link" href="./category?/products">Meubles</a>
-        <a class="text-decoration-none text-white nav-link" href="./category?/products">Vêtements</a>
-        <a class="text-decoration-none text-white nav-link" href="./category?/products">Electronique</a>
-        <a class="text-decoration-none text-white nav-link" href="./category?/products">Meubles</a>
-        <a class="text-decoration-none text-white nav-link" href="./category?/products">Vêtements</a>
-        <a class="text-decoration-none text-white nav-link" href="./category?/products">Electronique</a>
-        <a class="text-decoration-none text-white nav-link" href="./category?/products">Meubles</a>
-        <a class="text-decoration-none text-white nav-link" href="./category?/products">Vêtements</a>
-        <a class="text-decoration-none text-white nav-link" href="./category?/products">Electronique</a>
-        <a class="text-decoration-none text-white nav-link" href="./category?/products">Meubles</a>
+        <a class="text-decoration-none text-color nav-link scale-on-hover" href="./category?/products">Vêtements</a>
+        <a class="text-decoration-none text-color nav-link scale-on-hover" href="./category?/products">Electronique</a>
+        <a class="text-decoration-none text-color nav-link scale-on-hover" href="./category?/products">Meubles</a>
+        <a class="text-decoration-none text-color nav-link scale-on-hover" href="./category?/products">Vêtements</a>
+        <a class="text-decoration-none text-color nav-link scale-on-hover" href="./category?/products">Electronique</a>
+        <a class="text-decoration-none text-color nav-link scale-on-hover " href="./category?/products">Meubles</a>
+        <a class="text-decoration-none text-color nav-link scale-on-hover" href="./category?/products">Vêtements</a>
+        <a class="text-decoration-none text-color nav-link scale-on-hover" href="./category?/products">Electronique</a>
+        <a class="text-decoration-none text-color nav-link scale-on-hover" href="./category?/products">Meubles</a>
+        <a class="text-decoration-none text-color nav-link scale-on-hover" href="./category?/products">Vêtements</a>
+        <a class="text-decoration-none text-color nav-link scale-on-hover" href="./category?/products">Electronique</a>
+        <a class="text-decoration-none text-color nav-link scale-on-hover" href="./category?/products">Meubles</a>
+        <a class="text-decoration-none text-color nav-link scale-on-hover" href="./category?/products">Vêtements</a>
+        <a class="text-decoration-none text-color nav-link scale-on-hover" href="./category?/products">Electronique</a>
+        <a class="text-decoration-none text-color nav-link scale-on-hover" href="./category?/products">Meubles</a>
+        <a class="text-decoration-none text-color nav-link scale-on-hover" href="./category?/products">Vêtements</a>
+        <a class="text-decoration-none text-color nav-link scale-on-hover" href="./category?/products">Electronique</a>
+        <a class="text-decoration-none text-color nav-link scale-on-hover" href="./category?/products">Meubles</a>
             
     </div>
 
