@@ -119,23 +119,26 @@ body,html{
 #main {
     flex-grow: 1;
     display: flex;
-    justify-content: center;
+    justify-content: space-between; /* Changez center par space-between */
     align-items: flex-start;
     gap: 40px;
     padding: 20px;
     margin: 0 auto;
-    max-width: 1800px;
+    width:100%;
     position: relative;
+}
+
+.col{
+    max-width: 350px;
 }
 
 .left-ad-wrapper,
 .right-ad-wrapper {
-    flex: 0 0 auto;
+    flex: 0 0 160px; /* Changez auto par 160px pour une largeur fixe */
     width: 160px;
     height: 100%;
     position: relative;
 }
-
 .left-ad,
 .right-ad {
     width: 100%;
@@ -149,8 +152,15 @@ body,html{
 
 .center {
     flex: 1;
+    /* Retirez max-width: 1200px; */
+    min-width: 0; /* Ajoutez ceci pour éviter les débordements */
+}
+
+
+
+.center {
+    flex: 1;
     max-width: 1200px;
-   
 }
 
 
@@ -846,3 +856,4 @@ cart-item{
         margin-right: 5px;
     }
 }
+
