@@ -1,3 +1,43 @@
+<?php
+require_once '../back/getData.php';
+// En haut de productList.php, avant le HTML et avant l'inclusion du header
+$subcategories = []; // toujours définir la variable pour éviter les warnings
+
+$productCards = [];
+
+if (isset($_GET['category'])) {
+    $categoryId = (int) $_GET['category'];
+    if ($categoryId <= 0) {
+        $categoryId = null;
+    }
+    $response = GetData(['action'=>'getsubcategories','categoryid' => $categoryId]);
+    $subcategories = $response['subcategories'] ?? [];
+
+    if (isset($_Get['subcategory'])){
+        $subcategoryId = (int) $_GET['subcategory'];
+        $response = GetData(['action' => 'getproductcard', 'param' => 'subcategory', 'id'=> $subcategoryId]);
+        /**
+         * @var ProductCard[]
+         */
+        $productCards = $response['productCards'];
+    }else{
+        $categoryId = (int)$categoryId;
+        $response = GetData(['action' => 'getproductcard', 'param' => 'category', 'id'=> $categoryId]);
+        /**
+         * @var ProductCard[]
+         */
+        $productCards = $response['productCards'];
+        
+    }
+
+    
+
+} else {
+    $categoryId = null;
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -26,13 +66,12 @@
                 </div>
                 <div class="offcanvas-body   underline-text" >
                     <div class="d-flex flex-column ">
-                        <a class="text-decoration-none text-color nav-link" href="./category/subcategory/products">T-shirts</a>
-                        <a class="text-decoration-none text-color nav-link" href="./category/subcategory/products">Pantalons</a>
-                        <a class="text-decoration-none text-color nav-link" href="./category/subcategory/products">Shorts</a>
-                        <a class="text-decoration-none text-color nav-link" href="./category/subcategory/products">Robes</a>
-                        <a class="text-decoration-none text-color nav-link" href="./category/subcategory/products">sweatShirts</a>
-                        <a class="text-decoration-none text-color nav-link" href="./category/subcategory/products">casquettes</a>
-
+                        <?php 
+                        /** @var SubCategory[] $subcategories */
+                        /** @var SubCategory $subcategory */
+                        foreach($subcategories as $subcategory): ?>
+                        <a class="text-decoration-none text-color nav-link" href="./productList.php?category=<?= urlencode($categoryId)?>&?subcategory=<?= urlencode($subcategory->GetId())?>"><?= $subcategory->GetName()?></a>
+                        <?php endforeach; ?>
                     </div>
 
                 </div>
@@ -105,93 +144,23 @@
             </div>
 
             <div class="row row-cols-1 row-cols-md-3 g-4 p-3">
-                <div class="col">
-                    <div class="card rounded-5">
-                        <a class="text-decoration-none text-color-light-bg" href="./products/id">
-                        <img src="./assets/chaussure1.webp" class="card-img-top h-300px img-cover  rounded-5" alt="...">
-                        <div class="card-body">
-                        <h5 class="card-title">Chaussure</h5>
-                        <p class="card-text">idéalement en jaune, mais peut prendre différentes couleurs</p>
-                        <p class="card-text" style="color: red; font-size: 2rem;"><strong>199$</strong></p>
-                        </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card rounded-5">
-                        <a class="text-decoration-none text-color-light-bg" href="./products/id">
-                        <img src="./assets/chaussure1.webp" class="card-img-top h-300px img-cover rounded-5" alt="...">
-                        <div class="card-body">
-                        <h5 class="card-title">Chaussure</h5>
-                        <p class="card-text">idéalement en jaune, mais peut prendre différentes couleurs</p>
-                        <p class="card-text" style="color: red; font-size: 2rem;"><strong>199$</strong></p>
-                        </div>
-                        </a>
-                    </div>
-                </div>
                 
-                <div class="col mobile">
-                    <div class="mobile-ad">
-                        <img src="./assets/polo1.webp" alt="" class="img-cover w-100">
-                    </div>
-                </div>
-            
-
+                <?php 
+                    foreach($productCards as $productCard): 
+                ?>
                 <div class="col">
                     <div class="card rounded-5">
-                        <a class="text-decoration-none text-color-light-bg" href="./products/id">
-                        <img src="./assets/chaussure1.webp" class="card-img-top h-300px img-cover rounded-5" alt="...">
+                        <a class="text-decoration-none text-color-light-bg" href="./products?id=<?= urlencode($productCard->product->GetId()) ?>">
+                        <img src="<?= htmlspecialchars($productCard->productImage->GetRelativeUrl()) ?>" class="card-img-top h-300px img-cover  rounded-5" alt="...">
                         <div class="card-body">
-                        <h5 class="card-title">Chaussure</h5>
-                        <p class="card-text">idéalement en jaune, mais peut prendre différentes couleurs</p>
-                        <p class="card-text" style="color: red; font-size: 2rem;"><strong>199$</strong></p>
+                        <h5 class="card-title"><?= $productCard->product->GetName() ?></h5>
+                        <p class="card-text"><?= $productCard->product->GetDescription() ?></p>
+                        <p class="card-text" style="color: red; font-size: 2rem;"><strong><?= $productCard->product->GetPrice() ?> €</strong></p>
                         </div>
                         </a>
                     </div>
                 </div>
-                <div class="col">
-                    <div class="card rounded-5">
-                        <a class="text-decoration-none text-color-light-bg" href="./products/id">
-                        <img src="./assets/chaussure1.webp" class="card-img-top h-300px img-cover rounded-5" alt="...">
-                        <div class="card-body">
-                        <h5 class="card-title">Chaussure</h5>
-                        <p class="card-text">idéalement en jaune, mais peut prendre différentes couleurs</p>
-                        <p class="card-text" style="color: red; font-size: 2rem;"><strong>199$</strong></p>
-                        </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card rounded-5">
-                        <a class="text-decoration-none text-color-light-bg" href="./products/id">
-                        <img src="./assets/chaussure1.webp" class="card-img-top h-300px img-cover rounded-5" alt="...">
-                        <div class="card-body">
-                        <h5 class="card-title">Chaussure</h5>
-                        <p class="card-text">idéalement en jaune, mais peut prendre différentes couleurs</p>
-                        <p class="card-text" style="color: red; font-size: 2rem;"><strong>199$</strong></p>
-                        </div>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="col mobile">
-                    <div class="mobile-ad">
-                        <img src="./assets/polo1.webp" alt="" class="img-cover w-100">
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card rounded-5">
-                        <a class="text-decoration-none text-color-light-bg" href="./products/id">
-                        <img src="./assets/chaussure1.webp" class="card-img-top h-300px img-cover rounded-5" alt="...">
-                        <div class="card-body">
-                        <h5 class="card-title">Chaussure</h5>
-                        <p class="card-text">idéalement en jaune, mais peut prendre différentes couleurs</p>
-                        <p class="card-text" style="color: red; font-size: 2rem;"><strong>199$</strong></p>
-                        </div>
-                        </a>
-                    </div>
-                </div>
+                <?php endforeach;?>
             </div>
         </div>
 

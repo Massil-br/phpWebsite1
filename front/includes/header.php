@@ -1,5 +1,13 @@
 
-
+<?php
+    require_once '../back/getData.php';
+    $response = GetData(['action'=>'getcategories']);
+    /**
+     * @var Category[] $categories
+     */
+    $categories = $response['categories'];
+    
+?>
 
 <!-- header  -->
  <canvas id="background"></canvas>
@@ -30,7 +38,7 @@
                         echo '
                             <li class="nav-item dropdown ">
                                 <a class="nav-link dropdown-toggle active" data-bs-toggle="offcanvas" href="#subcategory" role="button" aria-controls="subcategory">
-                                    Sous-Catégories
+                                    Sous Catégories
                                 </a>
                             </li>
                         ';
@@ -59,25 +67,12 @@
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body offcanvas-row underline-text " >
+
+        <?php foreach($categories as $category): ?>
+            <a class="text-decoration-none text-color nav-link scale-on-hover"
+       href="./productList.php?category=<?= urlencode($category->GetId()) ?>">  <?= htmlspecialchars($category->GetName()) ?></a>
+     <?php endforeach;?>
         
-        <a class="text-decoration-none text-color nav-link scale-on-hover" href="./category?/products">Vêtements</a>
-        <a class="text-decoration-none text-color nav-link scale-on-hover" href="./category?/products">Electronique</a>
-        <a class="text-decoration-none text-color nav-link scale-on-hover" href="./category?/products">Meubles</a>
-        <a class="text-decoration-none text-color nav-link scale-on-hover" href="./category?/products">Vêtements</a>
-        <a class="text-decoration-none text-color nav-link scale-on-hover" href="./category?/products">Electronique</a>
-        <a class="text-decoration-none text-color nav-link scale-on-hover " href="./category?/products">Meubles</a>
-        <a class="text-decoration-none text-color nav-link scale-on-hover" href="./category?/products">Vêtements</a>
-        <a class="text-decoration-none text-color nav-link scale-on-hover" href="./category?/products">Electronique</a>
-        <a class="text-decoration-none text-color nav-link scale-on-hover" href="./category?/products">Meubles</a>
-        <a class="text-decoration-none text-color nav-link scale-on-hover" href="./category?/products">Vêtements</a>
-        <a class="text-decoration-none text-color nav-link scale-on-hover" href="./category?/products">Electronique</a>
-        <a class="text-decoration-none text-color nav-link scale-on-hover" href="./category?/products">Meubles</a>
-        <a class="text-decoration-none text-color nav-link scale-on-hover" href="./category?/products">Vêtements</a>
-        <a class="text-decoration-none text-color nav-link scale-on-hover" href="./category?/products">Electronique</a>
-        <a class="text-decoration-none text-color nav-link scale-on-hover" href="./category?/products">Meubles</a>
-        <a class="text-decoration-none text-color nav-link scale-on-hover" href="./category?/products">Vêtements</a>
-        <a class="text-decoration-none text-color nav-link scale-on-hover" href="./category?/products">Electronique</a>
-        <a class="text-decoration-none text-color nav-link scale-on-hover" href="./category?/products">Meubles</a>
             
     </div>
 
