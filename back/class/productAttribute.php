@@ -15,4 +15,8 @@ class ProductAttribute{
         return $this->value;
     }
 
+    public function GetAttributeId():int{
+        return $this->attribute_id;
+    }
+
 }

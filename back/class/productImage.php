@@ -27,4 +27,12 @@ class ProductImage{
     public function GetRelativeUrl(): string{
        return  self::$folder . $this->image_name;
     }
+
+    public function GetPosition():int{
+        return $this->position;
+    }
+
+    public function GetAlt():string{
+        return $this->alt_text;
+    }
 }

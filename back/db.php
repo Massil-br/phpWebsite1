@@ -27,7 +27,7 @@ class Database {
     }
 
    
-    public function executeQuery(string $query, array $params = []): array|bool {
+    private function executeQuery(string $query, array $params = []): array|bool {
         try {
             $stmt = $this->pdo->prepare($query);
 
@@ -124,6 +124,99 @@ class Database {
         $productFirstImage = new ProductImage($row['id'], $row['product_id'], $row['image_name'], $row['alt_text'], $row['position'],$createdAt);
         return $productFirstImage;
     }
+
+    public function GetProductById(int $id):Product{
+        $query = "SELECT * FROM product WHERE id = :id";
+        $params = [
+            ':id' => $id
+        ];
+
+        $results = $this->executeQuery($query,$params);
+        $row = $results[0];
+
+        $createdAt = new DateTime($row['created_at']);
+        $product = new Product($row['id'], $row['subcategory_id'], $row['name'],$row['description'], $row['price'], $row['stock'], $createdAt);
+        return $product;
+    
+    }
+    /**
+     * Summary of GetProductImages
+     * @param int $id
+     * @return ProductImage[]
+     */
+    public function GetProductImages(int $id): array{
+        $query = "SELECT * FROM product_image WHERE product_id = :id";
+        $params = [
+            ':id' => $id
+        ];
+
+        $results = $this->executeQuery($query, $params);
+
+        $productimages = [];
+        foreach($results as $row){
+            $createdAt = new DateTime($row['created_at']);
+            $productimages[] = new ProductImage($row['id'],$row['product_id'], $row['image_name'], $row['alt_text'], $row['position'], $createdAt);
+        }
+
+        return $productimages;
+
+    }
+
+    /**
+     * Summary of GetProductAttributes
+     * @param int $id
+     * @return ProductAttribute[]
+     */
+    public function GetProductAttributes(int $id):array{
+        $query = "SELECT * FROM product_attribute WHERE product_id = :id";
+        $params =[
+            ':id'=> $id
+        ];
+
+        $results = $this->executeQuery($query, $params);
+
+        $productAttributes = [];
+        foreach($results as $row){
+            $productAttributes[] = new ProductAttribute($row['product_id'],$row['attribute_id'], $row['value']);
+        }
+        return $productAttributes;
+
+    }
+
+    /**
+     * Summary of GetAttribute
+     * @param int[] $ids
+     * @return FilterAttribute[]
+     */
+    public function GetAttributes(array $ids): array{
+        $query = "SELECT * FROM attribute WHERE id = :id";
+        $idMarked = [];
+        foreach($ids as $id){
+            if(!in_array($id,$idMarked)){
+                $idMarked[] = $id;
+            }
+        }
+
+        $attributes = [];
+        foreach($idMarked as $id){
+            $params = [
+                ':id' => $id
+            ];
+
+            $results = $this->executeQuery($query, $params);
+            $row = $results[0];
+
+            $attributes[]= new FilterAttribute($row['id'], $row['name']);
+
+        }
+
+        return $attributes;
+        
+    }
+
+
+
+
     
 
 }

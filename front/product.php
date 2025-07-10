@@ -1,3 +1,28 @@
+<?php
+require_once '../back/getData.php';
+
+if(isset($_GET['id'])){
+    $product_id = (int)$_GET['id'];
+    $response = GetData(['action'=>'getProductDetail', 'id' => $product_id]);
+
+    /**
+     * @var ProductDetail
+     */
+    $productDetail = $response['productDetail'];
+
+    usort($productDetail->productImages, function($a, $b) {
+    return $a->GetPosition() <=> $b->GetPosition();
+    });
+
+    $firstImage = $productDetail->productImages[0];
+    
+}
+
+
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,14 +53,15 @@
                             <div class="image-counter">
                                 <span id="current-image">1</span> / <span id="total-images">5</span>
                             </div>
-                            <img id="main-image" src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&h=400&fit=crop" alt="Nike Air Max 270" class="main-image">
+                            <img id="main-image" src="<?= htmlspecialchars($firstImage->GetRelativeUrl()) ?>" alt="<?= htmlspecialchars($firstImage->GetAlt())?>" class="main-image">
                             
                             <div class="thumbnail-container">
-                                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=80&h=80&fit=crop" alt="Vue 1" class="thumbnail active" data-index="0">
-                                <img src="https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?w=80&h=80&fit=crop" alt="Vue 2" class="thumbnail" data-index="1">
-                                <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?w=80&h=80&fit=crop" alt="Vue 3" class="thumbnail" data-index="2">
-                                <img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=80&h=80&fit=crop" alt="Vue 4" class="thumbnail" data-index="3">
-                                <img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=80&h=80&fit=crop" alt="Vue 5" class="thumbnail" data-index="4">
+                                <?php 
+                                $count =  count($productDetail->productImages);
+                                if($count > 1):
+                                    for($i = 1; $i < $count ; $i++): ?>
+                                        <img src="<?= htmlspecialchars($productDetail->productImages[0]->GetRelativeUrl()) ?>" alt="<?= htmlspecialchars($productDetail->productImages[0]->GetAlt()) ?>" class="thumbnail active" data-index="0">
+                                <?php endfor; endif; ?>
                             </div>
                         </div>
                     </div>
@@ -43,8 +69,8 @@
                     <!-- Informations produit -->
                     <div class="col-lg-6 col-md-12">
                         <div class="product-info">
-                            <h1 class="product-title">Nike Air Max 270</h1>
-                            <div class="product-price">129,99 €</div>
+                            <h1 class="product-title"><?= htmlspecialchars($productDetail->product->GetName())?></h1>
+                            <div class="product-price"><?= htmlspecialchars($productDetail->product->GetPrice())?> €</div>
                             
                             <div class="product-rating">
                                 <span class="rating-stars">
@@ -58,7 +84,7 @@
                             </div>
 
                             <p class="product-description text-color">
-                                La Nike Air Max 270 offre un confort exceptionnel avec sa technologie Air Max visible et son design moderne. Parfaite pour un usage quotidien avec style.
+                                <?= htmlspecialchars($productDetail->product->GetDescription())?>
                             </p>
 
                             <div class="size-selector">
@@ -127,11 +153,9 @@
  <script>
         // Images du produit
         const images = [
-            'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&h=400&fit=crop',
-            'https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?w=600&h=400&fit=crop',
-            'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=600&h=400&fit=crop',
-            'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=600&h=400&fit=crop',
-            'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=600&h=400&fit=crop'
+            <?php foreach($productDetail->productImages as $image):?>
+            '<?= htmlspecialchars($image->GetRelativeUrl())?>',
+            <?php endforeach;?>
         ];
 
         let currentImageIndex = 0;

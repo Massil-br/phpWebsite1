@@ -2,11 +2,7 @@
 require_once(__DIR__ . '/db.php');
 $db = new Database('localhost', '3307', 'ecommerce_template_1','root', '');
 
-$classes = glob(__DIR__ . '/class/*.php');
 
-foreach ($classes as $file) {
-    require_once $file;
-}
 
 
 
@@ -81,6 +77,33 @@ function GetData(array $params):array{
             }
 
             return ['error' => 'invalid param'];
+        
+        case 'getproductdetail':
+            if(!isset($params['id'])){
+                return ['error' =>'missing id param'];
+            }
+            if (!is_int($params['id'])){
+                return ['error' => 'id must be integer'];
+            }
+            if ($params['id']<= 0){
+                return ['error'=> 'id must be positive and higher than 0']; 
+            }
+            $product = $db->getProductById($params['id']);
+
+            $productImages = $db->GetProductImages($params['id']);
+
+            $productAttributes = $db->GetProductAttributes($params['id']);
+
+            $ids = [];
+            foreach($productAttributes as $p){
+                $ids[]= $p->GetAttributeId();
+            }
+            $attributes =$db->GetAttributes($ids);
+
+            $productDetail = new ProductDetail($product, $productImages, $attributes, $productAttributes);
+
+            return['productDetail' => $productDetail];
+            
 
 
         default:
