@@ -1,5 +1,5 @@
 <?php
-require_once '../back/getData.php';
+require_once  '../back/getData.php';
 // En haut de productList.php, avant le HTML et avant l'inclusion du header
 $subcategories = []; // toujours définir la variable pour éviter les warnings
 
@@ -152,7 +152,7 @@ if (isset($_GET['category'])) {
                         <div class="card-body">
                         <h5 class="card-title"><?= $productCard->product->GetName() ?></h5>
                         <p class="card-text"><?= $productCard->product->GetDescription() ?></p>
-                        <p class="card-text" style="color: red; font-size: 2rem;"><strong><?= $productCard->product->GetPrice() ?> €</strong></p>
+                        <p class="card-text" style="color: red; font-size: 2rem;"><strong><?= $productCard->variant->GetPrice() ?> €</strong></p>
                         </div>
                         </a>
                     </div>

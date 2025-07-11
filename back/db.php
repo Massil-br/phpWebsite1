@@ -1,12 +1,10 @@
 <?php
-
-
 $classes = glob(__DIR__ . '/class/*.php');
+
 
 foreach ($classes as $file) {
     require_once $file;
 }
-
 
 class Database {
     private PDO $pdo;
@@ -85,7 +83,7 @@ class Database {
         $products = [];
         foreach($results as $row){
             $createdAt = new DateTime($row['created_at']);
-            $products[] = new Product($row['id'], $row['subcategory_id'], $row['name'], $row['description'], $row['price'], $row['stock'],$createdAt);
+            $products[] = new Product($row['id'], $row['subcategory_id'], $row['name'], $row['description'], $createdAt);
         }
         return $products;
     }
@@ -102,7 +100,7 @@ class Database {
         $results = $this->executeQuery($query, $params);
         foreach($results as $row){
             $createdAt = new DateTime($row['created_at']);
-            $products[] = new Product($row['id'], $row['subcategory_id'], $row['name'], $row['description'], $row['price'], $row['stock'],$createdAt);
+            $products[] = new Product($row['id'], $row['subcategory_id'], $row['name'], $row['description'], $createdAt);
         }
 
         return $products;
@@ -135,7 +133,7 @@ class Database {
         $row = $results[0];
 
         $createdAt = new DateTime($row['created_at']);
-        $product = new Product($row['id'], $row['subcategory_id'], $row['name'],$row['description'], $row['price'], $row['stock'], $createdAt);
+        $product = new Product($row['id'], $row['subcategory_id'], $row['name'],$row['description'],  $createdAt);
         return $product;
     
     }
@@ -214,8 +212,37 @@ class Database {
         
     }
 
+    public function GetFirstVariantByProductId(int $id):ProductVariant{
+        $query = "SELECT * FROM variant WHERE product_id = :id";
+        $params =[
+            ':id' =>$id
+        ];
 
+        $results = $this->executeQuery($query, $params);
 
+        $row = $results[0];
+        $variant = new ProductVariant($row['id'], $row['product_id'], $row['sku'], $row['price'], $row['stock'], $row['created_at']);
+        return $variant;
+    }
+
+    /**
+     * Summary of GetProductVariantsByProductId
+     * @param int $id
+     * @return ProductVariant[]
+     */
+    public function GetProductVariantsByProductId(int $id):array{
+        $query = "SELECT * FROM variant WHERE product_id =:id";
+        $params =[
+            ':id' => $id
+        ];
+
+        $results = $this->executeQuery($query, $params);
+        $variants = [];
+        foreach($results as $row){
+            $variants[] = new ProductVariant($row['id'], $row['product_id'], $row['sku'], $row['price'], $row['stock'], $row['created_at']);
+        }
+        return $variants;
+    }
 
     
 
