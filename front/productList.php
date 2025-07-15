@@ -41,7 +41,18 @@ if (isset($_GET['category'])) {
 
     
 
-} else {
+}elseif(isset($_GET['research'])){
+    $input = $_GET['research'] ?? '';
+    $response = GetData(['action'=> 'search', 'input' =>$input]);
+    if(isset($response['error'])){
+        var_dump($response['error']);
+    }else{
+        /**
+         * @var ProductCard[]
+         */
+        $productCards=$response['productCards'];
+    }
+}else{
     $categoryId = null;
 }
 ?>

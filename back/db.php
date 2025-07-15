@@ -447,7 +447,26 @@ class Database {
     //     ];
     //     $this->executeQuery($query, $params);
     // }
-
+    /**
+     * Summary of ResearchProduct
+     * @param string $input
+     * @return int[]
+     */
+    public function GetProductIdByName(string $input):array{
+        $query ="SELECT id from product where name like :input";
+        $params= [
+            ":input" => "%{$input}%"
+        ];
+        $results = $this->executeQuery($query, $params);
+        if(empty($results)){
+            throw new ErrorException("no id found for your research : $input");
+        }
+        $ids = [];
+        foreach($results as $row){
+            $ids[] = $row['id'];
+        }
+        return $ids;
+    }
 
 }
 

@@ -202,7 +202,6 @@ function GetData(array $params):array{
                 return['error' => 'limit must be positive & higher than 0'];
             }
 
-            $productCards = [];
             $productIds = $db->GetRandomProductsIds($params['limit']);
             $products =[];
 
@@ -237,6 +236,55 @@ function GetData(array $params):array{
                 }
             }
             return ['homeProductCards' => $productCards];
+        
+        case 'search':
+            if(!isset($params['input'])){
+                return ['error'=>'input param not set'];
+            }
+
+            if($params['input'] === ""){
+                return ['error'=> "input can't be empty"];
+            }
+
+            try{
+                $productIds = $db->GetProductIdByName($params['input']);
+            }catch(ErrorException $e){
+                return ['error' => $e->getMessage()];
+            }
+
+            $products =[];
+            foreach($productIds as $productId){
+                $products[]= $db->GetProductById($productId);
+            }
+
+             $firstVariants = [];
+            $productImages= [];
+            foreach($products as $product){
+                try{
+                    $variant = $db->GetFirstVariantByProductId($product->GetId());
+                }catch(ErrorException $e){
+                    return ["error" => $e->getMessage(), "products" => $products];
+                }
+                $firstVariants[]= $variant;
+                try{
+                    $image = $db->GetProductFirstImage($product->GetId());
+                }catch(ErrorException $e){
+                    return ["error"=>$e->getMessage()];
+                }
+                $productImages[] = $image;
+                
+            }
+
+            $productCards =[];
+            for ( $i = 0; $i < count($products); $i++){
+                $productCards[] = new ProductCard($products[$i],$firstVariants[$i],$productImages[$i], []);
+                if (empty($productCards[$i])){
+                    return ['error' => "error while creating product card , product & productImages number in list :$i" ];
+                }
+            }
+            return ['productCards' =>$productCards];
+                
+
 
         default:
             return ['error' => 'Unknown action'];
