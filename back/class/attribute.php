@@ -12,4 +12,7 @@ class FilterAttribute{
     public function GetId(): int{
         return $this->id;
     }
+    public function GetName():string{
+        return $this->name;
+    } 
 }

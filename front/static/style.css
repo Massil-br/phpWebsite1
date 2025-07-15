@@ -138,6 +138,7 @@ body,html{
     width: 160px;
     height: 100%;
     position: relative;
+    z-index: -1;
 }
 .left-ad,
 .right-ad {
@@ -284,6 +285,8 @@ header-footer-bg-color{
     width: 100% !important;
 }
 
+
+
 w-400px{
     width:400px !important ;
 }
@@ -301,9 +304,11 @@ w-400px{
 
 
 .carousel-img-fixed{
-    width: 100%;
+    width: 60rem;
     height: 500px;
-    object-fit: cover;
+    object-fit: cover; 
+    object-position: center center; 
+    
 }
 
 
@@ -544,7 +549,7 @@ cart-item{
 
 
 
-@media(max-width:1070px){
+@media(max-width:1170px){
     .left-ad-wrapper,
     .right-ad-wrapper{
         display: none;
@@ -660,12 +665,13 @@ cart-item{
     margin-right: 10px;
 }
 
-.size-selector {
+.filter-selector {
     margin-bottom: 20px;
 }
 
 .size-btn {
-    width: 50px;
+    max-width:fit-content;
+    min-width: 50px;
     height: 40px;
     border: 2px solid #ddd;
     background: white;
@@ -845,7 +851,8 @@ cart-item{
 
 @media (max-width: 576px) {
     .size-btn {
-        width: 45px;
+        max-width:fit-content;
+        min-width: 50px;
         height: 35px;
         font-size: 0.9rem;
     }

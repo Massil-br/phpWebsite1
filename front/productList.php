@@ -16,18 +16,27 @@ if (isset($_GET['category'])) {
     if (isset($_Get['subcategory'])){
         $subcategoryId = (int) $_GET['subcategory'];
         $response = GetData(['action' => 'getproductcard', 'param' => 'subcategory', 'id'=> $subcategoryId]);
-        /**
-         * @var ProductCard[]
-         */
-        $productCards = $response['productCards'];
+        
+        if (isset($response['error'])){
+            var_dump($response['error']);
+        }else{
+            /**
+             * @var ProductCard[]
+             */
+            $productCards = $response['productCards'];
+        }
+        
     }else{
         $categoryId = (int)$categoryId;
         $response = GetData(['action' => 'getproductcard', 'param' => 'category', 'id'=> $categoryId]);
-        /**
-         * @var ProductCard[]
-         */
-        $productCards = $response['productCards'];
-        
+        if(isset($response['error'])){
+            var_dump($response['error']);
+        }else{
+            /**
+             * @var ProductCard[]
+             */
+            $productCards = $response['productCards'];
+        }
     }
 
     
@@ -148,7 +157,7 @@ if (isset($_GET['category'])) {
                 <div class="col" >
                     <div class="card rounded-5">
                         <a class="text-decoration-none text-color-light-bg" href="./product.php?id=<?= urlencode($productCard->product->GetId()) ?>">
-                        <img src="<?= htmlspecialchars($productCard->productImage->GetRelativeUrl()) ?>" class="card-img-top h-300px img-cover rounded-5" alt="...">
+                        <img src="<?= htmlspecialchars($productCard->variantImage->GetRelativeUrl()) ?>" class="card-img-top h-300px img-cover rounded-5" alt="...">
                         <div class="card-body">
                         <h5 class="card-title"><?= $productCard->product->GetName() ?></h5>
                         <p class="card-text"><?= $productCard->product->GetDescription() ?></p>

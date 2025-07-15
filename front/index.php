@@ -1,3 +1,29 @@
+<?php
+    require_once   '../back/getData.php';
+    $response = GetData(['action' => 'getHomeCategories']);
+    if(isset($response['error'])){
+        var_dump($response['error']);
+    }else{
+        $homeCategories  = $response['homeCategories'];
+    }
+
+    $response = GetData(['action' => 'gethomeproducts', 'limit'=> 6]);
+    if(isset($response['error'])){
+        var_dump($response['error']);
+    }else{
+        $homeProductCards = $response['homeProductCards'];
+    }
+
+    $response = GetData(['action' =>'gethomeproducts','limit' => 3]);
+    if(isset($response['error'])){
+        var_dump($response['error']);
+    }else{
+        $carouselProductCards = $response['homeProductCards'];
+    }
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -31,27 +57,29 @@
                         <button type="button" data-bs-target="#mainPageCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
                     </div>
                     <div class="carousel-inner  ">
-                        <div class="carousel-item active  ">
-                        <img src="./assets/robe1.webp" class="d-block  carousel-img-fixed" alt="...">
-                        <div class="carousel-caption d-none d-md-block ">
-                            <h5>Robe rouge</h5>
-                            <p>Découvrez nos nouvelles robes de soirées</p>
-                        </div>
-                        </div>
-                        <div class="carousel-item">
-                        <img src="./assets/polo1.webp" class="d-block  carousel-img-fixed" alt="...">
-                        <div class="carousel-caption d-none d-md-block text-black">
-                            <h5>Polo</h5>
-                            <p>L'été est arrivé, il est temps de sortir votre nouveau polo</p>
-                        </div>
-                        </div>
-                        <div class="carousel-item ">
-                        <img src="./assets/chaussure1.webp" class="d-block  carousel-img-fixed" alt="...">
-                        <div class="carousel-caption d-none d-md-block blue text-black">
-                            <h5>Chaussure</h5>
-                            <p>Quoi de mieux que de nouvelles chaussures légères en ce temps chaud ?</p>
-                        </div>
-                        </div>
+                        <?php if(isset($carouselProductCards)):?>
+                            <div class="carousel-item active  ">
+                            <a  class="d-flex align-items-center justify-content-center" href="./product.php?id=<?= $carouselProductCards[0]->product->GetId() ?>">
+                                <img src="<?= $carouselProductCards[0]->variantImage->GetRelativeUrl() ?>" class="d-block  carousel-img-fixed" alt="<?= $carouselProductCards[0]->variantImage->GetAlt() ?>">
+                                <div class="carousel-caption d-none d-md-block ">
+                                    <h5 class="card-title text-black d-flex justify-content-center">
+                                    <strong class="bg-white rounded-2 p-1"><?= $carouselProductCards[0]->product->GetName() ?></strong>
+                                    </h5>
+                                </div>
+                            </a>
+                            </div>
+                           <?php for($i = 1; $i < count($carouselProductCards);$i++): ?>
+                             <div class="carousel-item ">
+                            <a class="d-flex align-items-center justify-content-center" href="./product.php?id=<?= $carouselProductCards[$i]->product->GetId() ?>">
+                                <img src="<?= $carouselProductCards[$i]->variantImage->GetRelativeUrl() ?>" class="d-block  carousel-img-fixed" alt="<?= $carouselProductCards[$i]->variantImage->GetAlt() ?>">
+                                <div class="carousel-caption d-none d-md-block ">
+                                    <h5 class="card-title text-black d-flex justify-content-center">
+                                    <strong class="bg-white rounded-2 p-1"><?= $carouselProductCards[$i]->product->GetName() ?></strong>
+                                    </h5>
+                                </div>
+                            </a>
+                            </div>
+                        <?php endfor; endif;?>
                     </div>
                     <button class="carousel-control-prev" type="button" data-bs-target="#mainPageCarousel" data-bs-slide="prev">
                         <span class="carousel-control-prev-icon bg-black" aria-hidden="true"></span>
@@ -75,49 +103,25 @@
                 <h1 class="text-white">Catégories recommandées</h1>
             </div>
 
-
+            
            <div class="row row-cols-1 row-cols-md-3 g-4 p-3">
+            <?php if(isset($homeCategories)):
+                foreach($homeCategories as $homeCategory):?>
                 <!-- Carte 1 -->
                 <div class="col">
                     <div class="card text-bg-white rounded-3">
-                        <a class="text-decoration-none text-black" href="./products/id">
-                        <img src="./assets/vetementPhoto.webp" class="card-img h-300px img-cover" alt="...">
+                        <a class="text-decoration-none text-black" href="./productList.php?category=<?= urlencode($homeCategory->category->GetId()) ?>">
+                        <img src="<?= $homeCategory->variantImage->GetRelativeUrl() ?>" class="card-img h-300px img-cover" alt="...">
                         <div class="card-img-overlay">
                             <h5 class="card-title text-black d-flex justify-content-center">
-                            <strong class="bg-white rounded-5 p-1">Vetements</strong>
+                            <strong class="bg-white rounded-5 p-1"><?= $homeCategory->category->GetName() ?></strong>
                             </h5>
                         </div>
                         </a>
                     </div>
                 </div>
-
-                <!-- Carte 2 -->
-                <div class="col">
-                    <div class="card text-bg-white rounded-3">
-                        <a class="text-decoration-none text-black" href="./products/id">
-                        <img src="./assets/vetementPhoto.webp" class="card-img h-300px img-cover" alt="...">
-                        <div class="card-img-overlay">
-                            <h5 class="card-title text-black d-flex justify-content-center">
-                            <strong class="bg-white rounded-5 p-1">Meubles</strong>
-                            </h5>
-                        </div>
-                        </a>
-                    </div>
-                </div>
+            <?php endforeach; endif;?>
                 
-                <!-- Carte 3 -->
-                <div class="col">
-                    <div class="card text-bg-white rounded-3">
-                        <a class="text-decoration-none text-black" href="./products/id">
-                        <img src="./assets/vetementPhoto.webp" class="card-img h-300px img-cover" alt="...">
-                        <div class="card-img-overlay">
-                            <h5 class="card-title text-black d-flex justify-content-center">
-                            <strong class="bg-white rounded-5 p-1">High Tech</strong>
-                            </h5>
-                        </div>
-                        </a>
-                    </div>
-                </div>
             </div>
 
 
@@ -133,86 +137,26 @@
 
 
             <div class="row row-cols-1 row-cols-md-3 g-4 p-3">
+                <?php 
+                    if(isset($homeProductCards)):
+                        foreach($homeProductCards as $homeProductCard):
+                ?>
                 <div class="col">
-                    <div class="card rounded-5">
-                        <a class="text-decoration-none text-black" href="./products/id">
-                        <img src="./assets/chaussure1.webp" class="card-img-top h-300px img-cover  rounded-5" alt="...">
+                    <div class="card  rounded-5">
+                        <a class="text-decoration-none text-black" href="./product.php?id=<?= urlencode($homeProductCard->product->GetId()) ?>">
+                        <img src="<?= $homeProductCard->variantImage->GetRelativeUrl() ?>" class="card-img-top  img-cover  rounded-5 h-300px" alt="...">
                         <div class="card-body">
-                        <h5 class="card-title">Chaussure</h5>
-                        <p class="card-text">idéalement en jaune, mais peut prendre différentes couleurs</p>
-                        <p class="card-text" style="color: red; font-size: 2rem;"><strong>199$</strong></p>
+                        <h5 class="card-title"><?=$homeProductCard->product->GetName() ?></h5>
+                        <p class="card-text"><?=$homeProductCard->product->GetDescription() ?></p>
+                        <p class="card-text" style="color: red; font-size: 2rem;"><strong><?=$homeProductCard->variant->GetPrice()?> €</strong></p>
                         </div>
                         </a>
                     </div>
                 </div>
-                <div class="col">
-                    <div class="card rounded-5">
-                        <a class="text-decoration-none text-black" href="./products/id">
-                        <img src="./assets/chaussure1.webp" class="card-img-top h-300px img-cover rounded-5" alt="...">
-                        <div class="card-body">
-                        <h5 class="card-title">Chaussure</h5>
-                        <p class="card-text">idéalement en jaune, mais peut prendre différentes couleurs</p>
-                        <p class="card-text" style="color: red; font-size: 2rem;"><strong>199$</strong></p>
-                        </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card rounded-5">
-                        <a class="text-decoration-none text-black" href="./products/id">
-                        <img src="./assets/chaussure1.webp" class="card-img-top h-300px img-cover rounded-5" alt="...">
-                        <div class="card-body">
-                        <h5 class="card-title">Chaussure</h5>
-                        <p class="card-text">idéalement en jaune, mais peut prendre différentes couleurs</p>
-                        <p class="card-text" style="color: red; font-size: 2rem;"><strong>199$</strong></p>
-                        </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card rounded-5">
-                        <a class="text-decoration-none text-black" href="./products/id">
-                        <img src="./assets/chaussure1.webp" class="card-img-top h-300px img-cover rounded-5" alt="...">
-                        <div class="card-body">
-                        <h5 class="card-title">Chaussure</h5>
-                        <p class="card-text">idéalement en jaune, mais peut prendre différentes couleurs</p>
-                        <p class="card-text" style="color: red; font-size: 2rem;"><strong>199$</strong></p>
-                        </div>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="col mobile">
-                    <div class="mobile-ad">
-                        <img src="./assets/polo1.webp" alt="" class="img-cover w-100">
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card rounded-5">
-                        <a class="text-decoration-none text-black" href="./products/id">
-                        <img src="./assets/chaussure1.webp" class="card-img-top h-300px img-cover rounded-5" alt="...">
-                        <div class="card-body">
-                        <h5 class="card-title">Chaussure</h5>
-                        <p class="card-text">idéalement en jaune, mais peut prendre différentes couleurs</p>
-                        <p class="card-text" style="color: red; font-size: 2rem;"><strong>199$</strong></p>
-                        </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card rounded-5">
-                        <a class="text-decoration-none text-black" href="./products/id">
-                        <img src="./assets/chaussure1.webp" class="card-img-top h-300px img-cover rounded-5" alt="...">
-                        <div class="card-body">
-                        <h5 class="card-title">Chaussure</h5>
-                        <p class="card-text">idéalement en jaune, mais peut prendre différentes couleurs</p>
-                        <p class="card-text" style="color: red; font-size: 2rem;"><strong>199$</strong></p>
-                        </div>
-                        </a>
-                    </div>
-                </div>
+                <?php endforeach; endif; ?>
             </div>
+
+
         </div>
 
         

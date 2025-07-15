@@ -49,28 +49,30 @@ function GetData(array $params):array{
             
             $params['param'] = strtolower($params['param']);
             if($params['param'] === 'category'){
-
-                $products = $db->getProductsByCategoryId($params['id']);
-                if(empty($products)){
-                    return ['error'=>'no products found'];
+                try{
+                    $products = $db->getProductsByCategoryId($params['id']);
+                    
+                }catch(ErrorException $e){
+                    return ["error" => $e->getMessage()];
                 }
+                
 
                 $firstVariants = [];
                 $productImages= [];
                 foreach($products as $product){
-                    $image = $db->GetProductFirstImage($product->GetId());
-                    if(empty($image)){
-                        $id = $product->GetId();
-                        return ['error' => " image not found,  product id : $id"];
-                    }
-                    $productImages[] = $image;
-
-                    $variant = $db->GetFirstVariantByProductId($product->GetId());
-                    if(empty($variant)){
-                        $id = $product->GetId();
-                        return ['error' => "variant not found , product id : $id"];
+                    try{
+                        $variant = $db->GetFirstVariantByProductId($product->GetId());
+                    }catch(ErrorException $e){
+                        return ["error" => $e->getMessage(), "products" => $products];
                     }
                     $firstVariants[]= $variant;
+                    try{
+                        $image = $db->GetProductFirstImage($product->GetId());
+                    }catch(ErrorException $e){
+                        return ["error"=>$e->getMessage()];
+                    }
+                    $productImages[] = $image;
+                    
                 }
 
 
@@ -149,11 +151,14 @@ function GetData(array $params):array{
             if(empty($productImages)){
                 return ['error' => 'no productImages found'];
             }
-
-            $productAttributes = $db->GetProductAttributes($params['id']);
-            // if(empty($productAttributes)){
-            //     return ['error'=> 'no product attributes found'];
-            // }
+            $productAttributes = [];
+            foreach($variants as $variant){
+                $productAttributes   = $db->GetProductAttributes($variant->GetId());
+                if(empty($productAttributes)){
+                    return ['error'=> 'no product attributes found'];
+                }
+            }
+            
 
             $ids = [];
             foreach($productAttributes as $p){
@@ -161,9 +166,9 @@ function GetData(array $params):array{
             }
 
             $attributes =$db->GetAttributes($ids);
-            // if(empty($attributes)){
-            //     return ['error'=> 'no attributes found'];
-            // }
+             if(empty($attributes)){
+                 return ['error'=> 'no attributes found'];
+             }
 
             $productDetail = new ProductDetail($product,$variants, $productImages, $attributes, $productAttributes);
             if(empty($productDetail)){
@@ -171,7 +176,67 @@ function GetData(array $params):array{
             }
 
             return['productDetail' => $productDetail];
-            
+        
+        case 'gethomecategories':
+            $categories=[];
+            $homeCategories = [];
+            try{
+               $categories =  $db->Get3RandomCategories();
+               foreach($categories as $category){
+                    $variantImage = $db->GetRandImageByCategoryId($category->GetId());
+                    $homeCategories[]= new HomeCategory($category, $variantImage);
+               }
+            }catch(ErrorException $e){
+                return ["error" => $e->getMessage()];
+            }
+            return ['homeCategories' =>$homeCategories];
+        
+        case 'gethomeproducts':
+            if(!isset($params['limit'])){
+                return ['error' => 'limit param not set'];
+            }
+            if(!is_int($params['limit'])){
+                return ['error' => 'limit param needs to be an integer'];
+            }
+            if($params['limit']<=0){
+                return['error' => 'limit must be positive & higher than 0'];
+            }
+
+            $productCards = [];
+            $productIds = $db->GetRandomProductsIds($params['limit']);
+            $products =[];
+
+            foreach($productIds as $productId){
+                $products[]= $db->GetProductById($productId);
+            }
+
+            $firstVariants = [];
+            $productImages= [];
+            foreach($products as $product){
+                try{
+                    $variant = $db->GetFirstVariantByProductId($product->GetId());
+                }catch(ErrorException $e){
+                    return ["error" => $e->getMessage(), "products" => $products];
+                }
+                $firstVariants[]= $variant;
+                try{
+                    $image = $db->GetProductFirstImage($product->GetId());
+                }catch(ErrorException $e){
+                    return ["error"=>$e->getMessage()];
+                }
+                $productImages[] = $image;
+                
+            }
+
+
+            $productCards =[];
+            for ( $i = 0; $i < count($products); $i++){
+                $productCards[] = new ProductCard($products[$i],$firstVariants[$i],$productImages[$i], []);
+                if (empty($productCards[$i])){
+                    return ['error' => "error while creating product card , product & productImages number in list :$i" ];
+                }
+            }
+            return ['homeProductCards' => $productCards];
 
         default:
             return ['error' => 'Unknown action'];

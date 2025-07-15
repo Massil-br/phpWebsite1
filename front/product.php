@@ -15,11 +15,11 @@ if(isset($_GET['id'])){
         $productDetail = $response['productDetail'];
         
 
-        usort($productDetail->productImages, function($a, $b) {
+        usort($productDetail->variantImages, function($a, $b) {
         return $a->GetPosition() <=> $b->GetPosition();
         });
 
-        $firstImage = $productDetail->productImages[0];
+        $firstImage = $productDetail->variantImages[0];
     }
 }
 
@@ -64,10 +64,10 @@ if(isset($_GET['id'])){
                             
                             <div class="thumbnail-container">
                                 <?php 
-                                $count =  count($productDetail->productImages);
+                                $count =  count($productDetail->variantImages);
                                 if($count > 1):
                                     for($i = 1; $i < $count ; $i++): ?>
-                                        <img src="<?= htmlspecialchars($productDetail->productImages[0]->GetRelativeUrl()) ?>" alt="<?= htmlspecialchars($productDetail->productImages[0]->GetAlt()) ?>" class="thumbnail active" data-index="0">
+                                        <img src="<?= htmlspecialchars($productDetail->variantImages[0]->GetRelativeUrl()) ?>" alt="<?= htmlspecialchars($productDetail->variantImages[0]->GetAlt()) ?>" class="thumbnail active" data-index="0">
                                 <?php endfor; endif; ?>
                             </div>
                         </div>
@@ -93,20 +93,25 @@ if(isset($_GET['id'])){
                             <p class="product-description text-color">
                                 <?= htmlspecialchars($productDetail->product->GetDescription())?>
                             </p>
-
-                            <div class="size-selector">
-                                <label class="form-label fw-bold text-color">Taille:</label>
-                                <div class="d-flex flex-wrap">
-                                    <button class="size-btn" data-size="38">38</button>
-                                    <button class="size-btn" data-size="39">39</button>
-                                    <button class="size-btn active" data-size="40">40</button>
-                                    <button class="size-btn" data-size="41">41</button>
-                                    <button class="size-btn" data-size="42">42</button>
-                                    <button class="size-btn" data-size="43">43</button>
-                                    <button class="size-btn" data-size="44">44</button>
-                                    <button class="size-btn" data-size="45">45</button>
+                            <?php foreach($productDetail->attributes as $attribute): ?>
+                            <div class="filter-selector">
+                                <label class="form-label fw-bold text-color"><?= htmlspecialchars(strtoupper($attribute->GetName()))?> :</label>
+                                <div class="d-flex flex-wrap row-gap-2">
+                                    <?php 
+                                        $variantAttributes = [];
+                                        for($i =0; $i < count($productDetail->variantAttributes); $i++){
+                                            if ($productDetail->variantAttributes[$i]->GetAttributeId() == $attribute->GetId()){
+                                                $variantAttributes[]=$productDetail->variantAttributes[$i];
+                                            }
+                                        }
+                                    
+                                    foreach($variantAttributes as $variantAttribute):?>
+                                    <button class="size-btn" data-attribute="<?= htmlspecialchars($attribute->GetName()) ?>" data-value="<?= htmlspecialchars($variantAttribute->GetValue())?>"><?= htmlspecialchars($variantAttribute->GetValue())?></button>
+                                    
+                                    <?php endforeach;?>
                                 </div>
                             </div>
+                            <?php endforeach;?>
 
                             <div class="quantity-selector">
                                 <label class="form-label fw-bold me-3 text-color">Quantité:</label>
@@ -155,7 +160,7 @@ if(isset($_GET['id'])){
 <script>
     // Images du produit
     const images = [
-        <?php foreach($productDetail->productImages as $image):?>
+        <?php foreach($productDetail->variantImages as $image):?>
         '<?= htmlspecialchars($image->GetRelativeUrl())?>',
         <?php endforeach;?>
     ];

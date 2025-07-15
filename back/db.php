@@ -98,29 +98,43 @@ class Database {
         ];
 
         $results = $this->executeQuery($query, $params);
-        foreach($results as $row){
-            $createdAt = new DateTime($row['created_at']);
-            $products[] = new Product($row['id'], $row['subcategory_id'], $row['name'], $row['description'], $createdAt);
-        }
+        if(count($results) >0){
+            foreach($results as $row){
+                $createdAt = new DateTime($row['created_at']);
+                $products[] = new Product($row['id'], $row['subcategory_id'], $row['name'], $row['description'], $createdAt);
+            }
 
-        return $products;
+            return $products;
+        }
+        throw new ErrorException("No products found for category : $category_id");
+        
     }
 
-    public function GetProductFirstImage(int $product_id): ProductImage{
-        $query = "SELECT * FROM product_image WHERE product_id = :product_id AND position = :position ";
+    public function GetProductFirstImage(int $product_id): VariantImage{
+        $id = 0;
+        try{
+            $variant = $this->GetFirstVariantByProductId($product_id);
+            $id = $variant->GetId();
+        }catch(ErrorException $e){
+            throw new ErrorException("first variant by produc id : $product_id , not found");
+        }
+        $query = "SELECT * FROM variant_image WHERE variant_id = :variant_id AND position = :position ";
         $params =[
-            ':product_id' => $product_id,
+            ':variant_id' => $id,
             ':position' => 1
         ];
         
 
         $results = $this->executeQuery($query, $params);
-
-        $row = $results[0];
+        if(isset($results[0])){
+            $row = $results[0];
         
-        $createdAt = new DateTime($row['created_at']);
-        $productFirstImage = new ProductImage($row['id'], $row['product_id'], $row['image_name'], $row['alt_text'], $row['position'],$createdAt);
-        return $productFirstImage;
+            
+            $variantFirstImage = new VariantImage($row['id'], $row['variant_id'], $row['image_name'], $row['alt_text'], $row['position']);
+            return $variantFirstImage;
+        }
+        throw new ErrorException("no images found in database");
+       
     }
 
     public function GetProductById(int $id):Product{
@@ -140,22 +154,32 @@ class Database {
     /**
      * Summary of GetProductImages
      * @param int $id
-     * @return ProductImage[]
+     * @return VariantImage[]
      */
-    public function GetProductImages(int $id): array{
-        $query = "SELECT * FROM product_image WHERE product_id = :id";
-        $params = [
-            ':id' => $id
-        ];
-
-        $results = $this->executeQuery($query, $params);
-
-        $productimages = [];
-        foreach($results as $row){
-            $createdAt = new DateTime($row['created_at']);
-            $productimages[] = new ProductImage($row['id'],$row['product_id'], $row['image_name'], $row['alt_text'], $row['position'], $createdAt);
+    public function GetProductImages(int $product_id): array{
+        try{
+            $ids = $this->GetProductVariantsIdsByProductId($product_id);
+             
+        }catch(ErrorException $e){
+            throw new ErrorException($e->getMessage());
         }
 
+        $productimages = [];
+
+        foreach($ids as $id){
+            $query = "SELECT * FROM variant_image WHERE variant_id = :id";
+            $params = [
+                ':id' => $id
+            ];
+
+            $results = $this->executeQuery($query, $params);
+
+        
+            foreach($results as $row){
+                $productimages[] = new VariantImage($row['id'],$row['variant_id'], $row['image_name'], $row['alt_text'], $row['position'] );
+            }
+        }
+        
         return $productimages;
 
     }
@@ -163,10 +187,10 @@ class Database {
     /**
      * Summary of GetProductAttributes
      * @param int $id
-     * @return ProductAttribute[]
+     * @return VariantAttribute[]
      */
     public function GetProductAttributes(int $id):array{
-        $query = "SELECT * FROM product_attribute WHERE product_id = :id";
+        $query = "SELECT * FROM variant_attribute WHERE variant_id = :id";
         $params =[
             ':id'=> $id
         ];
@@ -175,7 +199,7 @@ class Database {
 
         $productAttributes = [];
         foreach($results as $row){
-            $productAttributes[] = new ProductAttribute($row['product_id'],$row['attribute_id'], $row['value']);
+            $productAttributes[] = new VariantAttribute($row['variant_id'],$row['attribute_id'], $row['value']);
         }
         return $productAttributes;
 
@@ -219,10 +243,13 @@ class Database {
         ];
 
         $results = $this->executeQuery($query, $params);
-
-        $row = $results[0];
-        $variant = new ProductVariant($row['id'], $row['product_id'], $row['sku'], $row['price'], $row['stock'], $row['created_at']);
-        return $variant;
+        if(isset($results[0])){
+            $row = $results[0];
+            $variant = new ProductVariant($row['id'], $row['product_id'], $row['sku'], $row['price'], $row['stock'], $row['created_at']);
+            return $variant;
+        }
+        throw new ErrorException("no variant found for this product, product_id : $id");
+        
     }
 
     /**
@@ -243,8 +270,184 @@ class Database {
         }
         return $variants;
     }
+    /**
+     * Summary of GetProductVariantsIdsByProductId
+     * @param int $id
+     * @throws \ErrorException
+     * @return int[]
+     */
+    public function GetProductVariantsIdsByProductId(int $id):array{
+        $query = "SELECT id FROM variant WHERE product_id =:id";
+        $params = [
+            ':id' =>$id
+        ];
 
-    
+        $results = $this->executeQuery($query, $params);
+        if (count($results) >0){
+            $ids = [];
+            foreach($results as $row){
+                $ids[] = $row['id'];
+            }
+            return $ids;
+        }
+        throw new ErrorException("no variants found for product : $id");
+        
+    }
+    /**
+     * Summary of Get3RandomCategories
+     * @return Category[]
+     */
+    public function Get3RandomCategories():array{
+        $query ="SELECT * FROM category ORDER BY RAND() LIMIT 3";
+        $results = $this->executeQuery($query);
+        if(isset($results)){
+            $categories =[];
+            foreach($results as $row){
+                $createdAt = new DateTime($row['created_at']);
+                $categories[] = new Category($row['id'], $row['name'], $row['description'], $createdAt);
+            }
+            return $categories;
+        }
+        throw new ErrorException("error while trying to get 3 rand categories");
+    }
+
+    public function GetRandImageByCategoryId($category_id): VariantImage{
+        $query ="SELECT id from subcategory WHERE category_id =:id ORDER BY RAND() LIMIT 1";
+        $params =[
+            ":id" => $category_id
+        ];
+        $results = $this->executeQuery($query, $params);
+        if(empty($results)){
+           throw new ErrorException("no subcategory found for category id : $category_id"); 
+        }
+        $subcategoryId = $results[0]['id'];
+
+        $query ="SELECT id from product WHERE subcategory_id = :subcategory_id order by RAND() LIMIT 1 ";
+        $params=[
+            ":subcategory_id" => $subcategoryId
+        ];
+        $results = $this->executeQuery($query,$params);
+        if(empty($results)){
+           throw new ErrorException("no product found for subcategory id : $subcategoryId"); 
+        }
+        $productId = $results[0]['id'];
+
+        $query = "SELECT id from variant where product_id = :product_id order by RAND() LIMIT 1";
+        $params =[
+            "product_id" => $productId
+        ];
+        $results = $this->executeQuery($query,$params);
+        if(empty($results)){
+           throw new ErrorException("no variant found for product id : $productId"); 
+        }
+        $variantId = $results[0]['id'];
+
+
+        $query = "SELECT * from variant_image where variant_id =:variant_id and position = 1";
+        $params = [
+            "variant_id" =>$variantId
+        ];
+        $results = $this->executeQuery($query, $params);
+        if(empty($results)){
+           throw new ErrorException("no variant_image found for variant id : $variantId"); 
+        }
+        $row = $results[0];
+        $variantImage = new VariantImage($row['id'],$row['variant_id'], $row['image_name'], $row['alt_text'], $row['position']);
+        return $variantImage;
+    }
+    /**
+     * Summary of Get6RandomProducts
+     * @return int[]
+     */
+    public function GetRandomProductsIds(int $limit):array{
+        if($limit <=0){
+            throw new ErrorException("limit must be positive");
+        }
+
+        $query = "SELECT id FROM product order by RAND() limit $limit";
+        
+        $results = $this->executeQuery($query);
+        if(empty($results)){
+            throw new ErrorException("no products found when searching random products");
+        }
+        $productsIds = [];
+        foreach($results as $row){
+            $productsIds[] = $row['id'];
+        }
+        return $productsIds;
+    } 
+
+    // public function CreateCategory(string $name, string $description){
+    //     $query = "INSERT INTO category (name, description) values(:name, :description)";
+    //     $params=[
+    //         ":name" =>$name,
+    //         ":description" => $description
+    //     ];
+    //     $this->executeQuery($query,$params);
+    // }
+
+    // public function CreateSubCategory(int $category_id, string $name, string $description){
+    //     $query = "INSERT into subcategory (category_id, name, description) values(:category_id, :name, :description)";
+    //     $params = [
+    //         ":category_id" =>$category_id,
+    //         ":name" => $name,
+    //         ":description" => $description
+    //     ];
+    //     $this->executeQuery($query, $params);
+    // }
+
+    // public function CreateProduct(int $subcategory_id, string $name, string $description){
+    //     $query = "INSERT into product (subcategory_id, name, description) values (:subcategory_id, :name, :description) ";
+    //     $params = [
+    //         ":subcategory_id" => $subcategory_id,
+    //         ":name"=>$name,
+    //         ":description" => $description
+    //     ];
+    // }
+
+
+    // public function CreateVariant(int $product_id, string $sku, float $price, int $stock){
+    //     $query = "INSERT into variant (product_id, sku, price, stock) values (:product_id, :sku, :price, :stock)";
+    //     $params = [
+    //         ":product_id" => $product_id,
+    //         ":sku" => $sku,
+    //         ":price"=>$price,
+    //         ":stock" => $stock
+    //     ];
+
+    //     $this->executeQuery($query, $params);
+    // }
+
+    // public function CreateAttribute(string $name){
+    //     $query ="INSERT into attribute (name) values (:name)";
+    //     $params =[
+    //         ":name" => $name
+    //     ];
+    //     $this->executeQuery($name);
+    // }
+
+    // public function CreateVariantAttribute(int $variant_id, int $attribute_id, string $value){
+    //     $query ="INSERT into variant_attribute (variant_id, attribute_id, value) values (:variant_id, :attribute_id, :value)";
+    //     $params =[
+    //         ":variant_id" => $variant_id,
+    //         ":attribute_id" =>$attribute_id,
+    //         ":value" =>$value
+    //     ];
+
+    //     $this->executeQuery($query, $params);
+    // }
+
+    // public function CreateVariantImage(int $variant_id, string $image_name, string $alt_text, int $position ){
+    //     $query = "INSERT into variant_image (variant_id, image_name, alt_text, position) values (:variant_id, :image_name, :alt_text, :position)";
+    //     $params = [
+    //         ":variant_id" => $variant_id,
+    //         ":image_name" => $image_name,
+    //         ":alt_text"=>$alt_text,
+    //         ":position" => $position
+    //     ];
+    //     $this->executeQuery($query, $params);
+    // }
+
 
 }
 

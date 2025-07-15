@@ -4,23 +4,23 @@
 class ProductCard{
     public Product $product;
     public ProductVariant $variant;
-    public ProductImage $productImage;
+    public VariantImage $variantImage;
     /**
      * Summary of productAttribute
-     * @var ProductAttribute[]
+     * @var VariantAttribute[]
      */
     public array $productAttributes;
 
     /**
      * Summary of __construct
      * @param Product $product
-     * @param ProductImage $productImage
-     * @param ProductAttribute[] $productAttributes
+     * @param VariantImage $productImage
+     * @param VariantAttribute[] $productAttributes
      */
-    public function __construct(Product $product,ProductVariant $variant, ProductImage $productImage,  array $productAttributes){
+    public function __construct(Product $product,ProductVariant $variant, VariantImage $variantImage,  array $productAttributes){
         $this->product = $product;
         $this->variant = $variant;
-        $this->productImage = $productImage;
+        $this->variantImage = $variantImage;
         $this->productAttributes = $productAttributes;
     }
 }

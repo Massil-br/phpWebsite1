@@ -9,9 +9,9 @@ class ProductDetail{
     public array $variants;
     /**
      * Summary of productImages
-     * @var ProductImage[]
+     * @var VariantImage[]
      */
-    public array $productImages;
+    public array $variantImages;
     /**
      * Summary of attributes
      * @var Attribute[]
@@ -19,23 +19,23 @@ class ProductDetail{
     public array $attributes;
     /**
      * Summary of productAttributes
-     * @var ProductAttribute[]
+     * @var VariantAttribute[]
      */
-    public array $productAttributes;
+    public array $variantAttributes;
     /**
      * Summary of __construct
      * @param Product $product
      * @param ProductVariant[] $variants
-     * @param ProductImage[] $productImages
+     * @param variantImage[] $productImages
      * @param Attribute[] $attributes
-     * @param ProductAttribute[] $productAttributes
+     * @param VariantAttribute[] $productAttributes
      */
-    public function __construct(Product $product, array $variants, array $productImages, array $attributes, array $productAttributes){
+    public function __construct(Product $product, array $variants, array $variantImages, array $attributes, array $variantAttributes){
         $this->product = $product;
         $this->variants = $variants;
-        $this->productImages = $productImages;
+        $this->variantImages = $variantImages;
         $this->attributes = $attributes;
-        $this->productAttributes = $productAttributes;
+        $this->variantAttributes = $variantAttributes;
     }
     
 }
