@@ -33,5 +33,8 @@ class Product{
         return $this->description;
     }
 
+    public function GetCreatedAt(): string{
+        return $this->created_at->format(DateTime::ATOM);
+    }
     
 }

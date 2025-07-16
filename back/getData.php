@@ -257,48 +257,47 @@ function GetData(array $params):array{
  * @param Product[] $products
  * @return ProductCard[]
  */
-function CreateProductCardsWithProductList(array $products):array{
+function CreateProductCardsWithProductList(array $products): array {
     global $db;
     $firstVariants = [];
-    $productImages= [];
+    $productImages = [];
     $allvariantsAttributesByProduct = [];
             
-    foreach($products as $product){
-        try{
+    foreach ($products as $product) {
+        try {
             $variant = $db->GetFirstVariantByProductId($product->GetId());
             $image = $db->GetProductFirstImage($product->GetId());
             $variantIdList = $db->GetVariantsIdsByProductId($product->GetId());
             
             $productVariantAttributes = [];
-            foreach($variantIdList as $variantId){
+            foreach ($variantIdList as $variantId) {
                 $attributes = $db->GetVariantAttributes($variantId);
-                $productVariantAttributes[] = [
-                    'variantId' =>$variantId,
-                    'attributes' => $attributes
-                ];
-
+                foreach ($attributes as $attribute) {
+                    $productVariantAttributes[] = $attribute;
+                }
             }
 
-        }catch(ErrorException $e){
-            throw new ErrorException($e->getMessage()) ;
+        } catch (ErrorException $e) {
+            throw new ErrorException($e->getMessage());
         }
-        $firstVariants[]= $variant;
+
+        $firstVariants[] = $variant;
         $productImages[] = $image;
         $allvariantsAttributesByProduct[] = $productVariantAttributes;
-        
     }
 
-    
-
-
-    $productCards =[];
-    for ( $i = 0; $i < count($products); $i++){
-        $productCards[] = new ProductCard($products[$i],$firstVariants[$i],$productImages[$i], $allvariantsAttributesByProduct[$i]);
-        if (empty($productCards[$i])){
-            throw new ErrorException("error while creating product card , product & productImages number in list :$i");
+    $productCards = [];
+    for ($i = 0; $i < count($products); $i++) {
+        $productCards[] = new ProductCard(
+            $products[$i],
+            $firstVariants[$i],
+            $productImages[$i],
+            $allvariantsAttributesByProduct[$i]
+        );
+        if (empty($productCards[$i])) {
+            throw new ErrorException("Error while creating product card at index $i");
         }
     }
-    return $productCards;
-        
 
+    return $productCards;
 }
