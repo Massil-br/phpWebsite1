@@ -57,34 +57,14 @@ function GetData(array $params):array{
                 }
                 
 
-                $firstVariants = [];
-                $productImages= [];
-                foreach($products as $product){
-                    try{
-                        $variant = $db->GetFirstVariantByProductId($product->GetId());
-                    }catch(ErrorException $e){
-                        return ["error" => $e->getMessage(), "products" => $products];
-                    }
-                    $firstVariants[]= $variant;
-                    try{
-                        $image = $db->GetProductFirstImage($product->GetId());
-                    }catch(ErrorException $e){
-                        return ["error"=>$e->getMessage()];
-                    }
-                    $productImages[] = $image;
-                    
+                $productCards=[];
+                try{
+                   $productCards =  CreateProductCardsWithProductList($products);
+                }catch(ErrorException $e){
+                    return ['error' => $e->getMessage()];
                 }
-
-
-                $productCards =[];
-                for ( $i = 0; $i < count($products); $i++){
-                    $productCards[] = new ProductCard($products[$i],$firstVariants[$i],$productImages[$i], []);
-                    if (empty($productCards[$i])){
-                        return ['error' => "error while creating product card , product & productImages number in list :$i" ];
-                    }
-                }
-
-                return ['productCards' => $productCards];
+            
+            return ['productCards' =>$productCards];
             }
             if ($params['param'] === 'subcategory'){
 
@@ -94,33 +74,14 @@ function GetData(array $params):array{
 
                 }
 
-                $firstVariants = [];
-                $productImages = [];
-                foreach($products as $product){
-                    $image = $db->GetProductFirstImage($product->GetId());
-                    if(empty($image)){
-                        $id = $product->GetId();
-                        return ['error' => " image not found,  product id : $id"];
-                    }
-                    $productImages[] = $image;
-
-                    $variant = $db->GetFirstVariantByProductId($product->GetId());
-                    if(empty($variant)){
-                        $id = $product->GetId();
-                        return ['error' => "variant not found , product id : $id"];
-                    }
-                    $firstVariants[]= $variant;
+                $productCards=[];
+                try{
+                   $productCards =  CreateProductCardsWithProductList($products);
+                }catch(ErrorException $e){
+                    return ['error' => $e->getMessage()];
                 }
-
-                $productCards = [];
-                for($i = 0; $i < count($products); $i++){
-                    $productCards[] = new ProductCard($products[$i],$firstVariants[$i],$productImages[$i], []);
-                    if (empty($productCards[$i])){
-                        return ['error' => "error while creating product card , product & productImages number in list :$i" ];
-                    }
-                }
-
-                return ['productCards' => $productCards];
+                
+                return ['productCards' =>$productCards];
             }
 
             return ['error' => 'invalid param'];
@@ -153,7 +114,7 @@ function GetData(array $params):array{
             }
             $productAttributes = [];
             foreach($variants as $variant){
-                $productAttributes   = $db->GetProductAttributes($variant->GetId());
+                $productAttributes   = $db->GetVariantAttributes($variant->GetId());
                 if(empty($productAttributes)){
                     return ['error'=> 'no product attributes found'];
                 }
@@ -165,7 +126,7 @@ function GetData(array $params):array{
                 $ids[]= $p->GetAttributeId();
             }
 
-            $attributes =$db->GetAttributes($ids);
+            $attributes =$db->GetAttributesByIds($ids);
              if(empty($attributes)){
                  return ['error'=> 'no attributes found'];
              }
@@ -256,38 +217,88 @@ function GetData(array $params):array{
             foreach($productIds as $productId){
                 $products[]= $db->GetProductById($productId);
             }
-
-             $firstVariants = [];
-            $productImages= [];
-            foreach($products as $product){
-                try{
-                    $variant = $db->GetFirstVariantByProductId($product->GetId());
-                }catch(ErrorException $e){
-                    return ["error" => $e->getMessage(), "products" => $products];
-                }
-                $firstVariants[]= $variant;
-                try{
-                    $image = $db->GetProductFirstImage($product->GetId());
-                }catch(ErrorException $e){
-                    return ["error"=>$e->getMessage()];
-                }
-                $productImages[] = $image;
-                
+            $productCards=[];
+            try{
+               $productCards =  CreateProductCardsWithProductList($products);
+            }catch(ErrorException $e){
+                return ['error' => $e->getMessage()];
             }
-
-            $productCards =[];
-            for ( $i = 0; $i < count($products); $i++){
-                $productCards[] = new ProductCard($products[$i],$firstVariants[$i],$productImages[$i], []);
-                if (empty($productCards[$i])){
-                    return ['error' => "error while creating product card , product & productImages number in list :$i" ];
-                }
-            }
+            
             return ['productCards' =>$productCards];
                 
+        case 'getattributesbyid':
+            if(!isset($params['ids'])){
+                return ['error' => 'need ids param'];
+            }
+            if(!is_array($params['ids'])){
+                return['error' => 'ids must be array of number'];
+            }
+
+            $attributes= [];
+
+            try{
+                $attributes = $db->GetAttributesByIds($params['ids']);
+            }catch( ErrorException $e ){
+                return ['error' => $e->getMessage()];
+            }
+
+            return ['attributes' => $attributes];
+
 
 
         default:
             return ['error' => 'Unknown action'];
     }
+
+}
+
+/**
+ * Summary of CreateProductCardsWithProductList
+ * @param Product[] $products
+ * @return ProductCard[]
+ */
+function CreateProductCardsWithProductList(array $products):array{
+    global $db;
+    $firstVariants = [];
+    $productImages= [];
+    $allvariantsAttributesByProduct = [];
+            
+    foreach($products as $product){
+        try{
+            $variant = $db->GetFirstVariantByProductId($product->GetId());
+            $image = $db->GetProductFirstImage($product->GetId());
+            $variantIdList = $db->GetVariantsIdsByProductId($product->GetId());
+            
+            $productVariantAttributes = [];
+            foreach($variantIdList as $variantId){
+                $attributes = $db->GetVariantAttributes($variantId);
+                $productVariantAttributes[] = [
+                    'variantId' =>$variantId,
+                    'attributes' => $attributes
+                ];
+
+            }
+
+        }catch(ErrorException $e){
+            throw new ErrorException($e->getMessage()) ;
+        }
+        $firstVariants[]= $variant;
+        $productImages[] = $image;
+        $allvariantsAttributesByProduct[] = $productVariantAttributes;
+        
+    }
+
+    
+
+
+    $productCards =[];
+    for ( $i = 0; $i < count($products); $i++){
+        $productCards[] = new ProductCard($products[$i],$firstVariants[$i],$productImages[$i], $allvariantsAttributesByProduct[$i]);
+        if (empty($productCards[$i])){
+            throw new ErrorException("error while creating product card , product & productImages number in list :$i");
+        }
+    }
+    return $productCards;
+        
 
 }

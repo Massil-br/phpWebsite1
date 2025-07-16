@@ -158,7 +158,7 @@ class Database {
      */
     public function GetProductImages(int $product_id): array{
         try{
-            $ids = $this->GetProductVariantsIdsByProductId($product_id);
+            $ids = $this->GetVariantsIdsByProductId($product_id);
              
         }catch(ErrorException $e){
             throw new ErrorException($e->getMessage());
@@ -189,7 +189,7 @@ class Database {
      * @param int $id
      * @return VariantAttribute[]
      */
-    public function GetProductAttributes(int $id):array{
+    public function GetVariantAttributes(int $id):array{
         $query = "SELECT * FROM variant_attribute WHERE variant_id = :id";
         $params =[
             ':id'=> $id
@@ -210,7 +210,7 @@ class Database {
      * @param int[] $ids
      * @return FilterAttribute[]
      */
-    public function GetAttributes(array $ids): array{
+    public function GetAttributesByIds(array $ids): array{
         $query = "SELECT * FROM attribute WHERE id = :id";
         $idMarked = [];
         foreach($ids as $id){
@@ -276,7 +276,7 @@ class Database {
      * @throws \ErrorException
      * @return int[]
      */
-    public function GetProductVariantsIdsByProductId(int $id):array{
+    public function GetVariantsIdsByProductId(int $id):array{
         $query = "SELECT id FROM variant WHERE product_id =:id";
         $params = [
             ':id' =>$id
