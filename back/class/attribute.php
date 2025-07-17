@@ -21,31 +21,31 @@ class FilterAttribute{
      * @param int[] $ids
      * @return FilterAttribute[]
      */
-    public static function GetAttributesByIds(Database $db,array $ids): array{
-        $query = "SELECT * FROM attribute WHERE id = :id";
-        $idMarked = [];
-        foreach($ids as $id){
-            if(!in_array($id,$idMarked)){
-                $idMarked[] = $id;
-            }
-        }
-
-        $attributes = [];
-        foreach($idMarked as $id){
-            $params = [
-                ':id' => $id
-            ];
-
-            $results = $db->executeQuery($query, $params);
-            $row = $results[0];
-
-            $attributes[]= new FilterAttribute($row['id'], $row['name']);
-
-        }
-
-        return $attributes;
-        
+    public static function GetAttributesByIds(Database $db, array $ids): array {
+    $ids = array_unique($ids);
+    if (empty($ids)) {
+        return [];
     }
+
+    // Ré-indexe proprement les clés pour les paramètres positionnels
+    $ids = array_values($ids);
+
+    $placeholders = implode(',', array_fill(0, count($ids), '?'));
+    $query = "SELECT * FROM attribute WHERE id IN ($placeholders)";
+
+    $results = $db->executeQuery($query, $ids);
+
+    if ($results === false) {
+        throw new Exception("Erreur SQL lors de GetAttributesByIds");
+    }
+
+    $attributes = [];
+    foreach ($results as $row) {
+        $attributes[] = new FilterAttribute($row['id'], $row['name']);
+    }
+
+    return $attributes;
+}
 
 
 }

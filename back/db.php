@@ -26,20 +26,24 @@ class Database {
 
    
     public function executeQuery(string $query, array $params = []): array|bool {
-        try {
-            $stmt = $this->pdo->prepare($query);
+    try {
+        $stmt = $this->pdo->prepare($query);
 
-            foreach ($params as $key => &$value) {
-                $stmt->bindParam($key, $value);
+        foreach ($params as $key => $value) {
+            if (is_int($key)) {
+                $stmt->bindValue($key + 1, $value);
+            } else {
+                $stmt->bindValue($key, $value);
             }
-
-            $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (\PDOException $e) {
-            echo "Error: " . $e->getMessage();
-            return false;
         }
+
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (\PDOException $e) {
+        echo "Error: " . $e->getMessage();
+        return false;
     }
+}
 
    
 

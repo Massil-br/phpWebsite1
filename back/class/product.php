@@ -146,10 +146,10 @@ class Product{
      * @param int $offset
      * @return Product[]
      */
-    public static function GetProductsByCategoryIdPaginated(Database $db, $category_id, int $limit,int $offset):array{
-        $query = "SELECT p.* FROM product p JOIN subcategory s ON p.subcategory_id = s.id WHERE s.category_id = :category_id LIMIT :limit OFFSET :offset";
+    public static function GetProductsByCategoryIdPaginated(Database $db, int $category_id, int $limit,int $offset):array{
+        $query = "SELECT p.* FROM product p JOIN subcategory s ON p.subcategory_id = s.id WHERE s.category_id = :category_id LIMIT $limit OFFSET $offset";
 
-        $query = str_replace([':limit',':offset'], $limit, $offset, $query);
+        
 
         $params = [':category_id' => $category_id];
         
@@ -162,6 +162,43 @@ class Product{
 
         return $products;
     
+    }
+    /**
+     * Summary of GetProductsBySubcategoryIdPaginated
+     * @param Database $db
+     * @param int $subcategory_id
+     * @param int $limit
+     * @param int $offset
+     * @return Product[]
+     */
+    public static function GetProductsBySubcategoryIdPaginated(Database $db, int $subcategory_id, int $limit, int $offset):array{
+        $query = "SELECT * FROM product where subcategory_id = :subcategory_id limit :limit offset :offset";
+        $params =[
+            ':subcategory_id' => $subcategory_id,
+            ':limit' => $limit,
+            ':offset' => $offset
+        ];
+
+        $results = $db->executeQuery($query, $params);
+        $products=[];
+        foreach($results as $row){
+            $products[] = new Product($row['id'], $row['subcategory_id'], $row['name'], $row['description'], new DateTime($row['created_at']));
+        }
+        return $products;
+    }
+
+    public static function CountProductsByCategoryId(Database $db,int $categoryId):int{
+        $query = "SELECT count(*) as count FROM product p join subcategory s on p.subcategory_id = s.id where s.category_id = :category_id";
+        $params =[':category_id' => $categoryId];
+        $results = $db->executeQuery($query,$params);
+        return isset($results[0]['count']) ? (int)$results[0]['count'] : 0;
+    }
+    
+    public static function CountProductsBySubcategoryId(Database $db, int $subcategoryId):int{
+        $query = "SELECT count(*) as count from product where subcategory_id = :subcategory_id";
+        $params = [':subcategory_id' =>$subcategoryId];
+        $results = $db->executeQuery($query,$params);
+        return isset($results[0]['count']) ? (int)$results[0]['count'] : 0;
     }
 
 

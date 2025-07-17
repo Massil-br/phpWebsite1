@@ -8,12 +8,22 @@ if (isset($_GET['category'])) {
     if ($categoryId <= 0) {
         $categoryId = null;
     }
+    $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+    $limit = 12;
+
     $response = GetData(['action'=>'getsubcategories','categoryid' => $categoryId]);
     $subcategories = $response['subcategories'] ?? [];
 
     if (isset($_GET['subcategory'])){
         $subcategoryId = (int) $_GET['subcategory'];
-        $response = GetData(['action' => 'getproductcard', 'param' => 'subcategory', 'id'=> $subcategoryId]);
+        $response = GetData([
+            'action' =>'Getproductsbysubcategorypaginated',
+            'subcategory_id' => $categoryId,
+            'page' => $page,
+            'limit' =>$limit
+        ]);
+
+        //$response = GetData(['action' => 'getproductcard', 'param' => 'subcategory', 'id'=> $subcategoryId]);
         
         if (isset($response['error'])){
             var_dump($response['error']);
@@ -22,18 +32,31 @@ if (isset($_GET['category'])) {
              * @var ProductCard[]
              */
             $productCards = $response['productCards'];
+            $totalPages = $response['totalPages']?? 1;
+            $currentPage = $response['currentPage'] ?? 1;
+            $totalCount = $response['totalCount']?? 0;
         }
         
     } else {
         $categoryId = (int)$categoryId;
-        $response = GetData(['action' => 'getproductcard', 'param' => 'category', 'id'=> $categoryId]);
+        $response = GetData([
+            'action' =>'Getproductsbycategorypaginated',
+            'category_id' => $categoryId,
+            'page' => $page,
+            'limit' =>$limit
+        ]);
+
+        //$response = GetData(['action' => 'getproductcard', 'param' => 'category', 'id'=> $categoryId]);
         if (isset($response['error'])){
             var_dump($response['error']);
         } else {
             /**
              * @var ProductCard[]
              */
-            $productCards = $response['productCards'];
+            $productCards = $response['productCards']??[];
+            $totalPages = $response['totalPages']?? 1;
+            $currentPage = $response['currentPage'] ?? 1;
+            $totalCount = $response['totalCount']?? 0;
         }
     }
 
@@ -73,7 +96,7 @@ if (isset($productCards)) {
             }
         }
     }
-    $response = GetData(['action' => 'getAttributesById', 'ids' => $attributesIds]);
+    $response = GetData(['action' => 'getAttributesByIds', 'ids' => $attributesIds]);
     if (isset($response['error'])){
         var_dump($response['error']);
     } else {
@@ -213,6 +236,58 @@ if (isset($productCards)) {
                     </div>
                 <?php endforeach; ?>
             </div>
+            
+            <?php if ($totalPages > 1): ?>
+                <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center mt-4">
+
+                    <!-- Page précédente -->
+                    <?php if ($currentPage > 1): ?>
+                        <li class="page-item">
+                            <a class="page-link" href="productList.php?category=<?= $categoryId ?>&page=<?= $currentPage - 1 ?>">&laquo;</a>
+                        </li>
+                    <?php endif; ?>
+
+                    <?php
+                    $range = 2; // nombre de pages à gauche/droite
+                    $start = max(1, $currentPage - $range);
+                    $end = min($totalPages, $currentPage + $range);
+
+                    if ($start > 1): ?>
+                        <li class="page-item">
+                            <a class="page-link" href="productList.php?category=<?= $categoryId ?>&page=1">1</a>
+                        </li>
+                        <?php if ($start > 2): ?>
+                            <li class="page-item disabled"><span class="page-link">…</span></li>
+                        <?php endif; ?>
+                    <?php endif; ?>
+
+                    <?php for ($i = $start; $i <= $end; $i++): ?>
+                        <li class="page-item <?= ($i === $currentPage) ? 'active' : '' ?>">
+                            <a class="page-link" href="productList.php?category=<?= $categoryId ?>&page=<?= $i ?>"><?= $i ?></a>
+                        </li>
+                    <?php endfor; ?>
+
+                    <?php if ($end < $totalPages): ?>
+                        <?php if ($end < $totalPages - 1): ?>
+                            <li class="page-item disabled"><span class="page-link">…</span></li>
+                        <?php endif; ?>
+                        <li class="page-item">
+                            <a class="page-link" href="productList.php?category=<?= $categoryId ?>&page=<?= $totalPages ?>"><?= $totalPages ?></a>
+                        </li>
+                    <?php endif; ?>
+
+                    <!-- Page suivante -->
+                    <?php if ($currentPage < $totalPages): ?>
+                        <li class="page-item">
+                            <a class="page-link" href="productList.php?category=<?= $categoryId ?>&page=<?= $currentPage + 1 ?>">&raquo;</a>
+                        </li>
+                    <?php endif; ?>
+
+                </ul>
+                </nav>
+            <?php endif; ?>
+
         </div>
 
         <div class="right-ad-wrapper">
