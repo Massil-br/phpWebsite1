@@ -22,4 +22,22 @@ class SubCategory{
     public function GetName():string{
         return $this->name;
     }
+
+    /** @return SubCategory[] */
+    public static function getSubCategories(Database $db, int $category_id): array{
+        $query = "SELECT * FROM subcategory WHERE category_id = :category_id";
+        $params = [
+            ':category_id' => $category_id
+        ];
+        $results = $db->executeQuery($query,$params);
+
+        $subcategories = [];
+        foreach($results as $row){
+            $createdAt = new DateTime($row['created_at']);
+            $subcategories[]= new SubCategory($row['id'], $row['category_id'], $row['name'], $row['description'],$createdAt);
+        }
+        return $subcategories;
+    }
+
+
 }

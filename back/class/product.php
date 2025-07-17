@@ -36,5 +36,134 @@ class Product{
     public function GetCreatedAt(): string{
         return $this->created_at->format(DateTime::ATOM);
     }
+
+    /**
+     * Summary of getProductBySubCategory
+     * @param int $subcatecory_id
+     * @return Product[]
+     */
+    public static  function getProductsBySubCategoryId(Database $db,int $subcatecory_id): array{
+        $query = "SELECT * FROM product WHERE subcategory_id = :subcategory_id";
+        $params =[
+            ':subcategory_id' =>$subcatecory_id
+        ];
+        $results = $db->executeQuery($query,$params);
+        $products = [];
+        foreach($results as $row){
+            $createdAt = new DateTime($row['created_at']);
+            $products[] = new Product($row['id'], $row['subcategory_id'], $row['name'], $row['description'], $createdAt);
+        }
+        return $products;
+    }
+
+    /** 
+     * @return Product[]
+    */
+    public static function getProductsByCategoryId(Database $db,int $category_id): array{
+        $products =[];
+        $query = "SELECT p.* FROM product p JOIN subcategory s ON p.subcategory_id = s.id WHERE s.category_id = :category_id ";
+        $params = [
+            ':category_id' => $category_id
+        ];
+
+        $results = $db->executeQuery($query, $params);
+        if(count($results) >0){
+            foreach($results as $row){
+                $createdAt = new DateTime($row['created_at']);
+                $products[] = new Product($row['id'], $row['subcategory_id'], $row['name'], $row['description'], $createdAt);
+            }
+
+            return $products;
+        }
+        throw new ErrorException("No products found for category : $category_id");
+        
+    }
+
+
+    public static function GetProductById(Database $db,int $id):Product{
+        $query = "SELECT * FROM product WHERE id = :id";
+        $params = [
+            ':id' => $id
+        ];
+
+        $results = $db->executeQuery($query,$params);
+        $row = $results[0];
+
+        $createdAt = new DateTime($row['created_at']);
+        $product = new Product($row['id'], $row['subcategory_id'], $row['name'],$row['description'],  $createdAt);
+        return $product;
+    
+    }
+
+     /**
+     * Summary of Get6RandomProducts
+     * @return int[]
+     */
+    public static function GetRandomProductsIds(Database $db,int $limit):array{
+        if($limit <=0){
+            throw new ErrorException("limit must be positive");
+        }
+
+        $query = "SELECT id FROM product order by RAND() limit $limit";
+        
+        $results = $db->executeQuery($query);
+        if(empty($results)){
+            throw new ErrorException("no products found when searching random products");
+        }
+        $productsIds = [];
+        foreach($results as $row){
+            $productsIds[] = $row['id'];
+        }
+        return $productsIds;
+    } 
+
+
+    /**
+     * Summary of ResearchProduct
+     * @param string $input
+     * @return int[]
+     */
+    public static function GetProductIdByName(Database $db, $input):array{
+        $query ="SELECT id from product where name like :input";
+        $params= [
+            ":input" => "%{$input}%"
+        ];
+        $results = $db->executeQuery($query, $params);
+        if(empty($results)){
+            throw new ErrorException("no id found for your research : $input");
+        }
+        $ids = [];
+        foreach($results as $row){
+            $ids[] = $row['id'];
+        }
+        return $ids;
+    }
+
+    /**
+     * Summary of GetProductsByCategoryIdPaginated
+     * @param int $category_id
+     * @param int $limit
+     * @param int $offset
+     * @return Product[]
+     */
+    public static function GetProductsByCategoryIdPaginated(Database $db, $category_id, int $limit,int $offset):array{
+        $query = "SELECT p.* FROM product p JOIN subcategory s ON p.subcategory_id = s.id WHERE s.category_id = :category_id LIMIT :limit OFFSET :offset";
+
+        $query = str_replace([':limit',':offset'], $limit, $offset, $query);
+
+        $params = [':category_id' => $category_id];
+        
+        $results = $db->executeQuery($query, $params);
+
+        $products = [];
+        foreach($results as $row){
+            $products[] = new Product($row['id'],  $row['subcategory_id'], $row['name'], $row['description'], new DateTime($row['created_at']));
+        }
+
+        return $products;
+    
+    }
+
+
     
 }

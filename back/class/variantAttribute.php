@@ -23,4 +23,26 @@ class VariantAttribute{
         return $this->attribute_id;
     }
 
+    /**
+     * Summary of GetProductAttributes
+     * @param int $id
+     * @return VariantAttribute[]
+     */
+    public static function GetVariantAttributes(Database $db,int $id):array{
+        $query = "SELECT * FROM variant_attribute WHERE variant_id = :id";
+        $params =[
+            ':id'=> $id
+        ];
+
+        $results = $db->executeQuery($query, $params);
+
+        $productAttributes = [];
+        foreach($results as $row){
+            $productAttributes[] = new VariantAttribute($row['variant_id'],$row['attribute_id'], $row['value']);
+        }
+        return $productAttributes;
+
+    }
+
+
 }

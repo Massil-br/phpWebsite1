@@ -200,7 +200,7 @@ if (isset($productCards)) {
                          data-date="<?= htmlspecialchars($productCard->product->GetCreatedAt() ?? '') ?>">
                         <div class="card rounded-5">
                             <a class="text-decoration-none text-color-light-bg" href="./product.php?id=<?= urlencode($productCard->product->GetId()) ?>">
-                                <img src="<?= htmlspecialchars($productCard->variantImage->GetRelativeUrl()) ?>" class="card-img-top h-300px img-cover rounded-5" alt="..." />
+                                <img loading="lazy" src="<?= htmlspecialchars($productCard->variantImage->GetRelativeUrl()) ?>" class="card-img-top h-300px img-cover rounded-5" alt="..." />
                                 <div class="card-body">
                                     <h5 class="card-title"><?= htmlspecialchars($productCard->product->GetName()) ?></h5>
                                     <p class="card-text"><?= htmlspecialchars($productCard->product->GetDescription()) ?></p>
