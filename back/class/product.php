@@ -187,6 +187,37 @@ class Product{
         return $products;
     }
 
+    /**
+     * Summary of GetProductsBySearchPaginated
+     * @param Database $db
+     * @param string $input
+     * @return Product[]
+     */
+    public static function GetProductsBySearchPaginated(Database $db, string $input ,int $limit, int $offset): array{
+        $query = "SELECT * FROM product WHERE name like :input LIMIT :limit OFFSET :offset";
+        $params =[
+            ":input" => "%{$input}%",
+            ":limit" => $limit,
+            ":offset" => $offset
+        ];
+        $results =$db->executeQuery($query,$params);
+        $products = [];
+        foreach($results as $row){
+            $products[] = new Product($row['id'], $row['subcategory_id'], $row['name'], $row['description'], new DateTime($row['created_at'])); 
+        }
+        return $products;
+    }
+
+
+    public static function CountProductByName(Database $db, string $input):int{
+        $query ="SELECT count(*) as count from product WHERE name like :input";
+        $params=[
+            ":input" =>"%{$input}%"
+        ];
+        $results =$db->executeQuery($query,$params);
+        return isset($results[0]['count']) ? (int)$results[0]['count'] : 0;
+    }
+
     public static function CountProductsByCategoryId(Database $db,int $categoryId):int{
         $query = "SELECT count(*) as count FROM product p join subcategory s on p.subcategory_id = s.id where s.category_id = :category_id";
         $params =[':category_id' => $categoryId];

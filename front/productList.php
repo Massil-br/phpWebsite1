@@ -2,14 +2,14 @@
 require_once  '../back/getData.php';
 $subcategories = []; 
 $productCards = [];
-
+$page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+$limit = 12;
 if (isset($_GET['category'])) {
     $categoryId = (int) $_GET['category'];
     if ($categoryId <= 0) {
         $categoryId = null;
     }
-    $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
-    $limit = 12;
+    
 
     $response = GetData(['action'=>'getsubcategories','categoryid' => $categoryId]);
     $subcategories = $response['subcategories'] ?? [];
@@ -62,15 +62,25 @@ if (isset($_GET['category'])) {
 
 } elseif(isset($_GET['research'])){
     $input = $_GET['research'] ?? '';
-    $response = GetData(['action'=> 'search', 'input' =>$input]);
+    $response = GetData([
+        'action' => 'searchPaginated',
+        'input' =>$input,
+        'page' => $page,
+        'limit' =>$limit
+    ]);
+
     if (isset($response['error'])){
         var_dump($response['error']);
     } else {
         /**
          * @var ProductCard[]
          */
-        $productCards = $response['productCards'];
+        $productCards = $response['productCards']??[];
+        $totalPages = $response['totalPages']?? 1;
+        $currentPage = $response['currentPage'] ?? 1;
+        $totalCount = $response['totalCount']?? 0;
     }
+
 } else {
     $categoryId = null;
 }
@@ -240,22 +250,32 @@ if (isset($productCards)) {
             <?php if ($totalPages > 1): ?>
                 <nav aria-label="Page navigation">
                 <ul class="pagination justify-content-center mt-4">
+                    <?php
+                        $queryParams = $_GET;
+                        $baseUrl = 'productList.php';
+
+                        function buildPageLink($pageNumber) {
+                            $queryParams = $_GET;
+                            $queryParams['page'] = $pageNumber;
+                            return 'productList.php?' . http_build_query($queryParams);
+                        }
+                    ?>
 
                     <!-- Page précédente -->
                     <?php if ($currentPage > 1): ?>
                         <li class="page-item">
-                            <a class="page-link" href="productList.php?category=<?= $categoryId ?>&page=<?= $currentPage - 1 ?>">&laquo;</a>
+                            <a class="page-link" href="<?= buildPageLink($currentPage - 1) ?>">&laquo;</a>
                         </li>
                     <?php endif; ?>
 
                     <?php
-                    $range = 2; // nombre de pages à gauche/droite
+                    $range = 2;
                     $start = max(1, $currentPage - $range);
                     $end = min($totalPages, $currentPage + $range);
 
                     if ($start > 1): ?>
                         <li class="page-item">
-                            <a class="page-link" href="productList.php?category=<?= $categoryId ?>&page=1">1</a>
+                            <a class="page-link" href="<?= buildPageLink(1) ?>">1</a>
                         </li>
                         <?php if ($start > 2): ?>
                             <li class="page-item disabled"><span class="page-link">…</span></li>
@@ -264,7 +284,7 @@ if (isset($productCards)) {
 
                     <?php for ($i = $start; $i <= $end; $i++): ?>
                         <li class="page-item <?= ($i === $currentPage) ? 'active' : '' ?>">
-                            <a class="page-link" href="productList.php?category=<?= $categoryId ?>&page=<?= $i ?>"><?= $i ?></a>
+                            <a class="page-link" href="<?= buildPageLink($i) ?>"><?= $i ?></a>
                         </li>
                     <?php endfor; ?>
 
@@ -273,21 +293,21 @@ if (isset($productCards)) {
                             <li class="page-item disabled"><span class="page-link">…</span></li>
                         <?php endif; ?>
                         <li class="page-item">
-                            <a class="page-link" href="productList.php?category=<?= $categoryId ?>&page=<?= $totalPages ?>"><?= $totalPages ?></a>
+                            <a class="page-link" href="<?= buildPageLink($totalPages) ?>"><?= $totalPages ?></a>
                         </li>
                     <?php endif; ?>
 
                     <!-- Page suivante -->
                     <?php if ($currentPage < $totalPages): ?>
                         <li class="page-item">
-                            <a class="page-link" href="productList.php?category=<?= $categoryId ?>&page=<?= $currentPage + 1 ?>">&raquo;</a>
+                            <a class="page-link" href="<?= buildPageLink($currentPage + 1) ?>">&raquo;</a>
                         </li>
                     <?php endif; ?>
 
                 </ul>
                 </nav>
             <?php endif; ?>
-
+            
         </div>
 
         <div class="right-ad-wrapper">
