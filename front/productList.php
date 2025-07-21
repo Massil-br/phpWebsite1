@@ -1,84 +1,207 @@
 <?php
-require_once  '../back/getData.php';
+require_once '../back/getData.php';
+
 $subcategories = []; 
 $productCards = [];
 $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 $limit = 12;
+
 if (isset($_GET['category'])) {
     $categoryId = (int) $_GET['category'];
     if ($categoryId <= 0) {
         $categoryId = null;
     }
-    
 
-    $response = GetData(['action'=>'getsubcategories','categoryid' => $categoryId]);
+    $response = GetData([
+        'action' => 'getsubcategories',
+        'categoryid' => $categoryId
+    ]);
     $subcategories = $response['subcategories'] ?? [];
 
-    if (isset($_GET['subcategory'])){
+    if (isset($_GET['subcategory'])) {
         $subcategoryId = (int) $_GET['subcategory'];
-        $response = GetData([
-            'action' =>'Getproductsbysubcategorypaginated',
-            'subcategory_id' => $categoryId,
-            'page' => $page,
-            'limit' =>$limit
-        ]);
 
-        //$response = GetData(['action' => 'getproductcard', 'param' => 'subcategory', 'id'=> $subcategoryId]);
-        
-        if (isset($response['error'])){
+        if (isset($_GET['sortOption']) && $_GET['sortOption'] !== 'nofilter') {
+            switch ($_GET['sortOption']) {
+                case 'priceAsc':
+                    $sortOption = 'priceAsc';
+                    break;
+                case 'priceDesc':
+                    $sortOption = 'priceDesc';
+                    break;
+                case 'dateAsc':
+                    $sortOption = 'dateAsc';
+                    break;
+                case 'dateDesc':
+                    $sortOption = 'dateDesc';
+                    break;
+                default:
+                    echo "error invalid input in url sortOption";
+            }
+        }
+
+        $filterMap = [
+            'filter_1' => FilterName::COLOR,
+            'filter_2' => FilterName::SIZE,
+        ];
+
+        foreach ($_GET as $key => $value) {
+            if (str_starts_with($key, 'filter_') && isset($filterMap[$key])) {
+                $name =$filterMap[$key];
+                $values = explode(',', $value);
+                $values = array_map('trim', $values);
+                $filters[] = new Filter($name, $values);
+            }
+        }
+
+        if (isset($filters) && isset($sortOption)) {
+            $response = GetData([
+                'action' => 'getproductsbysubcategorypaginatedwithfilters',
+                'subcategory_id' => $subcategoryId,
+                'page' => $page,
+                'limit' => $limit,
+                'filters' => $filters,
+                'sortOption' => $sortOption
+            ]);
+        } elseif (isset($filters)) {
+            $response = GetData([
+                'action' => 'getproductsbysubcategorypaginatedwithfilters',
+                'subcategory_id' => $subcategoryId,
+                'page' => $page,
+                'limit' => $limit,
+                'filters' => $filters
+            ]);
+        } elseif (isset($sortOption)) {
+            $response = GetData([
+                'action' => 'getproductsbysubcategorypaginatedwithfilters',
+                'subcategory_id' => $subcategoryId,
+                'page' => $page,
+                'limit' => $limit,
+                'sortOption' => $sortOption
+            ]);
+        }else {
+            $categoryId = (int) $categoryId;
+            $response = GetData([
+                'action' => 'Getproductsbysubcategorypaginated',
+                'subcategory_id' => $subcategoryId,
+                'page' => $page,
+                'limit' => $limit
+            ]);
+        }
+
+        if (isset($response['error'])) {
             var_dump($response['error']);
         } else {
             /**
              * @var ProductCard[]
              */
             $productCards = $response['productCards'];
-            $totalPages = $response['totalPages']?? 1;
+            $totalPages = $response['totalPages'] ?? 1;
             $currentPage = $response['currentPage'] ?? 1;
-            $totalCount = $response['totalCount']?? 0;
+            $totalCount = $response['totalCount'] ?? 0;
         }
-        
-    } else {
-        $categoryId = (int)$categoryId;
-        $response = GetData([
-            'action' =>'Getproductsbycategorypaginated',
-            'category_id' => $categoryId,
-            'page' => $page,
-            'limit' =>$limit
-        ]);
 
-        //$response = GetData(['action' => 'getproductcard', 'param' => 'category', 'id'=> $categoryId]);
-        if (isset($response['error'])){
+    } else {
+        if (isset($_GET['sortOption']) && $_GET['sortOption'] !== 'nofilter') {
+            switch ($_GET['sortOption']) {
+                case 'priceAsc':
+                    $sortOption = 'priceAsc';
+                    break;
+                case 'priceDesc':
+                    $sortOption = 'priceDesc';
+                    break;
+                case 'dateAsc':
+                    $sortOption = 'dateAsc';
+                    break;
+                case 'dateDesc':
+                    $sortOption = 'dateDesc';
+                    break;
+                default:
+                    echo "error invalid input in url sortOption";
+            }
+        }
+
+        $filterMap = [
+            'filter_1' => FilterName::COLOR,
+            'filter_2' => FilterName::SIZE,
+        ];
+
+        foreach ($_GET as $key => $value) {
+            if (str_starts_with($key, 'filter_') && isset($filterMap[$key])) {
+                $name =$filterMap[$key];
+                $values = explode(',', $value);
+                $values = array_map('trim', $values);
+                $filters[] = new Filter($name, $values);
+            }
+        }
+
+        if (isset($filters) && isset($sortOption)) {
+            $response = GetData([
+                'action' => 'getproductsbycategorypaginatedwithfilters',
+                'category_id' => $categoryId,
+                'page' => $page,
+                'limit' => $limit,
+                'filters' => $filters,
+                'sortOption' => $sortOption
+            ]);
+        } elseif (isset($filters)) {
+            $response = GetData([
+                'action' => 'getproductsbycategorypaginatedwithfilters',
+                'category_id' => $categoryId,
+                'page' => $page,
+                'limit' => $limit,
+                'filters' => $filters
+            ]);
+        } elseif (isset($sortOption)) {
+            $response = GetData([
+                'action' => 'getproductsbycategorypaginatedwithfilters',
+                'category_id' => $categoryId,
+                'page' => $page,
+                'limit' => $limit,
+                'sortOption' => $sortOption
+            ]);
+        }else {
+            $categoryId = (int) $categoryId;
+            $response = GetData([
+                'action' => 'Getproductsbycategorypaginated',
+                'category_id' => $categoryId,
+                'page' => $page,
+                'limit' => $limit
+            ]);
+        }
+
+        if (isset($response['error'])) {
             var_dump($response['error']);
         } else {
             /**
              * @var ProductCard[]
              */
-            $productCards = $response['productCards']??[];
-            $totalPages = $response['totalPages']?? 1;
+            $productCards = $response['productCards'] ?? [];
+            $totalPages = $response['totalPages'] ?? 1;
             $currentPage = $response['currentPage'] ?? 1;
-            $totalCount = $response['totalCount']?? 0;
+            $totalCount = $response['totalCount'] ?? 0;
         }
     }
 
-} elseif(isset($_GET['research'])){
+} elseif (isset($_GET['research'])) {
     $input = $_GET['research'] ?? '';
     $response = GetData([
         'action' => 'searchPaginated',
-        'input' =>$input,
+        'input' => $input,
         'page' => $page,
-        'limit' =>$limit
+        'limit' => $limit
     ]);
 
-    if (isset($response['error'])){
+    if (isset($response['error'])) {
         var_dump($response['error']);
     } else {
         /**
          * @var ProductCard[]
          */
-        $productCards = $response['productCards']??[];
-        $totalPages = $response['totalPages']?? 1;
+        $productCards = $response['productCards'] ?? [];
+        $totalPages = $response['totalPages'] ?? 1;
         $currentPage = $response['currentPage'] ?? 1;
-        $totalCount = $response['totalCount']?? 0;
+        $totalCount = $response['totalCount'] ?? 0;
     }
 
 } else {
@@ -88,6 +211,7 @@ if (isset($_GET['category'])) {
 if (isset($productCards)) {
     $attributesIds = [];
     $attributesValuesByAttributeId = [];
+
     foreach ($productCards as $productCard) {
         foreach ($productCard->variantAttributes as $variantAttribute) {
             $attributeId = $variantAttribute->GetAttributeId();
@@ -106,8 +230,13 @@ if (isset($productCards)) {
             }
         }
     }
-    $response = GetData(['action' => 'getAttributesByIds', 'ids' => $attributesIds]);
-    if (isset($response['error'])){
+
+    $response = GetData([
+        'action' => 'getAttributesByIds',
+        'ids' => $attributesIds
+    ]);
+
+    if (isset($response['error'])) {
         var_dump($response['error']);
     } else {
         $attributes = $response['attributes'];
@@ -150,71 +279,63 @@ if (isset($productCards)) {
                     </div>
                 </div>
             </div>
+            
+            <form id="filterForm" method="get" action="productList.php">
+                <div class="dropdown m-3" data-bs-auto-close="outside">
+                    <button class="btn btn-light dropdown-toggle" type="button" id="dropdownFilters" data-bs-toggle="dropdown" aria-expanded="false">
+                        Filtres
+                    </button>
+                    <div class="dropdown-menu p-3 scrollable-dropdown" aria-labelledby="dropdownFilters" style="min-width: 300px;">
+                        <div class="d-grid gap-2 mt-3">
+                        <button type="submit" class="btn btn-primary">Appliquer</button>
+                        </div>
+                        <h6 class="dropdown-header"><strong>Trier par</strong></h6>
+                        <div class="form-check mb-2">
+                            <input type="radio" name="sortOption" id="sortOption0" value="nofilter" checked class="form-check-input" />
+                            <label for="sortOption0" class="form-check-label">Pertinence</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input type="radio" name="sortOption" id="sortOption1" value="priceAsc" class="form-check-input" />
+                            <label for="sortOption1" class="form-check-label">Prix croissant</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input type="radio" name="sortOption" id="sortOption2" value="priceDesc" class="form-check-input" />
+                            <label for="sortOption2" class="form-check-label">Prix décroissant</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input type="radio" name="sortOption" id="sortOption3" value="dateAsc" class="form-check-input" />
+                            <label for="sortOption3" class="form-check-label">Date d'ajout croissant</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input type="radio" name="sortOption" id="sortOption4" value="dateDesc" class="form-check-input" />
+                            <label for="sortOption4" class="form-check-label">Date d'ajout décroissant</label>
+                        </div>
 
-            <div class="dropdown m-3" data-bs-auto-close="outside">
-                <button class="btn btn-light dropdown-toggle" type="button" id="dropdownFilters" data-bs-toggle="dropdown" aria-expanded="false">
-                    Filtres
-                </button>
-                <div class="dropdown-menu p-3 scrollable-dropdown" aria-labelledby="dropdownFilters" style="min-width: 300px;">
-                    <h6 class="dropdown-header"><strong>Trier par</strong></h6>
-                    <div class="form-check mb-2">
-                        <input type="radio" name="sortOption" id="sortOption0" value="nofilter" checked class="form-check-input" />
-                        <label for="sortOption0" class="form-check-label">Pertinence</label>
-                    </div>
-                    <div class="form-check mb-2">
-                        <input type="radio" name="sortOption" id="sortOption1" value="priceAsc" class="form-check-input" />
-                        <label for="sortOption1" class="form-check-label">Prix croissant</label>
-                    </div>
-                    <div class="form-check mb-2">
-                        <input type="radio" name="sortOption" id="sortOption2" value="priceDesc" class="form-check-input" />
-                        <label for="sortOption2" class="form-check-label">Prix décroissant</label>
-                    </div>
-                    <div class="form-check mb-2">
-                        <input type="radio" name="sortOption" id="sortOption3" value="dateAsc" class="form-check-input" />
-                        <label for="sortOption3" class="form-check-label">Date d'ajout croissant</label>
-                    </div>
-                    <div class="form-check mb-2">
-                        <input type="radio" name="sortOption" id="sortOption4" value="dateDesc" class="form-check-input" />
-                        <label for="sortOption4" class="form-check-label">Date d'ajout décroissant</label>
-                    </div>
+                        <?php if (isset($attributes) && isset($attributesValuesByAttributeId)): ?>
+                            <?php foreach ($attributes as $attribute): ?>
+                                <h6 class="dropdown-header"><strong><?= htmlspecialchars($attribute->GetName()) ?></strong></h6>
+                                <?php if (!empty($attributesValuesByAttributeId[$attribute->GetId()])): ?>
+                                    <?php foreach ($attributesValuesByAttributeId[$attribute->GetId()] as $value): ?>
+                                        <div class="form-check mb-2">
+                                            <input type="checkbox"
+                                                name="filter_<?= htmlspecialchars($attribute->GetId())?>"
+                                                id="filter_<?= htmlspecialchars($attribute->GetId()) ?>_<?= htmlspecialchars($value) ?>"
+                                                value="<?= htmlspecialchars($value) ?>"
+                                                class="form-check-input" />
+                                            <label for="filter_<?= htmlspecialchars($attribute->GetId()) ?>_<?= htmlspecialchars($value) ?>" class="form-check-label">
+                                                <?= htmlspecialchars($value) ?>
+                                            </label>
+                                        </div>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <p class="text-muted">Aucune valeur disponible</p>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
 
-                    <?php if (isset($attributes) && isset($attributesValuesByAttributeId)): ?>
-                        <?php foreach ($attributes as $attribute): ?>
-                            <h6 class="dropdown-header"><strong><?= htmlspecialchars($attribute->GetName()) ?></strong></h6>
-
-                            <div class="form-check mb-2">
-                                <input type="radio"
-                                       name="filter_<?= htmlspecialchars($attribute->GetId()) ?>"
-                                       id="filter_<?= htmlspecialchars($attribute->GetId()) ?>_none"
-                                       value=""
-                                       checked
-                                       class="form-check-input" />
-                                <label for="filter_<?= htmlspecialchars($attribute->GetId()) ?>_none" class="form-check-label">
-                                    Ne pas filtrer
-                                </label>
-                            </div>
-
-                            <?php if (!empty($attributesValuesByAttributeId[$attribute->GetId()])): ?>
-                                <?php foreach ($attributesValuesByAttributeId[$attribute->GetId()] as $value): ?>
-                                    <div class="form-check mb-2">
-                                        <input type="radio"
-                                               name="filter_<?= htmlspecialchars($attribute->GetId()) ?>"
-                                               id="filter_<?= htmlspecialchars($attribute->GetId()) ?>_<?= htmlspecialchars($value) ?>"
-                                               value="<?= htmlspecialchars($value) ?>"
-                                               class="form-check-input" />
-                                        <label for="filter_<?= htmlspecialchars($attribute->GetId()) ?>_<?= htmlspecialchars($value) ?>" class="form-check-label">
-                                            <?= htmlspecialchars($value) ?>
-                                        </label>
-                                    </div>
-                                <?php endforeach; ?>
-                            <?php else: ?>
-                                <p class="text-muted">Aucune valeur disponible</p>
-                            <?php endif; ?>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-
+                    </div>
                 </div>
-            </div>
+            </form>
 
             <div class="row row-cols-1 row-cols-md-3 g-4 p-3 justify-content-center">
                 <?php foreach ($productCards as $productCard): ?>
@@ -318,111 +439,58 @@ if (isset($productCards)) {
     </div>
 
     <?php include './includes/footer.php' ?>
-
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const dropdownMenu = document.querySelector('#dropdownFilters + .dropdown-menu');
-            if (dropdownMenu) {
-                dropdownMenu.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                });
-            }
+
+        document.querySelectorAll('.dropdown-menu').forEach(menu =>{
+            menu.addEventListener('click',function(e){
+                e.stopPropagation();
+            });
         });
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const productCards = document.querySelectorAll('.product-card');
-            const filterRadios = document.querySelectorAll('.form-check-input');
 
-            filterRadios.forEach(radio => {
-                radio.addEventListener('change', updateFilters);
+        document.querySelector('#filterForm').addEventListener("submit", function(e){
+            e.preventDefault();
+            console.log('Soumission interceptée');
+
+            const form = e.target;
+            const data ={};
+
+            form.querySelectorAll("input[type=checkbox]:checked").forEach(input =>{
+                const name = input.name;
+                if (!data[name]) data[name]=[];
+                data[name].push(input.value);
             });
 
-            function updateFilters() {
-                const activeFilters = {};
-                let activeSort = 'nofilter';
+            form.querySelectorAll("input[type=radio]:checked").forEach(input =>{
+                data[input.name]= input.value;
+            });
 
-                
-                const sortRadio = document.querySelector('input[name="sortOption"]:checked');
-                if (sortRadio) {
-                    activeSort = sortRadio.value;
+            params = new URLSearchParams(window.location.search);
+            const newParams = new URLSearchParams();
+
+            for (const [key, value] of params.entries()){
+                if(!key.startsWith('filter_') && key !== 'sortOption'){
+                    newParams.set(key,value);
                 }
-
-               
-                const filterGroups = new Set();
-                filterRadios.forEach(radio => {
-                    if (radio.name.startsWith('filter_')) {
-                        filterGroups.add(radio.name);
-                    }
-                });
-
-                filterGroups.forEach(groupName => {
-                    const checked = document.querySelector(`input[name="${groupName}"]:checked`);
-                    if (checked && checked.value !== '') {
-                        activeFilters[groupName] = checked.value;
-                    }
-                });
-
-                
-                productCards.forEach(card => {
-                    const jsonString = card.getAttribute('data-attributes');
-                    if (jsonString) {
-                        try {
-                            const variants = JSON.parse(jsonString); 
-                            let visible = false;
-
-                            let allFiltersMatch = true;
-                            for (const [filterName, filterValue] of Object.entries(activeFilters)) {
-                                const attrId = filterName.replace('filter_', '');
-                                const found = variants.find(attr => attr.attribute_id == attrId && attr.value == filterValue);
-                                if (!found) {
-                                    allFiltersMatch = false;
-                                    break;
-                                }
-                            }
-                            visible = allFiltersMatch;
-
-                            card.style.display = visible ? '' : 'none';
-
-                        } catch (e) {
-                            console.error('Erreur JSON parse :', e);
-                            card.style.display = '';
-                        }
-                    }
-                });
-
-                sortCards(activeSort);
             }
 
-            function sortCards(sortOption) {
-                const container = document.querySelector('.row.row-cols-1');
-                const cardsArray = Array.from(container.children).filter(card => card.style.display !== 'none');
 
-                cardsArray.sort((a, b) => {
-                    const aPrice = parseFloat(a.getAttribute('data-price')) || 0;
-                    const bPrice = parseFloat(b.getAttribute('data-price')) || 0;
-
-                    const aDateStr = a.getAttribute('data-date');
-                    const bDateStr = b.getAttribute('data-date');
-                    const aDate = aDateStr ? new Date(aDateStr).getTime() : 0;
-                    const bDate = bDateStr ? new Date(bDateStr).getTime() : 0;
-
-                    switch (sortOption) {
-                        case 'priceAsc':
-                            return aPrice - bPrice;
-                        case 'priceDesc':
-                            return bPrice - aPrice;
-                        case 'dateAsc':
-                            return aDate - bDate;
-                        case 'dateDesc':
-                            return bDate - aDate;
-                        default:
-                            return 0;
-                    }
-                });
-
-                cardsArray.forEach(card => container.appendChild(card));
+            for (const name in data){
+                if(Array.isArray(data[name])){
+                    newParams.set(name, data[name].join(','));
+                }else{
+                    newParams.set(name,data[name]);
+                }
             }
+
+            const baseUrl = window.location.pathname;
+            const finalUrl = baseUrl +'?'+ newParams.toString();
+            console.log('Redirection vers :' , finalUrl);
+            window.location.href = finalUrl;
+
         });
     </script>
+
+    
 </body>
 </html>

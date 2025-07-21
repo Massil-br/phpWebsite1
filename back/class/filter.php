@@ -9,11 +9,20 @@ enum FilterName:string{
 
 class Filter{
     public FilterName $name;
-    public string $value;
+    /**
+     * Summary of value
+     * @var string[]
+     */
+    public array $values;
 
-    public function __construct(FilterName $name, string $value){
+    /**
+     * Summary of __construct
+     * @param FilterName $name
+     * @param string[] $value
+     */
+    public function __construct(FilterName $name, array $values){
         $this->name = $name;
-        $this->value = $value;
+        $this->values = $values;
     }
 }
 
