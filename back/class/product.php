@@ -303,6 +303,50 @@ class Product{
         return $products;
     }
 
+     /**
+     * Summary of GetProductsBySearchPaginated
+     * @param Database $db
+     * @param string $input
+     * @param string $sortOption
+     * @return Product[]
+     */
+    public static function GetProductsBySearchPaginatedWithSort(Database $db, string $input,string $sortOption ,int $limit, int $offset): array{
+        $query = "SELECT p.* FROM product p JOIN variant v on v.product_id = p.id  WHERE p.name like :input";
+        $params =[
+            ":input" => "%{$input}%",
+            ":limit" => $limit,
+            ":offset" => $offset
+        ];
+
+        switch($sortOption){
+            case 'priceAsc':
+                $query .= " ORDER BY v.price ASC";
+                break;
+            case 'priceDesc':
+                $query .=" ORDER BY v.price Desc";
+                break;
+            case 'dateAsc':
+                $query .=" ORDER BY p.created_at ASC";
+                break;
+            case 'dateDesc':
+                $query .=" ORDER BY p.created_at DESC";
+                break;
+            default:
+                $query .= " Order BY p.created_at DESC";
+        }
+        $query .=" LIMIT :limit OFFSET :offset";
+        $params[':limit'] = $limit;
+        $params[':offset'] = $offset;
+
+
+        $results =$db->executeQuery($query,$params);
+        $products = [];
+        foreach($results as $row){
+            $products[] = new Product($row['id'], $row['subcategory_id'], $row['name'], $row['description'], new DateTime($row['created_at'])); 
+        }
+        return $products;
+    }
+
     /**
      * Summary of GetProductBySearchPaginatedWithFilters
      * @param Database $db
@@ -313,7 +357,7 @@ class Product{
      * @return Product[]
      */
     public static function GetProductBySearchPaginatedWithFilters(Database $db, string $input, array $filters, int $limit, int $offset):array{
-        $query = "SELECT distinct p.* from product where p.name like :input";
+        $query = "SELECT distinct p.* from product p where p.name like :input";
         $params = ['input' => "%$input%"];
         $i = 0;
         
@@ -336,7 +380,72 @@ class Product{
                 and va.value IN (".implode(',',$placeholders)."))";
             $params[":attr_{$name}"] = $name;
         }
-        $query .="LIMIT :limit OFFSET :offset";
+        $query .=" LIMIT :limit OFFSET :offset";
+        $params[':limit'] = $limit;
+        $params[':offset'] = $offset;
+
+        $results = $db->executeQuery($query, $params);
+
+        $products=[];
+        foreach($results as $row){
+            $products[]= new Product($row['id'], $row['subcategory_id'], $row['name'], $row['description'], new DateTime($row['created_at']));
+        }
+        return $products;
+        
+    }
+     /**
+     * Summary of GetProductBySearchPaginatedWithFilters
+     * @param Database $db
+     * @param string $input
+     * @param Filter[] $filters
+     * @param string $sortOption;
+     * @param int $limit
+     * @param int $offset
+     * @return Product[]
+     */
+    public static function GetProductsBySearchPaginatedWithFiltersAndSort(Database $db, string $input, array $filters, string $sortOption, int $limit, int $offset):array{
+        $query = "SELECT distinct p.* from product p JOIN variant v on v.product_id = p.id where p.name like :input";
+        $params = ['input' => "%$input%"];
+        $i = 0;
+        
+        foreach($filters as  $filter){
+            $name =(string)$filter->name->value;
+            $values = $filter->values;
+            $placeholders = [];
+            foreach($values as $value){
+                $param = ":{$name}_{$i}";
+                $placeholders[] = $param;
+                $params[$param] = $value;
+                $i++;
+            }
+            $query .=" AND exists (
+                SELECT 1 FROM variant v join variant_attribute va 
+                on va.variant_id = v.id join attribute a 
+                on a.id = va.attribute_id 
+                where v.product_id = p.id
+                and a.name = :attr_{$name} 
+                and va.value IN (".implode(',',$placeholders)."))";
+            $params[":attr_{$name}"] = $name;
+        }
+
+        switch($sortOption){
+            case 'priceAsc':
+                $query .= " ORDER BY v.price ASC";
+                break;
+            case 'priceDesc':
+                $query .=" ORDER BY v.price Desc";
+                break;
+            case 'dateAsc':
+                $query .=" ORDER BY p.created_at ASC";
+                break;
+            case 'dateDesc':
+                $query .=" ORDER BY p.created_at DESC";
+                break;
+            default:
+                $query .= " Order BY p.created_at DESC";
+        }
+
+        $query .=" LIMIT :limit OFFSET :offset";
         $params[':limit'] = $limit;
         $params[':offset'] = $offset;
 

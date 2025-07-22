@@ -462,6 +462,82 @@ function GetProductsByCategoryPaginatedWithFilters(array $params):array{
     ];
 }
 
+function SearchPaginatedWithFilters(array $params):array{
+    global $db;
+    if(!isset($params['input']) || $params['input'] === ""){
+        return ['error' => 'missing parameter input'];
+    }
+    if(!isset($params['limit'], $params['page'])){
+        return ['error' => 'missing parameter limit or page or both'];
+    }
+    if ((!isset($params['filters']) || !is_array($params['filters'])) && (!isset($params['sortOption']))) {
+        return ['error' => 'filters must be an array of Filter'];
+    }
+    
+
+    $input = $params['input'];
+    $page = max(1,(int)$params['page']);
+    $limit = max(1,(int)$params['limit']);
+    $offset = ($page-1) * $limit;
+    $totalCount = 0;
+    $products = [];
+
+    if(isset($params['filters']) && isset($params['sortOption'])){
+        try{
+            $sortOption = $params['sortOption'];
+
+            $validSortOptions = ['priceAsc', 'priceDesc', 'dateAsc', 'dateDesc'];
+            if (!in_array($sortOption, $validSortOptions, true)) {
+                return ['error' => 'invalid sort option', $sortOption];
+            }
+
+            $filters = $params['filters'];
+            $products = Product::GetProductsBySearchPaginatedWithFiltersAndSort($db, $input, $filters, $sortOption, $limit, $offset);
+            $totalCount = Product::CountProductByNameWithFilters($db, $input, $filters);
+        }catch(ErrorException $e){
+            return ['error'=>$e->getMessage()];
+        }
+    }elseif(isset($params['sortOption'])){
+        try{
+            $sortOption = $params['sortOption'];
+            $validSortOptions = ['priceAsc', 'priceDesc', 'dateAsc', 'dateDesc'];
+            if (!in_array($sortOption, $validSortOptions, true)) {
+                return ['error' => 'invalid sort option', $sortOption];
+            }
+            $products = Product::GetProductsBySearchPaginatedWithSort($db,$input,$sortOption,$limit,$offset);
+            $totalCount = Product::CountProductByName($db,$input);
+        }catch(ErrorException $e){
+            return ['error'=>$e->getMessage()];
+        }
+    }elseif(isset($params['filters'])){
+        try{
+            $filters = $params['filters'];
+            $products = Product::GetProductBySearchPaginatedWithFilters($db,$input,$filters, $limit,$offset);
+            $totalCount = Product::CountProductByNameWithFilters($db,$input, $filters);
+        }catch(ErrorException $e){
+            return ['error' => $e->getMessage()];
+        }
+    }else{
+        return ['error' => 'not isset filter or options unexcpected'];
+    }
+
+    
+
+    try{
+        $productCards = CreateProductCardsWithProductList($products);
+    }catch(ErrorException $e){
+        return ['error' => $e->getMessage()];
+    }
+
+    return[
+        'productCards'=>$productCards,
+        'totalCount'=>$totalCount,
+        'currentPage'=>$page,
+        'limit' =>$limit,
+        'totalPages' => ceil($totalCount/$limit)
+    ];
+}
+
 function GetProductsBySubcategoryPaginatedWithFilters(array $params):array{
     global $db;
     if(!isset($params['subcategory_id'], $params['page'], $params['limit'])){
@@ -610,53 +686,3 @@ function SearchPaginated(array $params):array{
     ];
 }
 
-function SearchPaginatedWithFilters(array $params):array{
-    global $db;
-    if(!isset($params['input']) || $params['input'] === ""){
-        return ['error' => 'missing parameter input'];
-    }
-    if(!isset($params['limit'], $params['page'])){
-        return ['error' => 'missing parameter limit or page or both'];
-    }
-    if (!isset($params['filters']) || !is_array($params['filters'])) {
-        return ['error' => 'filters must be an array of Filter'];
-    }
-
-    $filters = [];
-
-    foreach ($params['filters'] as $index => $filter) {
-    if (!($filter instanceof Filter)) {
-        return ['error' => "filter at index $index is not an instance of Filter"];
-    }
-
-    $filters[] = $filter;
-    }
-
-   
-
-    $input = $params['input'];
-    $page = max(1,(int)$params['page']);
-    $limit = max(1,(int)$params['limit']);
-    $offset = ($page-1) * $limit;
-
-    try{
-        $products = Product::GetProductBySearchPaginatedWithFilters($db,$input,$filters, $limit,$offset);
-        $totalCount = Product::CountProductByNameWithFilters($db,$input, $filters);
-    }catch(ErrorException $e){
-        return ['error' => $e->getMessage()];
-    }
-
-    try{
-        $productCards = CreateProductCardsWithProductList($products);
-    }catch(ErrorException $e){
-        return ['error' => $e->getMessage()];
-    }
-
-    return[
-        'productCards'=>$productCards,
-        'totalCount'=>$totalCount,
-        'currentPage'=>$page,
-        'limit' =>$limit,
-        'totalPages' => ceil($totalCount/$limit)
-    ];
-}

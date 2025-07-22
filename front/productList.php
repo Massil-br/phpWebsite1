@@ -185,12 +185,72 @@ if (isset($_GET['category'])) {
 
 } elseif (isset($_GET['research'])) {
     $input = $_GET['research'] ?? '';
-    $response = GetData([
-        'action' => 'searchPaginated',
-        'input' => $input,
-        'page' => $page,
-        'limit' => $limit
-    ]);
+    if (isset($_GET['sortOption']) && $_GET['sortOption'] !== 'nofilter') {
+        switch ($_GET['sortOption']) {
+            case 'priceAsc':
+                $sortOption = 'priceAsc';
+                break;
+            case 'priceDesc':
+                $sortOption = 'priceDesc';
+                break;
+            case 'dateAsc':
+                $sortOption = 'dateAsc';
+                break;
+            case 'dateDesc':
+                $sortOption = 'dateDesc';
+                break;
+            default:
+                echo "error invalid input in url sortOption";
+        }
+    }
+
+    $filterMap = [
+        'filter_1' => FilterName::COLOR,
+        'filter_2' => FilterName::SIZE,
+    ];
+
+    foreach ($_GET as $key => $value) {
+        if (str_starts_with($key, 'filter_') && isset($filterMap[$key])) {
+            $name =$filterMap[$key];
+            $values = explode(',', $value);
+            $values = array_map('trim', $values);
+            $filters[] = new Filter($name, $values);
+        }
+    }
+
+    if (isset($filters) && isset($sortOption)) {
+        $response = GetData([
+            'action' => 'searchpaginatedwithfilters',
+            'input' => $input,
+            'page' => $page,
+            'limit' => $limit,
+            'filters' => $filters,
+            'sortOption' => $sortOption
+        ]);
+    } elseif (isset($filters)) {
+        $response = GetData([
+            'action' => 'searchpaginatedwithfilters',
+            'input' => $input,
+            'page' => $page,
+            'limit' => $limit,
+            'filters' => $filters
+        ]);
+    } elseif (isset($sortOption)) {
+        $response = GetData([
+            'action' => 'searchpaginatedwithfilters',
+            'input' => $input,
+            'page' => $page,
+            'limit' => $limit,
+            'sortOption' => $sortOption
+        ]);
+    }else {
+        $response = GetData([
+            'action' => 'searchpaginated',
+            'input' => $input,
+            'page' => $page,
+            'limit' => $limit
+        ]);
+    }
 
     if (isset($response['error'])) {
         var_dump($response['error']);
