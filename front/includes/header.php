@@ -34,7 +34,7 @@
 
                 <?php 
                     $page = basename($_SERVER['SCRIPT_FILENAME']);
-                    if ($page === "productList.php"){
+                    if ($page === "productList.php" && !isset($_GET['research'])){
                         echo '
                             <li class="nav-item dropdown ">
                                 <a class="nav-link dropdown-toggle active" data-bs-toggle="offcanvas" href="#subcategory" role="button" aria-controls="subcategory">

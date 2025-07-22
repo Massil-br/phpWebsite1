@@ -101,6 +101,18 @@ if (isset($_GET['category'])) {
             $totalCount = $response['totalCount'] ?? 0;
         }
 
+        $response = GetData([
+            'action' =>'getattrvattrbysubcategory',
+            'subcategory_id' => $subcategoryId
+        ]);
+
+        if(isset($response['error'])){
+            var_dump($response['error']);
+        }else{
+            $attrVAttrList = $response['attrVAttr'];
+        }
+
+
     } else {
         if (isset($_GET['sortOption']) && $_GET['sortOption'] !== 'nofilter') {
             switch ($_GET['sortOption']) {
@@ -181,6 +193,18 @@ if (isset($_GET['category'])) {
             $currentPage = $response['currentPage'] ?? 1;
             $totalCount = $response['totalCount'] ?? 0;
         }
+
+        $response = GetData([
+            'action' =>'getattrvattrbycategory',
+            'category_id' => $categoryId
+        ]);
+
+        if(isset($response['error'])){
+            var_dump($response['error']);
+        }else{
+            $attrVAttrList = $response['attrVAttr'];
+        }
+
     }
 
 } elseif (isset($_GET['research'])) {
@@ -264,6 +288,18 @@ if (isset($_GET['category'])) {
         $totalCount = $response['totalCount'] ?? 0;
     }
 
+    $response = GetData([
+        'action' =>'getattrvattrbysearch',
+        'input' => $input
+    ]);
+
+    if(isset($response['error'])){
+        var_dump($response['error']);
+    }else{
+        $attrVAttrList = $response['attrVAttr'];
+    }
+
+
 } else {
     $categoryId = null;
 }
@@ -302,6 +338,9 @@ if (isset($productCards)) {
         $attributes = $response['attributes'];
     }
 }
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -371,25 +410,21 @@ if (isset($productCards)) {
                             <label for="sortOption4" class="form-check-label">Date d'ajout décroissant</label>
                         </div>
 
-                        <?php if (isset($attributes) && isset($attributesValuesByAttributeId)): ?>
-                            <?php foreach ($attributes as $attribute): ?>
-                                <h6 class="dropdown-header"><strong><?= htmlspecialchars($attribute->GetName()) ?></strong></h6>
-                                <?php if (!empty($attributesValuesByAttributeId[$attribute->GetId()])): ?>
-                                    <?php foreach ($attributesValuesByAttributeId[$attribute->GetId()] as $value): ?>
+                        <?php if (isset($attrVAttrList)): ?>
+                            <?php foreach ($attrVAttrList as $attrVAttr): ?>
+                                <h6 class="dropdown-header"><strong><?= htmlspecialchars($attrVAttr->attribute->GetName()) ?></strong></h6>
+                                    <?php foreach ($attrVAttr->variantAttributes as $variantAttribute): ?>
                                         <div class="form-check mb-2">
                                             <input type="checkbox"
-                                                name="filter_<?= htmlspecialchars($attribute->GetId())?>"
-                                                id="filter_<?= htmlspecialchars($attribute->GetId()) ?>_<?= htmlspecialchars($value) ?>"
-                                                value="<?= htmlspecialchars($value) ?>"
+                                                name="filter_<?= htmlspecialchars($attrVAttr->attribute->GetId())?>"
+                                                id="filter_<?= htmlspecialchars($attrVAttr->attribute->GetId()) ?>_<?= htmlspecialchars($variantAttribute->GetValue()) ?>"
+                                                value="<?= htmlspecialchars($variantAttribute->GetValue()) ?>"
                                                 class="form-check-input" />
-                                            <label for="filter_<?= htmlspecialchars($attribute->GetId()) ?>_<?= htmlspecialchars($value) ?>" class="form-check-label">
-                                                <?= htmlspecialchars($value) ?>
+                                            <label for="filter_<?= htmlspecialchars($attrVAttr->attribute->GetId()) ?>_<?= htmlspecialchars($variantAttribute->GetValue()) ?>" class="form-check-label">
+                                                <?= htmlspecialchars($variantAttribute->GetValue()) ?>
                                             </label>
                                         </div>
                                     <?php endforeach; ?>
-                                <?php else: ?>
-                                    <p class="text-muted">Aucune valeur disponible</p>
-                                <?php endif; ?>
                             <?php endforeach; ?>
                         <?php endif; ?>
 

@@ -41,6 +41,12 @@ function GetData(array $params):array{
             return GetProductsByCategoryPaginatedWithFilters($params);
         case'getproductsbysubcategorypaginatedwithfilters':
             return GetProductsBySubcategoryPaginatedWithFilters($params);
+        case 'getattrvattrbycategory':
+            return GetAttrVAttrByCategory($params);
+        case 'getattrvattrbysubcategory':
+            return GetAttrVAttrBySubcategory($params);
+        case 'getattrvattrbysearch':
+            return GetAttrVAttrBySearch($params);
         default:
             return ['error' => 'Unknown action'];
     }
@@ -684,5 +690,74 @@ function SearchPaginated(array $params):array{
         'limit' =>$limit,
         'totalPages' => ceil($totalCount/$limit)
     ];
+}
+
+
+function GetAttrVAttrByCategory(array $params):array{
+    global $db;
+    if(!isset($params['category_id'])){
+        return ['error'=> 'missing param category_id'];
+    }
+    
+    $attrVAttr = [];
+
+    try{
+        $categoryId = (int)$params['category_id'];
+        $attributes = FilterAttribute::GetAttributesByCategory($db,$categoryId);
+        foreach($attributes as $attribute){
+            $variantAttributes = VariantAttribute::GetVariantAttributesByCategoryAndAttributeId($db,$categoryId,$attribute->GetId());
+            $attrVAttr[] = new AttrvAttr($attribute,$variantAttributes);
+        }
+
+
+    }catch(ErrorException $e){
+        return ['error' => $e->getMessage()];
+    }
+
+
+    
+    return['attrVAttr' => $attrVAttr];
+}
+
+function GetAttrVAttrBySubcategory(array $params):array{
+    global $db;
+    if(!isset($params['subcategory_id'])){
+        return ['error'=> 'missing param category_id'];
+    }
+    $attrVAttr = [];
+
+    try{
+        $subcategory_id = (int)$params['subcategory_id'];
+        $attributes = FilterAttribute::GetAttributesBySubcategory($db, $subcategory_id);
+        foreach($attributes as $attribute){
+            $variantAttributes = VariantAttribute::GetVariantAttributesBySubCategoryAndAttributeId($db,$subcategory_id, $attribute->GetId());
+            $attrVAttr[]= new AttrvAttr($attribute, $variantAttributes);
+        }
+    }catch(ErrorException $e){
+        return ['error' => $e->getMessage()];
+    }
+
+    return ['attrVAttr' => $attrVAttr];
+}
+
+function GetAttrVAttrBySearch(array $params): array{
+    global $db;
+    if(!isset($params['input'])){
+        return ['error' => 'missing param input'];
+    }
+    $attrVAttr = [];
+
+    try{
+        $input = $params['input'];
+        $attributes = FilterAttribute::GetAttributesBySearch($db, $input);
+        foreach($attributes as $attribute){
+            $variantAttributes =VariantAttribute::GetVariantAttributesBySearchAndAttributeId($db,$input,$attribute->GetId());
+            $attrVAttr[]=new AttrvAttr($attribute,$variantAttributes);
+        }
+    }catch(ErrorException $e){
+        return ['error' => $e->getMessage()];
+    }
+
+    return ['attrVAttr' => $attrVAttr];
 }
 
