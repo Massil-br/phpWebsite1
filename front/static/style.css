@@ -329,6 +329,13 @@ a{
     text-decoration: none;
 }
 
+.mh-80{
+    max-height: 60vh;
+}
+
+.mw-80vw{
+    max-width: 80vw;
+}
 
 
 
@@ -574,6 +581,12 @@ cart-item{
         min-width: 70%;
         margin:0 auto;
     }
+
+    .caroussel-max-height-500px{
+        max-width: 100%;
+    }
+
+
 
 
 }

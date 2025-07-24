@@ -61,7 +61,7 @@
                             <div class="carousel-item active  ">
                             <a  class="d-flex align-items-center justify-content-center" href="./product.php?id=<?= $carouselProductCards[0]->product->GetId() ?>">
                                 <img src="<?= $carouselProductCards[0]->variantImage->GetRelativeUrl() ?>" class="d-block  carousel-img-fixed" alt="<?= $carouselProductCards[0]->variantImage->GetAlt() ?>">
-                                <div class="carousel-caption d-none d-md-block ">
+                                <div class="carousel-caption  d-md-block ">
                                     <h5 class="card-title text-black d-flex justify-content-center">
                                     <strong class="bg-white rounded-2 p-1"><?= $carouselProductCards[0]->product->GetName() ?></strong>
                                     </h5>
@@ -72,7 +72,7 @@
                              <div class="carousel-item ">
                             <a class="d-flex align-items-center justify-content-center" href="./product.php?id=<?= $carouselProductCards[$i]->product->GetId() ?>">
                                 <img src="<?= $carouselProductCards[$i]->variantImage->GetRelativeUrl() ?>" class="d-block  carousel-img-fixed" alt="<?= $carouselProductCards[$i]->variantImage->GetAlt() ?>">
-                                <div class="carousel-caption d-none d-md-block ">
+                                <div class="carousel-caption  d-md-block ">
                                     <h5 class="card-title text-black d-flex justify-content-center">
                                     <strong class="bg-white rounded-2 p-1"><?= $carouselProductCards[$i]->product->GetName() ?></strong>
                                     </h5>

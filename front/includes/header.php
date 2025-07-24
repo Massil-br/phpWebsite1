@@ -1,11 +1,13 @@
 
 <?php
     require_once '../back/getData.php';
+    session_start();
     $response = GetData(['action'=>'getcategories']);
     /**
      * @var Category[] $categories
      */
     $categories = $response['categories'];
+    
     
 ?>
 
@@ -45,7 +47,7 @@
                     }
                 ?>
             </ul>
-            <form class="d-flex" role="search" method="GET" action="./productList.php">
+            <form class="d-flex me-5" role="search" method="GET" action="./productList.php">
                 <input 
                 class="form-control me-2"
                 type="search"
@@ -55,6 +57,26 @@
                 />
                 <button class="btn btn-outline-success" type="submit">Rechercher</button>
             </form>
+            <ul class="navbar-nav me-5 mb-2 mb-lg-0">
+                <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="./cart.php">Panier</a>
+                </li>
+                <?php if(!isset($_SESSION['user'])):?>
+                <li>
+                    <a class="nav-link active" aria-current="page" href="./login.php">Se connecter</a>
+                </li>
+                <li>
+                    <a class="nav-link active" aria-current="page" href="./register.php">S'enregistrer</a>
+                </li>
+                <?php  else:?>
+                <li>
+                <a class="nav-link active" aria-current="page" href="./profile.php"><?= $_SESSION['user']->getFirstName() ?></a>
+                </li>
+                <li>
+                    <a class="nav-link active" aria-current="page" href="./logout.php">Se déconnecter</a>
+                </li>
+                <?php endif;?>
+            </ul>
             </div>
         </div>
     </nav>
