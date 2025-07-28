@@ -132,23 +132,36 @@ body,html{
     max-width: 350px;
 }
 
-.left-ad-wrapper,
-.right-ad-wrapper {
-    flex: 0 0 160px; /* Changez auto par 160px pour une largeur fixe */
+.right-ad-wrapper,
+.left-ad-wrapper {
+    flex: 0 0 160px; 
     width: 160px;
     height: 100%;
     position: relative;
     z-index: -1;
 }
-.left-ad,
-.right-ad {
+
+.right-ad,
+.left-ad {
     width: 100%;
     max-width: 160px;
     min-width: 80px;
     height: 400px;
     background: #eee;
-    position: absolute;
+    position: absolute; 
     top: 0;
+}
+
+.right-ad .text-overlay,
+.left-ad .text-overlay {
+    position: absolute;
+    bottom: 10px;        
+    left: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 10px;
+    font-size: 16px;
+    z-index: 2;          
 }
 
 .center {
@@ -568,19 +581,37 @@ cart-item{
         display: none;
     }
 
-    .mobile-ad{
-        display :flex;
+    .mobile-ad {
+        display: flex;
         margin: 1rem;
-        
+
         max-width: 100%;
         max-height: 400px;
         min-width: 200px;
         min-height: 200px;
         background: #eee;
+        position: relative; /* Ajout de position relative pour le conteneur */
+    }
+
+    .mobile-ad img {
+        width: 100%;
+        height: auto;
+    }
+
+    .text-overlay {
+        position: absolute;
+        top: 0px;        /* Ajuster la position selon vos besoins */
+        left: 0px;
+        background-color: rgba(0, 0, 0, 0.5);
+        color: white;
+        padding: 10px;
+        font-size: 16px;
+        z-index: 2;          /* Assurez-vous que le texte est au-dessus de l'image */
     }
     .mobile {
         display: block;
     }
+
     
 
     .col{
