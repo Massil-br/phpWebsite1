@@ -267,6 +267,7 @@ header-footer-bg-color{
   color: var(--highlight-color) !important;
 }
 .scale-on-hover:hover{
+    transform-origin: center center;
     transform: scale(1.05);
 }
 
@@ -314,6 +315,11 @@ w-400px{
 
 .mobile{
     display:none;
+}
+
+#registerMsg{
+    max-width: 100%;
+    word-break: break-word;
 }
 
 

@@ -10,15 +10,15 @@ enum role : string{
 
 class User {
     private int $id;
-    private DateTime $created_at;
+    private string $created_at;
     private string $first_name;
     private string $last_name;
     private string $email;
     private string $phone_number;
-    private role $role;
+    private string $role;
 
-    public function __construct(int $id, DateTime $created_at, 
-    string $first_name, string $last_name, string $email, string $phone_number, role $role  )
+    public function __construct(int $id, string $created_at, 
+    string $first_name, string $last_name, string $email, string $phone_number, string $role  )
     {
         $this->id = $id;
         $this->created_at = $created_at;
@@ -29,10 +29,11 @@ class User {
         $this->role = $role;
     }
 
+
     public function getId():int{
         return $this->id;
     }
-    public function getCreatedAt() : DateTime{
+    public function getCreatedAt() : string{
         return $this->created_at;
     }
 
@@ -52,34 +53,54 @@ class User {
         return $this->phone_number;
     }
     
-    public function getRole(): role{
+    public function getRole(): string{
         return $this->role;
     }
 
 
-    public static function getUserFromId(int $id, PDO $pdo): User{
-        try{
-            $sql = $pdo->prepare("SELECT * FROM user WHERE id = :id");
-            $sql->bindParam(':id', $id);
-            $sql->execute();
-
-            $userData = $sql->fetch(PDO::FETCH_ASSOC);
-            if($userData === false){
-                throw new Exception("User with ID {$id} not found");
-            }
-            return new User(
-                id: (int) $userData['id'],
-                created_at : new DateTime($userData['created_at']),
-                first_name : $userData['first_name'],
-                last_name : $userData['last_name'],
-                email : $userData['email'],
-                phone_number: $userData['phone_number'],
-                role : $userData['role']
-            );
-        }catch(PDOException $e){
-            throw new Exception("Database error : " . $e->getMessage());
-        }
+    public static function CheckIfEmailExist(Database $db, string $email): bool {
+        $query = "SELECT 1 FROM user WHERE email = :email LIMIT 1";
+        $params = [':email' => $email];
+        $result = $db->executeQuery($query, $params);
+        
+        return !empty($result);
     }
+
+    public static function CreateUser(Database $db,string $first_name, string $last_name, string $email , string $password, string $phone_number ): void{
+        $query = "INSERT into user (first_name,last_name,email, password, phone_number) values (:first_name,:last_name,:email,:password,:phone_number)";
+        $params =[
+            ':first_name'=>$first_name,
+            ':last_name'=>$last_name,
+            ':email'=>$email,
+            ':password'=>$password,
+            ':phone_number'=>$phone_number
+        ];
+
+        $db->executeQuery($query,$params);
+    }
+
+    public static function GetPasswordHashByEmail(Database $db, string $email):string{
+        $query = "SELECT password from user where email = :email";
+        $params = [':email'=>$email];
+
+        $result = $db->executeQuery($query,$params);
+        return $result[0]['password'];
+    }
+
+    public static function GetUserByEmail(Database $db, string $email):User{
+        $query = "SELECT * from user where email = :email";
+        $params = [':email'=>$email];
+
+        $results = $db->executeQuery($query, $params);
+        $row = $results[0];
+        $user = new User($row['id'],$row['created_at'],$row['first_name'], $row['last_name'], $row['email'], $row['phone_number'], $row['role']);
+        
+        return $user;
+    }
+
+    
+
+    
 
 
 }

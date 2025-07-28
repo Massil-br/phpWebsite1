@@ -119,13 +119,10 @@ class Database {
     // }
 
 
-    
-
-    
-
-    
-
 
 }
+
+
+$db = new Database('localhost', '3307', 'ecommerce_template_1','root', '');
 
 

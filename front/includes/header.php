@@ -1,7 +1,9 @@
 
 <?php
     require_once '../back/getData.php';
-    session_start();
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
     $response = GetData(['action'=>'getcategories']);
     /**
      * @var Category[] $categories
@@ -66,7 +68,7 @@
                     <a class="nav-link active" aria-current="page" href="./login.php">Se connecter</a>
                 </li>
                 <li>
-                    <a class="nav-link active" aria-current="page" href="./register.php">S'enregistrer</a>
+                    <a class="nav-link active" aria-current="page" href="./register.php">S'inscrire</a>
                 </li>
                 <?php  else:?>
                 <li>

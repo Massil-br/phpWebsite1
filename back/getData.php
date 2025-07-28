@@ -1,11 +1,9 @@
 <?php
 
 require_once(__DIR__ . '/db.php');
-$db = new Database('localhost', '3307', 'ecommerce_template_1','root', '');
 
 
 function GetData(array $params):array{
-    global $db;
     if (empty($params['action'])) {
         return ['error' => 'action must contain a valid action'];
     }
