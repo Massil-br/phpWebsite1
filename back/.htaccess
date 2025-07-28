@@ -1,0 +1,10 @@
+# Bloquer l'accès direct aux fichiers PHP dans le répertoire back/
+<FilesMatch "\.php$">
+    Require all denied
+</FilesMatch>
+<Files "login.php">
+    Require all granted
+</Files>
+<Files "register.php">
+    Require all granted
+</Files>
