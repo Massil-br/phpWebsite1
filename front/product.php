@@ -44,11 +44,7 @@ if(isset($_GET['id'])){
     if(isset($productDetail)):
 ?>
 <div id="main">
-    <div class="left-ad-wrapper">
-        <div class="left-ad">
-            <img src="./assets/shoes.png" alt="" class="img-cover w-100">
-        </div>
-    </div>
+    <?php include './includes/leftAdWrapper.php' ?>
 
     <div class="center">
        <div class="container-fluid">
@@ -149,11 +145,7 @@ if(isset($_GET['id'])){
         </div>
     </div>
 
-    <div class="left-ad-wrapper">
-        <div class="left-ad">
-            <img src="./assets/shoes.png" alt="" class=" img-cover w-100">
-        </div>
-    </div>
+    <?php include './includes/rightAdWrapper.php' ?>
 
    
 </div>

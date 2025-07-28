@@ -14,11 +14,7 @@
 <body>
     <?php include './includes/header.php'; ?>
     <div id="main">
-        <div class="left-ad-wrapper">
-            <div class="left-ad">
-                <img src="./assets/shoes.png" alt="" class="img-cover w-100">
-            </div>
-        </div>
+        <?php include './includes/leftAdWrapper.php' ?>
 
         <div class="center">
             <div class="checkoutContainer d-flex align-items-center justify-content-center flex-column mw-80vw">
@@ -105,11 +101,7 @@
              </div>
         </div>
 
-        <div class="right-ad-wrapper">
-            <div class="right-ad">
-                <img src="./assets/shoes.png" alt="" class="img-cover w-100">
-            </div>
-        </div>
+        <?php include './includes/rightAdWrapper.php' ?>
     </div>
 
 
