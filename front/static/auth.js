@@ -65,7 +65,11 @@ if(registerForm){
             if (res.ok) {
                 showMessage(result.message || 'Inscription réussie 🎉', false);
                 loading(false);
-                form.reset(); 
+                form.reset();
+                setTimeout(function(){
+                    window.location.href = './index.php';
+                },2000)
+                
             } else {
                 showMessage(result.error || 'Erreur inconnue', true);
                 loading(false);
