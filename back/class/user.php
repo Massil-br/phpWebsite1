@@ -1,11 +1,11 @@
 <?php 
 
-
-enum role : string{
-    case User = 'user';
-    case Admin = 'admin';
-    case Dev = 'dev';
+class UserRole{
+    public static string $user = 'user';
+    public static string $admin = 'admin';
+    public static string $dev = 'dev';
 }
+
 
 
 class User {
@@ -97,10 +97,27 @@ class User {
         
         return $user;
     }
-
-    
-
-    
+    public static function GetUserByID(Database $db, int $id):User{
+        $query = "SELECT * FROM user where id = :id";
+        $params = [':id'=>$id];
+        $results = $db->executeQuery($query,$params);
+        if(empty($results)){
+            throw new ErrorException("no user found");
+        }
+        $row = $results[0];
+        $user = new User($row['id'], $row['created_at'], $row['first_name'], $row['last_name'], $row['email'], $row['phone_number'], $row['role']);
+        return $user;
+    }
+    public static function GetUserRoleByID(Database $db, int $id):string{
+        $query = "SELECT role FROM user where id = :id";
+        $params =[':id'=>$id];
+        $results = $db->executeQuery($query,$params);
+        if(empty($results)){
+            throw new ErrorException("no user found");
+        }
+        $role = $results[0]['role'];
+        return $role;        
+    }
 
 
 }

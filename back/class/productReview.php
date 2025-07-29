@@ -48,4 +48,14 @@ class ProductReview{
         }
         return $productReviews;
     }
+    public static function CreateProductReview(Database $db, int $product_id, int $user_id, string $stars){
+        $query ="INSERT into product_review (product_id, user_id, stars) values (:product_id, :user_id, :stars)";
+        $params =[
+            ':product_id'=> $product_id,
+            ':user_id'=>$user_id,
+            ':stars'=>$stars
+        ];
+
+        $db->executeQuery($query, $params);
+    }
 }
