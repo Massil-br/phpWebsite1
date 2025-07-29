@@ -35,6 +35,12 @@ class ProductReview{
         return $this->stars;
     }
 
+    /**
+     * Summary of GetProductReviewsByProductID
+     * @param Database $db
+     * @param int $product_id
+     * @return ProductReview[]
+     */
     public static function GetProductReviewsByProductID(Database $db, int $product_id):array{
         $query="SELECT * From product_review where product_id = :product_id";
         $params = [':product_id'=> $product_id];

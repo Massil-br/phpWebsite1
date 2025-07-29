@@ -3,6 +3,7 @@ require_once '../back/getData.php';
 
 $subcategories = []; 
 $productCards = [];
+$benchmarks = [];
 $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 $limit = 12;
 
@@ -17,6 +18,7 @@ if (isset($_GET['category'])) {
         'categoryid' => $categoryId
     ]);
     $subcategories = $response['subcategories'] ?? [];
+    $benchmarks[]= $response['benchmark'];
 
     if (isset($_GET['subcategory'])) {
         $subcategoryId = (int) $_GET['subcategory'];
@@ -87,6 +89,7 @@ if (isset($_GET['category'])) {
                 'page' => $page,
                 'limit' => $limit
             ]);
+            
         }
 
         if (isset($response['error'])) {
@@ -99,6 +102,7 @@ if (isset($_GET['category'])) {
             $totalPages = $response['totalPages'] ?? 1;
             $currentPage = $response['currentPage'] ?? 1;
             $totalCount = $response['totalCount'] ?? 0;
+            $benchmarks[]= $response['benchmark'];
         }
 
         $response = GetData([
@@ -110,6 +114,7 @@ if (isset($_GET['category'])) {
             var_dump($response['error']);
         }else{
             $attrVAttrList = $response['attrVAttr'];
+            $benchmarks[]= $response['benchmark'];
         }
 
 
@@ -192,6 +197,7 @@ if (isset($_GET['category'])) {
             $totalPages = $response['totalPages'] ?? 1;
             $currentPage = $response['currentPage'] ?? 1;
             $totalCount = $response['totalCount'] ?? 0;
+            $benchmarks[]= $response['benchmark'];
         }
 
         $response = GetData([
@@ -203,6 +209,7 @@ if (isset($_GET['category'])) {
             var_dump($response['error']);
         }else{
             $attrVAttrList = $response['attrVAttr'];
+            $benchmarks[]= $response['benchmark'];
         }
 
     }
@@ -286,6 +293,7 @@ if (isset($_GET['category'])) {
         $totalPages = $response['totalPages'] ?? 1;
         $currentPage = $response['currentPage'] ?? 1;
         $totalCount = $response['totalCount'] ?? 0;
+        $benchmarks[]= $response['benchmark'];
     }
 
     $response = GetData([
@@ -297,6 +305,7 @@ if (isset($_GET['category'])) {
         var_dump($response['error']);
     }else{
         $attrVAttrList = $response['attrVAttr'];
+        $benchmarks[]= $response['benchmark'];
     }
 
 
@@ -336,6 +345,7 @@ if (isset($productCards)) {
         var_dump($response['error']);
     } else {
         $attributes = $response['attributes'];
+        $benchmarks[]= $response['benchmark'];
     }
 }
 
@@ -577,7 +587,12 @@ if (isset($productCards)) {
 
         });
     </script>
-
+<script>
+        <?php if(!empty($benchmarks)):
+            foreach($benchmarks as $benchmark):?>
+            console.log("<?= $benchmark ?> ");
+        <?php endforeach;endif;?>
+</script>
     
 </body>
 </html>

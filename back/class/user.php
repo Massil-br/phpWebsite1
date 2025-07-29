@@ -119,5 +119,15 @@ class User {
         return $role;        
     }
 
+    public static function GetUserFirstNameById(Database $db, int $id):string{
+        $query = "SELECT first_name FROM user where id = :id";
+        $params =[':id'=>$id];
+        $results = $db->executeQuery($query, $params);
+        if(empty($results)){
+            throw new ErrorException("no user found");
+        }
+        return $results[0]['first_name'];
+    }
+
 
 }

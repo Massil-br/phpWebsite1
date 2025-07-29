@@ -45,6 +45,8 @@ function GetData(array $params):array{
             return GetAttrVAttrBySubcategory($params);
         case 'getattrvattrbysearch':
             return GetAttrVAttrBySearch($params);
+        case 'getcommentreviewsbyid':
+            return GetCommentReviewsById($params);
         default:
             return ['error' => 'Unknown action'];
     }
@@ -105,15 +107,20 @@ function CreateProductCardsWithProductList(array $products): array {
 
 function GetCategories():array{
     global $db;
+    $benchmark = new Benchmark("GetCategories");
+    $benchmark->StartBenchmark();
     $categories = Category::getCategories($db);
     if(empty($categories)){
         return ['error'=>'no categories found'];
     }
-    return ['categories' => $categories];
+    $benchmark->EndBenchmark();
+    return ['categories' => $categories, 'benchmark'=>$benchmark->GetBenchmark()];
 }
 
 function GetSubCategories(array $params):array{
     global $db;
+    $benchmark = new Benchmark("GetSubCategories");
+    $benchmark->StartBenchmark();
     if (!isset($params['categoryid']) || !is_int($params['categoryid']) || $params['categoryid'] <= 0) {
         return ['error' => 'categoryid is empry or invalid'];
     }
@@ -122,11 +129,14 @@ function GetSubCategories(array $params):array{
     if(empty($subcategories)){
         return ['error' => 'no subcategories found'];
     }
-    return ['subcategories' => $subcategories];
+    $benchmark->EndBenchmark();
+    return ['subcategories' => $subcategories, 'benchmark'=>$benchmark->GetBenchmark()];
 }
 
 function GetProductCards( array $params):array{
     global $db;
+    $benchmark = new Benchmark("GetProductCards");
+    $benchmark->StartBenchmark();
     if(!isset($params['param'])){
         return ['error'=>'param not set'];
     }
@@ -157,8 +167,8 @@ function GetProductCards( array $params):array{
         }catch(ErrorException $e){
             return ['error' => $e->getMessage()];
         }
-    
-    return ['productCards' =>$productCards];
+        $benchmark->EndBenchmark();
+        return ['productCards' =>$productCards, 'benchmark'=>$benchmark->GetBenchmark()];
     }
     if ($params['param'] === 'subcategory'){
         global $db;
@@ -175,7 +185,7 @@ function GetProductCards( array $params):array{
             return ['error' => $e->getMessage()];
         }
         
-        return ['productCards' =>$productCards];
+        return ['productCards' =>$productCards, 'benchmark'=>$benchmark->GetBenchmark()];
     }
 
     return ['error' => 'invalid param'];
@@ -184,6 +194,8 @@ function GetProductCards( array $params):array{
 
 function GetProductDetails(array $params):array{
     global $db;
+    $benchmark = new Benchmark("GetProductDetails");
+    $benchmark->StartBenchmark();
      if(!isset($params['id'])){
         return ['error' =>'missing id param'];
     }
@@ -232,12 +244,14 @@ function GetProductDetails(array $params):array{
     if(empty($productDetail)){
         return ['error' => 'could not create productDetail'];
     }
-
-    return['productDetail' => $productDetail];
+    $benchmark->EndBenchmark();
+    return['productDetail' => $productDetail, 'benchmark'=>$benchmark->GetBenchmark()];
 }
 
 function GetHomeCategories():array{
     global $db;
+    $benchmark = new Benchmark("GetHomeCategories");
+    $benchmark->StartBenchmark();
     $categories=[];
     $homeCategories = [];
     try{
@@ -249,11 +263,14 @@ function GetHomeCategories():array{
     }catch(ErrorException $e){
         return ["error" => $e->getMessage()];
     }
-    return ['homeCategories' =>$homeCategories];
+    $benchmark->EndBenchmark();
+    return ['homeCategories' =>$homeCategories, 'benchmark'=>$benchmark->GetBenchmark()];
 }
 
 function GetHomeProducts(array $params):array{
     global $db;
+    $benchmark = new Benchmark("GetHomeProducts");
+    $benchmark->StartBenchmark();
     if(!isset($params['limit'])){
         return ['error' => 'limit param not set'];
     }
@@ -298,12 +315,15 @@ function GetHomeProducts(array $params):array{
             return ['error' => "error while creating product card , product & productImages number in list :$i" ];
         }
     }
-    return ['homeProductCards' => $productCards];
+    $benchmark->EndBenchmark();
+    return ['homeProductCards' => $productCards, 'benchmark'=>$benchmark->GetBenchmark()];
 }
 
 
 function Search(array $params):array{
     global $db;
+    $benchmark = new Benchmark("Search");
+    $benchmark->StartBenchmark();
     if(!isset($params['input'])){
         return ['error'=>'input param not set'];
     }
@@ -328,12 +348,14 @@ function Search(array $params):array{
     }catch(ErrorException $e){
         return ['error' => $e->getMessage()];
     }
-    
-    return ['productCards' =>$productCards];
+    $benchmark->EndBenchmark();
+    return ['productCards' =>$productCards, 'benchmark'=>$benchmark->GetBenchmark()];
 }
 
 function GetAttributesById(array $params):array{
     global $db;
+    $benchmark = new Benchmark("GetAttributesById");
+    $benchmark->StartBenchmark();
     if(!isset($params['ids'])){
         return ['error' => 'need ids param'];
     }
@@ -348,13 +370,15 @@ function GetAttributesById(array $params):array{
     }catch( ErrorException $e ){
         return ['error' => $e->getMessage()];
     }
-
-    return ['attributes' => $attributes];
+    $benchmark->EndBenchmark();
+    return ['attributes' => $attributes, 'benchmark'=>$benchmark->GetBenchmark()];
 
 }
 
 function GetProductsByCategoryPaginated(array $params):array{
     global $db;
+    $benchmark = new Benchmark("GetProductsByCategoryPaginated");
+    $benchmark->StartBenchmark();
     if(!isset($params['category_id'], $params['page'], $params['limit'])){
         return ['error' => 'Missing parameters need : category_id, page & limit'];
     }
@@ -375,18 +399,20 @@ function GetProductsByCategoryPaginated(array $params):array{
     }catch(ErrorException $e){
         return ['error' => $e->getMessage()];
     }
-
+    $benchmark->EndBenchmark();
     return[
         'productCards'=>$productCards,
         'totalCount'=>$totalCount,
         'currentPage'=>$page,
         'limit' =>$limit,
-        'totalPages' => ceil($totalCount/$limit)
+        'totalPages' => ceil($totalCount/$limit), 'benchmark'=>$benchmark->GetBenchmark()
     ];
 }
 
 function GetProductsByCategoryPaginatedWithFilters(array $params):array{
     global $db;
+    $benchmark = new Benchmark("GetProductsByCategoryPaginatedWithFilters");
+    $benchmark->StartBenchmark();
     if(!isset($params['category_id'], $params['page'], $params['limit'])){
         return ['error' => 'Missing parameters need : category_id, page & limit'];
     }
@@ -456,18 +482,20 @@ function GetProductsByCategoryPaginatedWithFilters(array $params):array{
     }catch(ErrorException $e){
         return ['error' => $e->getMessage()];
     }
-
+    $benchmark->EndBenchmark();
     return[
         'productCards'=>$productCards,
         'totalCount'=>$totalCount,
         'currentPage'=>$page,
         'limit' =>$limit,
-        'totalPages' => ceil($totalCount/$limit)
+        'totalPages' => ceil($totalCount/$limit), 'benchmark'=>$benchmark->GetBenchmark()
     ];
 }
 
 function SearchPaginatedWithFilters(array $params):array{
     global $db;
+    $benchmark = new Benchmark("SearchPaginatedWithFilters");
+    $benchmark->StartBenchmark();
     if(!isset($params['input']) || $params['input'] === ""){
         return ['error' => 'missing parameter input'];
     }
@@ -532,18 +560,20 @@ function SearchPaginatedWithFilters(array $params):array{
     }catch(ErrorException $e){
         return ['error' => $e->getMessage()];
     }
-
+    $benchmark->EndBenchmark();
     return[
         'productCards'=>$productCards,
         'totalCount'=>$totalCount,
         'currentPage'=>$page,
         'limit' =>$limit,
-        'totalPages' => ceil($totalCount/$limit)
+        'totalPages' => ceil($totalCount/$limit), 'benchmark'=>$benchmark->GetBenchmark()
     ];
 }
 
 function GetProductsBySubcategoryPaginatedWithFilters(array $params):array{
     global $db;
+    $benchmark = new Benchmark("GetProductsBySubcategoryPaginatedWithFilers");
+    $benchmark->StartBenchmark();
     if(!isset($params['subcategory_id'], $params['page'], $params['limit'])){
         return ['error' => 'Missing parameters need : subcategory_id, page & limit'];
     }
@@ -613,18 +643,20 @@ function GetProductsBySubcategoryPaginatedWithFilters(array $params):array{
     }catch(ErrorException $e){
         return ['error' => $e->getMessage()];
     }
-
+    $benchmark->EndBenchmark();
     return[
         'productCards'=>$productCards,
         'totalCount'=>$totalCount,
         'currentPage'=>$page,
         'limit' =>$limit,
-        'totalPages' => ceil($totalCount/$limit)
+        'totalPages' => ceil($totalCount/$limit), 'benchmark'=>$benchmark->GetBenchmark()
     ];
 }
 
 function GetProductsBySubcategoryPaginated(array $params):array{
     global $db;
+    $benchmark = new Benchmark("GetProductsBySubcategoryPaginated");
+    $benchmark->StartBenchmark();
     if(!isset($params['subcategory_id'], $params['page'], $params['limit'])){
         return ['error' => 'Missing parameters need : subcategory_id, page & limit'];
     }
@@ -645,18 +677,20 @@ function GetProductsBySubcategoryPaginated(array $params):array{
     }catch(ErrorException $e){
         return ['error' => $e->getMessage()];
     }
-
+    $benchmark->EndBenchmark();
     return[
         'productCards'=>$productCards,
         'totalCount'=>$totalCount,
         'currentPage'=>$page,
         'limit' =>$limit,
-        'totalPages' => ceil($totalCount/$limit)
+        'totalPages' => ceil($totalCount/$limit), 'benchmark'=>$benchmark->GetBenchmark()
     ];
 }
 
 function SearchPaginated(array $params):array{
     global $db;
+    $benchmark = new Benchmark("SearchPaginated");
+    $benchmark->StartBenchmark();
     if(!isset($params['input']) || $params['input'] === ""){
         return ['error' => 'missing parameter input'];
     }
@@ -680,19 +714,21 @@ function SearchPaginated(array $params):array{
     }catch(ErrorException $e){
         return ['error' => $e->getMessage()];
     }
-
+    $benchmark->EndBenchmark();
     return[
         'productCards'=>$productCards,
         'totalCount'=>$totalCount,
         'currentPage'=>$page,
         'limit' =>$limit,
-        'totalPages' => ceil($totalCount/$limit)
+        'totalPages' => ceil($totalCount/$limit), 'benchmark'=>$benchmark->GetBenchmark()
     ];
 }
 
 
 function GetAttrVAttrByCategory(array $params):array{
     global $db;
+    $benchmark = new Benchmark("GetAttrVAttrByCategory");
+    $benchmark->StartBenchmark();
     if(!isset($params['category_id'])){
         return ['error'=> 'missing param category_id'];
     }
@@ -713,12 +749,14 @@ function GetAttrVAttrByCategory(array $params):array{
     }
 
 
-    
-    return['attrVAttr' => $attrVAttr];
+    $benchmark->EndBenchmark();
+    return['attrVAttr' => $attrVAttr, 'benchmark'=>$benchmark->GetBenchmark()];
 }
 
 function GetAttrVAttrBySubcategory(array $params):array{
     global $db;
+    $benchmark = new Benchmark("GetAttrVAttrBySubcategory");
+    $benchmark->StartBenchmark();
     if(!isset($params['subcategory_id'])){
         return ['error'=> 'missing param category_id'];
     }
@@ -734,12 +772,15 @@ function GetAttrVAttrBySubcategory(array $params):array{
     }catch(ErrorException $e){
         return ['error' => $e->getMessage()];
     }
-
-    return ['attrVAttr' => $attrVAttr];
+    $benchmark->EndBenchmark();
+    return ['attrVAttr' => $attrVAttr, 'benchmark'=>$benchmark->GetBenchmark()];
 }
 
 function GetAttrVAttrBySearch(array $params): array{
     global $db;
+    $benchmark = new Benchmark("GetAttrVAttrBySearch");
+    $benchmark->StartBenchmark();
+    
     if(!isset($params['input'])){
         return ['error' => 'missing param input'];
     }
@@ -756,6 +797,41 @@ function GetAttrVAttrBySearch(array $params): array{
         return ['error' => $e->getMessage()];
     }
 
-    return ['attrVAttr' => $attrVAttr];
+    $benchmark->EndBenchmark();
+    return ['attrVAttr' => $attrVAttr, 'benchmark'=>$benchmark->GetBenchmark()];
+}
+
+function GetCommentReviewsById(array $params):array{
+    global $db;
+    $benchmark = new Benchmark("GetCommentReviewsById");
+    $benchmark->StartBenchmark();
+    if(!isset($params['id'])){
+        return ['error'=> "no id in params"];
+    }
+   
+    try{
+        $productId = (int)$params['id'];
+
+        $productReviews = [];
+        $productReviews = ProductReview::GetProductReviewsByProductID($db, $productId);
+
+        
+        $commentReviews = [];
+        if(count($productReviews)>0){
+            foreach($productReviews as $productReview){
+                $productComment = ProductComment::GetProductCommentByReviewId($db, $productReview->GetId());
+                $userFirstName = User::GetUserFirstNameById($db,$productReview->GetUserId());
+                $commentReviews[]=new CommentReview($productReview, $productComment, $userFirstName);
+            }
+        }
+        
+
+    }catch(ErrorException $e){
+        return ['error'=>$e->getMessage()];
+    }
+
+  
+    $benchmark->EndBenchmark();
+    return ['commentReviews' => $commentReviews, 'benchmark'=>$benchmark->GetBenchmark()];
 }
 

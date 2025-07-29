@@ -5,6 +5,8 @@ require_once   '../back/getData.php';
 if(isset($_GET['id'])){
     $product_id = (int)$_GET['id'];
     $response = GetData(['action'=>'getProductDetail', 'id' => $product_id]);
+    $benchmarks =[];
+    $commentReviews = [];
 
     if(isset($response['error'])){
         var_dump($response['error']);
@@ -13,7 +15,7 @@ if(isset($_GET['id'])){
          * @var ProductDetail
          */
         $productDetail = $response['productDetail'];
-        
+        $benchmarks[]= $response['benchmark'];
 
         usort($productDetail->variantImages, function($a, $b) {
         return $a->GetPosition() <=> $b->GetPosition();
@@ -21,6 +23,17 @@ if(isset($_GET['id'])){
 
         $firstImage = $productDetail->variantImages[0];
     }
+
+    $response = GetData(['action'=>'getCommentReviewsById', 'id'=>$product_id]);
+    if(isset($response['error'])){
+        var_dump($response['error']);
+    }else{
+        $commentReviews = $response['commentReviews'];    
+        $benchmarks[]= $response['benchmark']; 
+    }
+
+    
+
 }
 
 
@@ -143,6 +156,23 @@ if(isset($_GET['id'])){
             <button class="modal-nav modal-next" onclick="changeModalImage(1)">❯</button>
             <img class="modal-content" id="modalImage" alt="Image agrandie">
         </div>
+        <?php if(!empty($commentReviews)): ?>
+        <div class="comments-section d-flex justify-content-center align-items-center">
+            <?php foreach($commentReviews as $commentReview):?>
+                <div class="comment d-flex flex-column">
+                    <div class="userName-stars">
+                        <p><?= $commentReview->userFirstName?></p>
+                        <p><?= $commentReview->productReview->GetStars(); ?></p>
+                    </div>
+                    <?php if(isset($commentReview->$productComment)):?>
+                    <div class="user-comment">
+                        <p><?= $commentReview->productComment->getComment(); ?></p>
+                    </div>
+                    <?php endif;?>
+                </div>
+            <?php endforeach;?>
+        </div>
+        <?php endif;?>
     </div>
 
     <?php include './includes/rightAdWrapper.php' ?>
@@ -294,7 +324,12 @@ if(isset($_GET['id'])){
 </script>
 <?php endif;?>
 <?php include './includes/footer.php'; ?>
-
+<script>
+        <?php if(!empty($benchmarks)):
+            foreach($benchmarks as $benchmark):?>
+            console.log("<?= $benchmark ?> ");
+        <?php endforeach;endif;?>
+</script>
 </body>
 
  

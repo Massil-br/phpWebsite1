@@ -1,10 +1,12 @@
 <?php
     require_once   '../back/getData.php';
+    $benchmarks = [];
     $response = GetData(['action' => 'getHomeCategories']);
     if(isset($response['error'])){
         var_dump($response['error']);
     }else{
         $homeCategories  = $response['homeCategories'];
+        $benchmarks[]= $response['benchmark'];
     }
 
     $response = GetData(['action' => 'gethomeproducts', 'limit'=> 6]);
@@ -12,6 +14,7 @@
         var_dump($response['error']);
     }else{
         $homeProductCards = $response['homeProductCards'];
+        $benchmarks[]= $response['benchmark'];
     }
 
     $response = GetData(['action' =>'gethomeproducts','limit' => 3]);
@@ -19,6 +22,7 @@
         var_dump($response['error']);
     }else{
         $carouselProductCards = $response['homeProductCards'];
+        $benchmarks[]= $response['benchmark'];
     }
 
 ?>
@@ -165,5 +169,11 @@
 
     </div>
     <?php include './includes/footer.php'; ?>
+    <script>
+        <?php if(!empty($benchmarks)):
+            foreach($benchmarks as $benchmark):?>
+            console.log("<?= $benchmark ?> ");
+        <?php endforeach;endif;?>
+    </script>
 </body>
 </html>

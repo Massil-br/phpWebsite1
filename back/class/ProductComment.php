@@ -21,6 +21,9 @@ class ProductComment{
     public function GetUserID():int{
         return $this->user_id;
     }
+    public function GetComment():string{
+        return $this->comment;
+    }
 
     public static function GetProductCommentsByProductId(Database $db, int $product_id):array{
         $query = "SELECT * FROM product_comment WHERE product_id = :product_id";
@@ -71,6 +74,18 @@ class ProductComment{
         $query = "DELETE FROM product_comment WHERE id = :id";
         $params =[':id'=>$product_comment_id];
         $db->executeQuery($query,$params);
+    }
+
+    public static function GetProductCommentByReviewId(Database $db, int $product_review_id):ProductComment| null{
+        $query = "SELECT * FROM product_comment where product_review_id = :id";
+        $params =[':id'=>$product_review_id];
+        $results = $db->executeQuery($query, $params);
+        if (empty($results)){
+           return null;
+        }
+        $row = $results[0];
+        return new ProductComment($row['id'],$row['product_id'], $row['user_id'], $row['comment'], $row['product_review_id']);    
+    
     }
 
 }
