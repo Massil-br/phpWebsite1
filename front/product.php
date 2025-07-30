@@ -156,15 +156,29 @@ if(isset($_GET['id'])){
             <button class="modal-nav modal-next" onclick="changeModalImage(1)">❯</button>
             <img class="modal-content" id="modalImage" alt="Image agrandie">
         </div>
+
+        <div class="createReview d-flex flex-wrap justify-content-center align-items-center flex-column text-color">
+            <p>N'hésitez pas à donner votre avis sur le produit</p>
+            <button onclick="Review()">Noter ou donner un avis sur le produit</button>
+            <form class="d-flex align-items-center justify-content-center flex-wrap flex-column  d-none" id ="reviewForm" action="">
+                <label for="stars">Stars</label>
+                <input id="stars" name="stars" type="number" min="1" max="5" >
+                <label for="comment">Comment (optional)</label>
+                <input id="comment" name="comment" type="text">
+                <button id="submit-button" type="submit">Enregistrer l'avis</button>
+                <div id="msg"></div>
+            </form>
+        </div>
+
         <?php if(!empty($commentReviews)): ?>
-        <div class="comments-section d-flex justify-content-center align-items-center">
+        <div class="comments-section d-flex justify-content-center align-items-center text-color flex-column">
             <?php foreach($commentReviews as $commentReview):?>
                 <div class="comment d-flex flex-column">
-                    <div class="userName-stars">
+                    <div class="userName-stars d-flex gap-4 ">
                         <p><?= $commentReview->userFirstName?></p>
-                        <p><?= $commentReview->productReview->GetStars(); ?></p>
+                        <p><?= $commentReview->productReview->GetStars(); ?> stars</p>
                     </div>
-                    <?php if(isset($commentReview->$productComment)):?>
+                    <?php if(isset($commentReview->productComment)):?>
                     <div class="user-comment">
                         <p><?= $commentReview->productComment->getComment(); ?></p>
                     </div>
@@ -173,162 +187,111 @@ if(isset($_GET['id'])){
             <?php endforeach;?>
         </div>
         <?php endif;?>
+
     </div>
 
     <?php include './includes/rightAdWrapper.php' ?>
 
    
 </div>
-<script>
-    // Images du produit
-    const images = [
-        <?php foreach($productDetail->variantImages as $image):?>
-        '<?= htmlspecialchars($image->GetRelativeUrl())?>',
-        <?php endforeach;?>
-    ];
-
-    let currentImageIndex = 0;
-    let selectedSize = 40;
-    let isZoomed = false;
-
-    // Initialisation
-    document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('total-images').textContent = images.length;
-        
-        // Gestion des miniatures
-        const thumbnails = document.querySelectorAll('.thumbnail');
-        thumbnails.forEach((thumbnail, index) => {
-            thumbnail.addEventListener('click', () => changeImage(index));
-        });
-
-        // Gestion des tailles
-        const sizeButtons = document.querySelectorAll('.size-btn');
-        sizeButtons.forEach(btn => {
-            btn.addEventListener('click', () => selectSize(btn.dataset.size));
-        });
-
-        // Agrandissement de l'image principale
-        document.getElementById('main-image').addEventListener('click', openModal);
-
-        // Fermeture du modal avec Escape
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') closeModal();
-            if (e.key === 'ArrowLeft') changeModalImage(-1);
-            if (e.key === 'ArrowRight') changeModalImage(1);
-        });
-    });
-
-    function changeImage(index) {
-        currentImageIndex = index;
-        document.getElementById('main-image').src = images[index];
-        document.getElementById('current-image').textContent = index + 1;
-        
-        // Mise à jour des miniatures
-        document.querySelectorAll('.thumbnail').forEach((thumb, i) => {
-            thumb.classList.toggle('active', i === index);
-        });
-    }
-
-    function selectSize(size) {
-        selectedSize = size;
-        document.querySelectorAll('.size-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.size === size);
-        });
-    }
-
-    function changeQuantity(delta) {
-        const input = document.getElementById('quantity');
-        const newValue = parseInt(input.value) + delta;
-        if (newValue >= 1 && newValue <= 10) {
-            input.value = newValue;
-        }
-    }
-
-    function openModal() {
-        const modal = document.getElementById('imageModal');
-        const modalImage = document.getElementById('modalImage');
-        
-        modal.style.display = 'block';
-        modalImage.src = images[currentImageIndex];
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeModal() {
-        const modal = document.getElementById('imageModal');
-        const modalImage = document.getElementById('modalImage');
-        
-        modal.style.display = 'none';
-        modalImage.classList.remove('zoomed');
-        isZoomed = false;
-        document.body.style.overflow = 'auto';
-    }
-
-    function changeModalImage(delta) {
-        currentImageIndex += delta;
-        if (currentImageIndex < 0) currentImageIndex = images.length - 1;
-        if (currentImageIndex >= images.length) currentImageIndex = 0;
-        
-        document.getElementById('modalImage').src = images[currentImageIndex];
-        document.getElementById('modalImage').classList.remove('zoomed');
-        isZoomed = false;
-        
-        // Mise à jour de l'image principale et des miniatures
-        changeImage(currentImageIndex);
-    }
-
-    // Zoom sur l'image dans le modal
-    document.getElementById('modalImage').addEventListener('click', function(e) {
-        e.stopPropagation();
-        this.classList.toggle('zoomed');
-        isZoomed = !isZoomed;
-    });
-
-    // Fermeture du modal en cliquant sur l'arrière-plan
-    document.getElementById('imageModal').addEventListener('click', function(e) {
-        if (e.target === this) {
-            closeModal();
-        }
-    });
-
-    function addToCart() {
-        const quantity = document.getElementById('quantity').value;
-        alert(`Produit ajouté au panier!\nTaille: ${selectedSize}\nQuantité: ${quantity}`);
-        
-        // Animation du bouton
-        const btn = document.querySelector('.add-to-cart-btn');
-        btn.innerHTML = '<i class="fas fa-check me-2"></i>Ajouté au panier!';
-        btn.classList.remove('btn-primary');
-        btn.classList.add('btn-success');
-        
-        setTimeout(() => {
-            btn.innerHTML = '<i class="fas fa-shopping-cart me-2"></i>Ajouter au panier';
-            btn.classList.remove('btn-success');
-            btn.classList.add('btn-primary');
-        }, 2000);
-    }
-
-    function addToWishlist() {
-        alert('Produit ajouté à la liste de souhaits!');
-        
-        // Animation du bouton
-        const btn = document.querySelector('.btn-outline-secondary');
-        const icon = btn.querySelector('i');
-        icon.classList.remove('fas', 'fa-heart');
-        icon.classList.add('fas', 'fa-heart');
-        icon.style.color = '#dc3545';
-        
-        setTimeout(() => {
-            icon.style.color = '';
-        }, 2000);
-    }
-</script>
+<?php include './includes/productimage.php'?>
 <?php endif;?>
 <?php include './includes/footer.php'; ?>
 <script>
-        <?php if(!empty($benchmarks)):
-            foreach($benchmarks as $benchmark):?>
-            console.log("<?= $benchmark ?> ");
-        <?php endforeach;endif;?>
+    // Fixed benchmark logging
+    <?php if(!empty($benchmarks)): ?>
+        <?php foreach($benchmarks as $benchmark): ?>
+            console.log("<?= addslashes($benchmark) ?>");
+        <?php endforeach; ?>
+    <?php else: ?>
+        console.log("No benchmarks available");
+    <?php endif; ?>
+</script>
+
+<script>
+    const reviewForm = document.getElementById('reviewForm');
+    
+    function Review(){
+        <?php if(!isset($_SESSION['user'])): ?>
+            window.location = "./login.php";
+            return;
+        <?php endif; ?>
+        
+        if(reviewForm.classList.contains('d-none')){
+            reviewForm.classList.remove('d-none');
+        }
+    }
+
+    reviewForm.addEventListener('submit', async function (e){
+        e.preventDefault();
+        loading(true);
+        const form = e.target;
+        const formData = new FormData(form);
+
+        let data = Object.fromEntries(formData.entries());
+        <?php if(isset($_SESSION['user'])): ?>
+            data.user_id = <?= $_SESSION['user']->GetId() ?>;
+        <?php endif; ?>
+        data.product_id = <?= $product_id ?>;
+
+        if(!data.stars || data.stars<1 || data.stars >5){
+            showMessage("les étoiles attribuées ne sont pas dans la plage accéptée", true);
+            loading(false);
+            return;
+        }
+    
+        const url = "../back/makeReview.php";
+        
+        try{
+            const res = await myFetch(url, 'POST', data);
+            const result = await res.json();
+            const stringResult = JSON.stringify(result);
+            
+            if(res.ok){
+                showMessage(result.message || 'Inscription réussie 🎉', false);
+                loading(false);
+                form.reset();
+            }else{
+                showMessage(result.error ||'Erreur inconnue', true);
+                loading(false);
+            }
+        }catch(err){
+            showMessage('Erreur lors de la requête : ' + err.message, true);
+            loading(false);
+        }
+    });
+    
+
+    async function myFetch(url, method, data){
+        const res = await fetch(url,{
+            method: method,
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        return res;
+    }
+
+    function showMessage(msg, isError = false) {
+        const div = document.getElementById('msg');
+        div.innerHTML = msg.replace(/,/g, '<br>');
+        div.style.color = isError ? 'red' : 'green';
+    }
+
+    function loading(isLoading) {
+        const element = document.getElementById('submit-button');
+        if (isLoading) {
+            if (typeof originalBtnText === 'undefined') {
+                window.originalBtnText = element.textContent;
+            }
+            element.textContent = "Chargement...";
+            element.disabled = true;
+        } else {
+            element.textContent = window.originalBtnText || "Enregistrer l'avis";
+            element.disabled = false;
+        }
+    }
 </script>
 </body>
 

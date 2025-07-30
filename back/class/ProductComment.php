@@ -9,7 +9,7 @@ class ProductComment{
 
     public function __construct(int $id, int $product_id, int $user_id, string $comment, int $product_review_id){
         $this->id = $id;
-        $this->$product_id = $product_id;
+        $this->product_id = $product_id;
         $this->user_id = $user_id;
         $this->comment = $comment;
         $this->product_review_id = $product_review_id;

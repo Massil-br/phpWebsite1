@@ -54,7 +54,7 @@ class ProductReview{
         }
         return $productReviews;
     }
-    public static function CreateProductReview(Database $db, int $product_id, int $user_id, string $stars){
+    public static function CreateProductReview(Database $db, int $product_id, int $user_id, string $stars): int{
         $query ="INSERT into product_review (product_id, user_id, stars) values (:product_id, :user_id, :stars)";
         $params =[
             ':product_id'=> $product_id,
@@ -63,5 +63,7 @@ class ProductReview{
         ];
 
         $db->executeQuery($query, $params);
+        $id = $db->lastInsertId();
+        return $id;
     }
 }

@@ -8,3 +8,6 @@
 <Files "register.php">
     Require all granted
 </Files>
+<Files "makeReview.php">
+    Require all granted
+</Files>
