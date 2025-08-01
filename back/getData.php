@@ -47,6 +47,8 @@ function GetData(array $params):array{
             return GetAttrVAttrBySearch($params);
         case 'getcommentreviewsbyid':
             return GetCommentReviewsById($params);
+        case 'getcartproductsbyuserid':
+            return GetCartProductsByUserId($params);
         default:
             return ['error' => 'Unknown action'];
     }
@@ -72,7 +74,7 @@ function CreateProductCardsWithProductList(array $products): array {
             
             $productVariantAttributes = [];
             foreach ($variantIdList as $variantId) {
-                $attributes = VariantAttribute::GetVariantAttributes($db,$variantId);
+                $attributes = VariantAttribute::GetVariantAttributesByVariantId($db,$variantId);
                 foreach ($attributes as $attribute) {
                     $productVariantAttributes[] = $attribute;
                 }
@@ -223,7 +225,7 @@ function GetProductDetails(array $params):array{
     }
     $productAttributes = [];
     foreach($variants as $variant){
-        $productAttributes   = VariantAttribute::GetVariantAttributes($db,$variant->GetId());
+        $productAttributes   = VariantAttribute::GetVariantAttributesByVariantId($db,$variant->GetId());
         if(empty($productAttributes)){
             return ['error'=> 'no product attributes found'];
         }
@@ -835,3 +837,29 @@ function GetCommentReviewsById(array $params):array{
     return ['commentReviews' => $commentReviews, 'benchmark'=>$benchmark->GetBenchmark()];
 }
 
+function GetCartProductsByUserId($params): array{
+    global $db;
+    $benchmark = new Benchmark("GetCartProductByUserId");
+    $benchmark->StartBenchmark();
+    if(!isset($params['user_id'])){
+        return ['error'=> 'missing user_id param'];
+    }
+    $user_id =(int)$params['user_id'];
+    try{
+        $cartid = Cart::GetCartIdByUserId($db,$user_id);
+        if($cartid == -1){
+            cart::CreateCartIfNotExists($db,$user_id);
+        }
+        $cartProducts = CartProduct::GetCartProductsByCartId($db,$cartid);
+        $cartProductsDisplay = [];
+        foreach($cartProducts as $cartProduct){
+            $cartProductsDisplay[]= new cartProductDisplay($cartProduct);
+        }
+    }catch(ErrorException $e){
+        return ['error'=>$e->getMessage()];
+    }
+
+    $benchmark->EndBenchmark();
+    return ['cartProductsDisplay'=>$cartProductsDisplay, 'benchmark'=>$benchmark->GetBenchmark()];
+
+}

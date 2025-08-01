@@ -159,7 +159,7 @@ if(isset($_GET['id'])){
 
         <div class="createReview d-flex flex-wrap justify-content-center align-items-center flex-column text-color">
             <p>N'hésitez pas à donner votre avis sur le produit</p>
-            <button onclick="Review()">Noter ou donner un avis sur le produit</button>
+            <button class="btn btn-primary" onclick="Review()">Noter ou donner un avis sur le produit</button>
             <form class="d-flex align-items-center justify-content-center flex-wrap flex-column  d-none" id ="reviewForm" action="">
                 <label for="stars">Stars</label>
                 <input id="stars" name="stars" type="number" min="1" max="5" >
@@ -171,16 +171,18 @@ if(isset($_GET['id'])){
         </div>
 
         <?php if(!empty($commentReviews)): ?>
-        <div class="comments-section d-flex justify-content-center align-items-center text-color flex-column">
+        <div class="comments-section d-flex justify-content-center align-items-center text-color flex-column my-5 ">
             <?php foreach($commentReviews as $commentReview):?>
-                <div class="comment d-flex flex-column">
-                    <div class="userName-stars d-flex gap-4 ">
-                        <p><?= $commentReview->userFirstName?></p>
-                        <p><?= $commentReview->productReview->GetStars(); ?> stars</p>
+                <div class="comment d-flex flex-column align-items-start my-2 bg-reviews w-reviews p-2 rounded-2  ">
+                    <div class="userName-stars d-flex gap-2 bg-reviews-top align-items-center mb-1">
+                        <img src="./assets/default/image.png" width="36" height="36" alt="">
+                        <p class="mb-0"><?= $commentReview->userFirstName?></p>
+                        <p class="mb-0"><?= $commentReview->productReview->GetStars(); ?> </p>
+                        <i class="fas fa-star color-star"></i>
                     </div>
                     <?php if(isset($commentReview->productComment)):?>
-                    <div class="user-comment">
-                        <p><?= $commentReview->productComment->getComment(); ?></p>
+                    <div class="user-comment bg-reviews-bot pt-2">
+                        <p class="px-3"><?= $commentReview->productComment->getComment(); ?></p>
                     </div>
                     <?php endif;?>
                 </div>
@@ -215,7 +217,8 @@ if(isset($_GET['id'])){
         <?php if(!isset($_SESSION['user'])): ?>
             window.location = "./login.php";
             return;
-        <?php endif; ?>
+        <?php $_SESSION['message']="Vous devez être connecté pour mettre un avis";
+        endif; ?>
         
         if(reviewForm.classList.contains('d-none')){
             reviewForm.classList.remove('d-none');

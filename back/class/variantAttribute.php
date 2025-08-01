@@ -28,10 +28,10 @@ class VariantAttribute{
      * @param int $id
      * @return VariantAttribute[]
      */
-    public static function GetVariantAttributes(Database $db,int $id):array{
+    public static function GetVariantAttributesByVariantId(Database $db,int $variant_id):array{
         $query = "SELECT * FROM variant_attribute WHERE variant_id = :id";
         $params =[
-            ':id'=> $id
+            ':id'=> $variant_id
         ];
 
         $results = $db->executeQuery($query, $params);
@@ -140,6 +140,18 @@ class VariantAttribute{
             $variantAttributes[]= new VariantAttribute($row['variant_id'], $row['attribute_id'], $row['value']);
         }
         return $variantAttributes;
+    }
+
+    public static function GetVariantAttributeById(Database $db, int $id):VariantAttribute{
+        $query = "SELECT * FROM variant_attribute where id = :id";
+        if($id <= 0){
+            throw new Exception("id <=0");
+        }
+        $params = [':id'=>$id];
+        $results = $db->executeQuery($query,$params);
+        $row =$results[0];
+        $variantAttribute= new VariantAttribute($row['variant_id'], $row['attribute_id'], $row['value']);
+        return $variantAttribute;
     }
 
 

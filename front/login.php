@@ -1,11 +1,7 @@
 <?php
     require_once '../back/getData.php';
     session_start();
-    if(isset($_SESSION['user'])){
-        var_dump($_SESSION['user']);
-    }
-    
-    
+    include './includes/sessionMessage.php';
 ?>
 
 
@@ -28,11 +24,11 @@
                 <form id="loginForm" class="login-container d-flex align-items-center justify-content-center flex-column mt-5">
                     <h2>Se connecter</h2>
 
-                    <label for="">Email</label>
-                    <input type="email" name="email" required>
+                    <label for="email">Email</label>
+                    <input id="email"type="email" name="email" required>
 
-                    <label for="">Mot de passe</label>
-                    <input type="password" name="password" required>
+                    <label for="password">Mot de passe</label>
+                    <input id="password" type="password" name="password" required>
 
                     <button id="submit-button"type="submit">Se connecter</button>
                     <div id="registerMsg" class="mt-3 text-center"></div>

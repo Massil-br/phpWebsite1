@@ -4,354 +4,140 @@ require_once '../back/getData.php';
 $subcategories = []; 
 $productCards = [];
 $benchmarks = [];
-$page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $limit = 12;
+$filters = [];
+$sortOption = null;
+$categoryId = isset($_GET['category']) ? max(0, (int)$_GET['category']) : null;
+$subcategoryId = isset($_GET['subcategory']) ? (int)$_GET['subcategory'] : null;
+$input = $_GET['research'] ?? null;
 
-if (isset($_GET['category'])) {
-    $categoryId = (int) $_GET['category'];
-    if ($categoryId <= 0) {
-        $categoryId = null;
-    }
+function parseSortOption() {
+    $valid = ['priceAsc', 'priceDesc', 'dateAsc', 'dateDesc'];
+    return (isset($_GET['sortOption']) && in_array($_GET['sortOption'], $valid)) ? $_GET['sortOption'] : null;
+}
 
-    $response = GetData([
-        'action' => 'getsubcategories',
-        'categoryid' => $categoryId
-    ]);
-    $subcategories = $response['subcategories'] ?? [];
-    $benchmarks[]= $response['benchmark'];
-
-    if (isset($_GET['subcategory'])) {
-        $subcategoryId = (int) $_GET['subcategory'];
-
-        if (isset($_GET['sortOption']) && $_GET['sortOption'] !== 'nofilter') {
-            switch ($_GET['sortOption']) {
-                case 'priceAsc':
-                    $sortOption = 'priceAsc';
-                    break;
-                case 'priceDesc':
-                    $sortOption = 'priceDesc';
-                    break;
-                case 'dateAsc':
-                    $sortOption = 'dateAsc';
-                    break;
-                case 'dateDesc':
-                    $sortOption = 'dateDesc';
-                    break;
-                default:
-                    echo "error invalid input in url sortOption";
-            }
-        }
-
-        $filterMap = [
-            'filter_1' => FilterName::COLOR,
-            'filter_2' => FilterName::SIZE,
-        ];
-
-        foreach ($_GET as $key => $value) {
-            if (str_starts_with($key, 'filter_') && isset($filterMap[$key])) {
-                $name =$filterMap[$key];
-                $values = explode(',', $value);
-                $values = array_map('trim', $values);
-                $filters[] = new Filter($name, $values);
-            }
-        }
-
-        if (isset($filters) && isset($sortOption)) {
-            $response = GetData([
-                'action' => 'getproductsbysubcategorypaginatedwithfilters',
-                'subcategory_id' => $subcategoryId,
-                'page' => $page,
-                'limit' => $limit,
-                'filters' => $filters,
-                'sortOption' => $sortOption
-            ]);
-        } elseif (isset($filters)) {
-            $response = GetData([
-                'action' => 'getproductsbysubcategorypaginatedwithfilters',
-                'subcategory_id' => $subcategoryId,
-                'page' => $page,
-                'limit' => $limit,
-                'filters' => $filters
-            ]);
-        } elseif (isset($sortOption)) {
-            $response = GetData([
-                'action' => 'getproductsbysubcategorypaginatedwithfilters',
-                'subcategory_id' => $subcategoryId,
-                'page' => $page,
-                'limit' => $limit,
-                'sortOption' => $sortOption
-            ]);
-        }else {
-            $categoryId = (int) $categoryId;
-            $response = GetData([
-                'action' => 'Getproductsbysubcategorypaginated',
-                'subcategory_id' => $subcategoryId,
-                'page' => $page,
-                'limit' => $limit
-            ]);
-            
-        }
-
-        if (isset($response['error'])) {
-            var_dump($response['error']);
-        } else {
-            /**
-             * @var ProductCard[]
-             */
-            $productCards = $response['productCards'];
-            $totalPages = $response['totalPages'] ?? 1;
-            $currentPage = $response['currentPage'] ?? 1;
-            $totalCount = $response['totalCount'] ?? 0;
-            $benchmarks[]= $response['benchmark'];
-        }
-
-        $response = GetData([
-            'action' =>'getattrvattrbysubcategory',
-            'subcategory_id' => $subcategoryId
-        ]);
-
-        if(isset($response['error'])){
-            var_dump($response['error']);
-        }else{
-            $attrVAttrList = $response['attrVAttr'];
-            $benchmarks[]= $response['benchmark'];
-        }
-
-
-    } else {
-        if (isset($_GET['sortOption']) && $_GET['sortOption'] !== 'nofilter') {
-            switch ($_GET['sortOption']) {
-                case 'priceAsc':
-                    $sortOption = 'priceAsc';
-                    break;
-                case 'priceDesc':
-                    $sortOption = 'priceDesc';
-                    break;
-                case 'dateAsc':
-                    $sortOption = 'dateAsc';
-                    break;
-                case 'dateDesc':
-                    $sortOption = 'dateDesc';
-                    break;
-                default:
-                    echo "error invalid input in url sortOption";
-            }
-        }
-
-        $filterMap = [
-            'filter_1' => FilterName::COLOR,
-            'filter_2' => FilterName::SIZE,
-        ];
-
-        foreach ($_GET as $key => $value) {
-            if (str_starts_with($key, 'filter_') && isset($filterMap[$key])) {
-                $name =$filterMap[$key];
-                $values = explode(',', $value);
-                $values = array_map('trim', $values);
-                $filters[] = new Filter($name, $values);
-            }
-        }
-
-        if (isset($filters) && isset($sortOption)) {
-            $response = GetData([
-                'action' => 'getproductsbycategorypaginatedwithfilters',
-                'category_id' => $categoryId,
-                'page' => $page,
-                'limit' => $limit,
-                'filters' => $filters,
-                'sortOption' => $sortOption
-            ]);
-        } elseif (isset($filters)) {
-            $response = GetData([
-                'action' => 'getproductsbycategorypaginatedwithfilters',
-                'category_id' => $categoryId,
-                'page' => $page,
-                'limit' => $limit,
-                'filters' => $filters
-            ]);
-        } elseif (isset($sortOption)) {
-            $response = GetData([
-                'action' => 'getproductsbycategorypaginatedwithfilters',
-                'category_id' => $categoryId,
-                'page' => $page,
-                'limit' => $limit,
-                'sortOption' => $sortOption
-            ]);
-        }else {
-            $categoryId = (int) $categoryId;
-            $response = GetData([
-                'action' => 'Getproductsbycategorypaginated',
-                'category_id' => $categoryId,
-                'page' => $page,
-                'limit' => $limit
-            ]);
-        }
-
-        if (isset($response['error'])) {
-            var_dump($response['error']);
-        } else {
-            /**
-             * @var ProductCard[]
-             */
-            $productCards = $response['productCards'] ?? [];
-            $totalPages = $response['totalPages'] ?? 1;
-            $currentPage = $response['currentPage'] ?? 1;
-            $totalCount = $response['totalCount'] ?? 0;
-            $benchmarks[]= $response['benchmark'];
-        }
-
-        $response = GetData([
-            'action' =>'getattrvattrbycategory',
-            'category_id' => $categoryId
-        ]);
-
-        if(isset($response['error'])){
-            var_dump($response['error']);
-        }else{
-            $attrVAttrList = $response['attrVAttr'];
-            $benchmarks[]= $response['benchmark'];
-        }
-
-    }
-
-} elseif (isset($_GET['research'])) {
-    $input = $_GET['research'] ?? '';
-    if (isset($_GET['sortOption']) && $_GET['sortOption'] !== 'nofilter') {
-        switch ($_GET['sortOption']) {
-            case 'priceAsc':
-                $sortOption = 'priceAsc';
-                break;
-            case 'priceDesc':
-                $sortOption = 'priceDesc';
-                break;
-            case 'dateAsc':
-                $sortOption = 'dateAsc';
-                break;
-            case 'dateDesc':
-                $sortOption = 'dateDesc';
-                break;
-            default:
-                echo "error invalid input in url sortOption";
-        }
-    }
-
-    $filterMap = [
+function parseFilters() {
+    $map = [
         'filter_1' => FilterName::COLOR,
         'filter_2' => FilterName::SIZE,
     ];
-
+    $filters = [];
     foreach ($_GET as $key => $value) {
-        if (str_starts_with($key, 'filter_') && isset($filterMap[$key])) {
-            $name =$filterMap[$key];
-            $values = explode(',', $value);
-            $values = array_map('trim', $values);
-            $filters[] = new Filter($name, $values);
+        if (str_starts_with($key, 'filter_') && isset($map[$key])) {
+            $filters[] = new Filter($map[$key], array_map('trim', explode(',', $value)));
         }
     }
-
-    if (isset($filters) && isset($sortOption)) {
-        $response = GetData([
-            'action' => 'searchpaginatedwithfilters',
-            'input' => $input,
-            'page' => $page,
-            'limit' => $limit,
-            'filters' => $filters,
-            'sortOption' => $sortOption
-        ]);
-    } elseif (isset($filters)) {
-        $response = GetData([
-            'action' => 'searchpaginatedwithfilters',
-            'input' => $input,
-            'page' => $page,
-            'limit' => $limit,
-            'filters' => $filters
-        ]);
-    } elseif (isset($sortOption)) {
-        $response = GetData([
-            'action' => 'searchpaginatedwithfilters',
-            'input' => $input,
-            'page' => $page,
-            'limit' => $limit,
-            'sortOption' => $sortOption
-        ]);
-    }else {
-        $response = GetData([
-            'action' => 'searchpaginated',
-            'input' => $input,
-            'page' => $page,
-            'limit' => $limit
-        ]);
-    }
-
-    if (isset($response['error'])) {
-        var_dump($response['error']);
-    } else {
-        /**
-         * @var ProductCard[]
-         */
-        $productCards = $response['productCards'] ?? [];
-        $totalPages = $response['totalPages'] ?? 1;
-        $currentPage = $response['currentPage'] ?? 1;
-        $totalCount = $response['totalCount'] ?? 0;
-        $benchmarks[]= $response['benchmark'];
-    }
-
-    $response = GetData([
-        'action' =>'getattrvattrbysearch',
-        'input' => $input
-    ]);
-
-    if(isset($response['error'])){
-        var_dump($response['error']);
-    }else{
-        $attrVAttrList = $response['attrVAttr'];
-        $benchmarks[]= $response['benchmark'];
-    }
-
-
-} else {
-    $categoryId = null;
+    return $filters;
 }
 
-if (isset($productCards)) {
+function fetchProducts($params) {
+    $response = GetData($params);
+    if (isset($response['error'])) {
+        var_dump($response['error']);
+        return [[], 1, 1, 0, null];
+    }
+    return [
+        $response['productCards'] ?? [],
+        $response['totalPages'] ?? 1,
+        $response['currentPage'] ?? 1,
+        $response['totalCount'] ?? 0,
+        $response['benchmark'] ?? null
+    ];
+}
+
+function fetchAttrVAttr($action, $idKey, $idValue) {
+    $res = GetData(['action' => $action, $idKey => $idValue]);
+    return $res['attrVAttr'] ?? null;
+}
+
+$sortOption = parseSortOption();
+$filters = parseFilters();
+
+// Sous-catégorie
+if ($categoryId !== null) {
+    $res = GetData(['action' => 'getsubcategories', 'categoryid' => $categoryId]);
+    $subcategories = $res['subcategories'] ?? [];
+    $benchmarks[] = $res['benchmark'] ?? null;
+
+    if ($subcategoryId) {
+        $params = [
+            'action' => 'getproductsbysubcategorypaginatedwithfilters',
+            'subcategory_id' => $subcategoryId,
+            'page' => $page,
+            'limit' => $limit
+        ];
+        if ($filters) $params['filters'] = $filters;
+        if ($sortOption) $params['sortOption'] = $sortOption;
+        if (!$filters && !$sortOption) $params['action'] = 'Getproductsbysubcategorypaginated';
+
+        [$productCards, $totalPages, $currentPage, $totalCount, $bm] = fetchProducts($params);
+        $benchmarks[] = $bm;
+
+        $attrVAttrList = fetchAttrVAttr('getattrvattrbysubcategory', 'subcategory_id', $subcategoryId);
+    } else {
+        $params = [
+            'action' => 'getproductsbycategorypaginatedwithfilters',
+            'category_id' => $categoryId,
+            'page' => $page,
+            'limit' => $limit
+        ];
+        if ($filters) $params['filters'] = $filters;
+        if ($sortOption) $params['sortOption'] = $sortOption;
+        if (!$filters && !$sortOption) $params['action'] = 'Getproductsbycategorypaginated';
+
+        [$productCards, $totalPages, $currentPage, $totalCount, $bm] = fetchProducts($params);
+        $benchmarks[] = $bm;
+
+        $attrVAttrList = fetchAttrVAttr('getattrvattrbycategory', 'category_id', $categoryId);
+    }
+}
+// Recherche
+elseif ($input !== null) {
+    $params = [
+        'action' => 'searchpaginatedwithfilters',
+        'input' => $input,
+        'page' => $page,
+        'limit' => $limit
+    ];
+    if ($filters) $params['filters'] = $filters;
+    if ($sortOption) $params['sortOption'] = $sortOption;
+    if (!$filters && !$sortOption) $params['action'] = 'searchpaginated';
+
+    [$productCards, $totalPages, $currentPage, $totalCount, $bm] = fetchProducts($params);
+    $benchmarks[] = $bm;
+
+    $attrVAttrList = fetchAttrVAttr('getattrvattrbysearch', 'input', $input);
+}
+
+// Préparer affichage des attributs à partir des produits
+if ($productCards) {
     $attributesIds = [];
     $attributesValuesByAttributeId = [];
 
     foreach ($productCards as $productCard) {
-        foreach ($productCard->variantAttributes as $variantAttribute) {
-            $attributeId = $variantAttribute->GetAttributeId();
-            $value = $variantAttribute->GetValue();
-
-            if (!in_array($attributeId, $attributesIds)) {
-                $attributesIds[] = $attributeId;
-            }
-
-            if (!isset($attributesValuesByAttributeId[$attributeId])) {
-                $attributesValuesByAttributeId[$attributeId] = [];
-            }
-
-            if (!in_array($value, $attributesValuesByAttributeId[$attributeId])) {
-                $attributesValuesByAttributeId[$attributeId][] = $value;
-            }
+        foreach ($productCard->variantAttributes as $va) {
+            $id = $va->GetAttributeId();
+            $value = $va->GetValue();
+            $attributesIds[$id] = true;
+            $attributesValuesByAttributeId[$id][] = $value;
         }
     }
 
     $response = GetData([
         'action' => 'getAttributesByIds',
-        'ids' => $attributesIds
+        'ids' => array_keys($attributesIds)
     ]);
 
     if (isset($response['error'])) {
         var_dump($response['error']);
     } else {
         $attributes = $response['attributes'];
-        $benchmarks[]= $response['benchmark'];
+        $benchmarks[] = $response['benchmark'] ?? null;
     }
 }
-
-
-
 ?>
+
 
 <!DOCTYPE html>
 <html lang="fr">

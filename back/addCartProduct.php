@@ -21,7 +21,7 @@ if (!$data) {
     exit;
 }
 
-$requiredFields = ['stars','user_id','product_id'];
+$requiredFields = ['user_id','variant_id','quantity', 'variant_attribute_ids'];
 foreach ($requiredFields as $field) {
     if (empty($data[$field])) {
         http_response_code(400);
@@ -30,35 +30,30 @@ foreach ($requiredFields as $field) {
     }
 }
 
-$hasComment = false;
-$stars = $data['stars']??null;
-$product_id = $data['product_id']??null;
-$userId = $data['user_id']??null;
-$comment = $data['comment']??null;
+$userId = $data['user_id'];;
+$variant_id = $data['variant_id'];;
+$quantity = $data['quantity'];
+$variantAttributeIds = $data['variant_attribute_ids'];
 
-if($stars < 1 || $stars >5){
-    http_response_code(400);
-    echo json_encode(['error'=>"stars ne peut être inférieur à 1 ou supérieur à 5"]);
-    exit;
-}
-if($comment !== null && $comment !==""){
-    $hasComment = true;
-}
-try{
-    $product_review_id = ProductReview::CreateProductReview($db, $product_id,$userId, $stars);
-
-    if($hasComment){
-        ProductComment::CreateProductComment($db,$product_id,$userId,$product_review_id,$comment);
+$cartId = Cart::GetCartIdByUserId($db,$userId);
+if($cartId === -1){
+    Cart::CreateCartIfNotExists($db,$userId);
+    $cartId = Cart::GetCartIdByUserId($db, $userId);
+    if($cartId === -1){
+        http_response_code(500);
+        echo json_encode(['error'=>" impossible de créer un panier pour l'utilisateur id: $userId"]);
+        exit;
     }
+}
+
+try{
+    CartProduct::AddProductToCart($db,$cartId,$variant_id,$quantity, $variantAttributes);
 }catch(ErrorException $e){
     http_response_code(500);
     echo json_encode(['error'=>$e->getMessage()]);
     exit;
 }
 
-http_response_code(200);
-echo json_encode(['message'=>"Commentaire créé avec succès"]);
+http_response_code(201);
+echo json_encode(['message'=>'Produit ajouté au panier avec succès']);
 exit;
-
-
-

@@ -55,6 +55,24 @@ class VariantImage{
 
         
     }
+    public static function GetProductFirstImageByVariantId(Database $db,int $variant_id): VariantImage{
+        
+        $query ="SELECT vi.* from variant_image vi 
+        Join variant v on v.id = vi.variant_id 
+        where v.id = :variant_id 
+        and vi.position = 1 order by v.id asc limit 1";
+
+        $params = [':variant_id' => $variant_id];
+        $results = $db->executeQuery($query,$params);
+
+        if(empty($results)){
+            throw new ErrorException("no images found in database");
+        }
+        $row = $results[0];
+        return new VariantImage($row['id'],$row['variant_id'], $row['image_name'], $row['alt_text'],$row['position']);
+
+        
+    }
 
 
     /**

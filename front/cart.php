@@ -1,5 +1,23 @@
 <?php
 require_once   '../back/getData.php';
+session_start();
+$cartProductsDisplay = [];
+$benchmarks = [];
+if(!isset($_SESSION['user'])){
+    $_SESSION['message']="Vous avez besoin d'être connecté pour accéder au panier";
+    header("Location: ./login.php");
+    exit;
+}
+$userId = $_SESSION['user']->GetId();
+$response = GetData(['action'=>'getcartproductsbyuserid', 'user_id'=>$userId]);
+if(isset($response['error'])){
+    var_dump($response['error']);
+}else{
+    $benchmarks[]=$response['benchmark'];
+    $cartProductsDisplay = $response['cartProductsDisplay'];
+}
+
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -22,19 +40,28 @@ require_once   '../back/getData.php';
 
         <div class="center">
             <div class="cart d-flex d-flex justify-content-center align-items-center mt-5 flex-column overflow-y-auto mh-80">
-                <div class="cart-item d-flex justify-content-center mt-5 gap-5 text-color align-items-center">
-                    <a class="nav-link " href="./product.php?productid=this->productid">
-                        <img src="product-img" alt="product">
-                    </a>
-                    <a class="nav-link " href="./product.php?productid=this->productid">
-                        <h4 class="cart-p-name">product name</h4>
-                    </a>
-                    <h5 class="cart-p-description">product description</h5>
-                        <p class="cart-attr m-0">attribute1 value</p>
-                        <p class="cart-attr m-0">attribute2 value</p>
-                    <div class="quantity-select">- 5 +</div>
-                    <button class="delete-cart-item ">Supprimer</button>
-                </div> 
+                <?php if (!empty($cartProductsDisplay)):
+                    foreach($cartProductsDisplay as $cartProductDisplay):
+                    ?>
+                    <div class="cart-item d-flex justify-content-center mt-5 gap-5 text-color align-items-center">
+                        <a class="nav-link " href="./product.php?id=<?=$cartProductDisplay->cartProduct->GetProductId() ?>">
+                            <img src="<?= $cartProductDisplay->variantImage->GetRelativeUrl() ?>" alt="Icône" width="48" height="48">
+                        </a>
+                        <a class="nav-link " href="./product.php?id=<?=$cartProductDisplay->cartProduct->GetProductId() ?>">
+                            <h4 class="cart-p-name"><?= $cartProductDisplay->variant->GetName()?></h4>
+                        </a>
+                            <?php foreach($cartProductDisplay->cartProduct->variantAttributes as $variantAttribute) :?>
+                            <p class="cart-attr m-0"><?= $variantAttribute->GetValue() ?></p>
+                            <?php endforeach;?>
+                        <div class="quantity-select"><?= $cartProductDisplay->cartProduct->GetQuantity() ?></div>
+                        <div>
+                            <button onclick="ReduceQuantity(<?= $cartProductDisplay->cartProduct->GetId() ?>)" class="btn btn-light">-</button>
+                            <button onclick="AddQuantity(<?= $cartProductDisplay->cartProduct->GetId() ?>)" class="btn btn-light">+</button>
+                            
+                        </div>
+                        <button class="delete-cart-item ">Supprimer</button>
+                    </div> 
+                <?php endforeach;endif; ?>
            </div>
            <div class="cart-confirm d-flex justify-content-center align-items-center mt-5">
                <a class="nav-link" href="./checkout.php">
@@ -51,6 +78,20 @@ require_once   '../back/getData.php';
 
 
     </div>
-    <?php include './includes/footer.php'; ?>
+    <?php include './includes/footer.php';
+        include './includes/benchmark.php';
+    ?>
+
+    <script>
+        function AddQuantity(cartProductId){
+            
+        }
+
+        function ReduceQuantity(cartProductId){
+            
+        }
+    </script>
+
+
 </body>
 </html>

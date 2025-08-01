@@ -24,7 +24,7 @@ class Cart{
         $params =[':user_id'=>$user_id];
         $results = $db->executeQuery($query,$params);
         if(empty($results)){
-            throw new ErrorException("no cart found");
+            return -1;
         }
         return $results[0]['id'];
     }

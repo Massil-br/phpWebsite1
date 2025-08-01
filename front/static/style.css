@@ -225,9 +225,29 @@ header-footer-bg-color{
     background-color: var(--header-footer-color);
 }
 
+.bg-reviews{
+    background-color: var(--color-deep-dark-blue);
+   
+}
+.bg-reviews-top{
+    width:100%;
+    border-radius: 1rem;
+    background-color: var(--color-anthracite-grey);
+}
+.bg-reviews-bot{
+    width:100%;
+    border-radius: 1rem;
+    background-color: var(--card-text-color);
+}
+
+.color-star{
+    color:var(--bouton-color);
+}
 
 
-
+.w-reviews{
+    width: 60vw;
+}
 
 
 .offcanvas{
@@ -617,6 +637,10 @@ cart-item{
         display: block;
     }
 
+    .w-reviews{
+        width:75vw;
+    }
+
     
 
     .col{
@@ -910,6 +934,9 @@ cart-item{
         min-width: 50px;
         height: 35px;
         font-size: 0.9rem;
+    }
+    .w-reviews{
+        padding:0 !important;
     }
 
     .thumbnail {

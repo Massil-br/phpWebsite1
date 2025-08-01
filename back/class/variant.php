@@ -34,6 +34,14 @@ class ProductVariant{
         return $this->stock;
     }
 
+    public function GetName():string{
+        global $db;
+        $query = "SELECT name FROM product Where id = :product_id";
+        $params= [':product_id'=>$this->product_id];
+        $results = $db->executeQuery($query,$params);
+        return $results[0]['name'];
+    }
+
     public static  function GetFirstVariantByProductId(Database $db, int $id):ProductVariant{
     $query = "SELECT * FROM variant WHERE product_id = :id";
     $params =[
@@ -48,6 +56,19 @@ class ProductVariant{
     }
     throw new ErrorException("no variant found for this product, product_id : $id");
         
+    }
+
+
+    public static function GetVariantById(Database $db, int $variant_id):ProductVariant{
+        $query = "SELECT * FROM variant WHERE id = :id";
+        $params = [':id'=>$variant_id];
+        $results = $db->executeQuery($query, $params);
+        if(empty($results)){
+            throw new ErrorException("no variant found");
+        }
+        $row = $results[0];
+        $variant = new ProductVariant($row['id'], $row['product_id'], $row['sku'], $row['price'], $row['stock'], $row['created_at']);
+        return $variant;
     }
 
 
