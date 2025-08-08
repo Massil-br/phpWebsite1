@@ -21,6 +21,10 @@ class Category{
         return $this->name;
     }
 
+    public function GetDescription():string{
+        return $this->description;
+    }
+
 
 
 

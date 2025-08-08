@@ -36,31 +36,34 @@ if(isset($response['error'])){
         
     <div id="main">
         <?php include './includes/leftAdWrapper.php' ?>
-
+        
+        
 
         <div class="center">
-            <div class="cart d-flex d-flex justify-content-center align-items-center mt-5 flex-column overflow-y-auto mh-80 overflow-x-hidden"  >
+            <div class="scroll-container mt-5">
                 <?php if (!empty($cartProductsDisplay)):
                     foreach($cartProductsDisplay as $cartProductDisplay):
                     ?>
-                    <div class="cart-item d-flex justify-content-between mt-3 gap-5 text-color align-items-center flex-wrap bg-reviews w-reviews rounded-2 p-2 ">
-                        <a class="nav-link mb-0 " href="./product.php?id=<?=$cartProductDisplay->cartProduct->GetProductId() ?>">
-                            <img src="<?= $cartProductDisplay->variantImage->GetRelativeUrl() ?>" alt="Icône" width="48" height="48">
-                        </a>
-                        <a class="nav-link mx-1 mb-0 " href="./product.php?id=<?=$cartProductDisplay->cartProduct->GetProductId() ?>">
-                            <h4 class="cart-p-name"><?= $cartProductDisplay->variant->GetName()?></h4>
-                        </a>
-                            <?php foreach($cartProductDisplay->cartProduct->variantAttributes as $variantAttribute) :?>
-                            <p class="cart-attr mx-1 mb-0"><?= $variantAttribute->GetValue() ?></p>
-                            <?php endforeach;?>
-                        <div class="quantity-select mx-1 mb-0"><?= $cartProductDisplay->cartProduct->GetQuantity() ?></div>
-                        <div>
-                            <button onclick="ReduceQuantity(<?= $cartProductDisplay->cartProduct->GetId() ?>)" class="btn btn-light">-</button>
-                            <button onclick="AddQuantity(<?= $cartProductDisplay->cartProduct->GetId() ?>)" class="btn btn-light">+</button>
-                            
+                    
+                        <div class="cart-item d-flex justify-content-between m-1 gap-2 text-color align-items-center flex-wrap bg-reviews w-100 rounded-2 p-2 ">
+                            <a class="nav-link mb-0 " href="./product.php?id=<?=$cartProductDisplay->cartProduct->GetProductId() ?>">
+                                <img src="<?= $cartProductDisplay->variantImage->GetRelativeUrl() ?>" alt="Icône" width="48" height="48">
+                            </a>
+                            <a class="nav-link mx-1 mb-0 " href="./product.php?id=<?=$cartProductDisplay->cartProduct->GetProductId() ?>">
+                                <h4 class="cart-p-name"><?= $cartProductDisplay->variant->GetName()?></h4>
+                            </a>
+                                <?php foreach($cartProductDisplay->cartProduct->variantAttributes as $variantAttribute) :?>
+                                <p class="cart-attr mx-1 mb-0"><?= $variantAttribute->GetValue() ?></p>
+                                <?php endforeach;?>
+                            <div class="quantity-select mx-1 mb-0"><?= $cartProductDisplay->cartProduct->GetQuantity() ?></div>
+                            <div>
+                                <button onclick="ReduceQuantity(<?= $cartProductDisplay->cartProduct->GetId() ?>)" class="btn btn-light">-</button>
+                                <button onclick="AddQuantity(<?= $cartProductDisplay->cartProduct->GetId() ?>)" class="btn btn-light">+</button>
+                                
+                            </div>
+                            <button class="btn btn-danger delete-cart-item ">Supprimer</button>
                         </div>
-                        <button class="btn btn-danger delete-cart-item ">Supprimer</button>
-                    </div> 
+     
                 <?php endforeach;endif; ?>
            </div>
            <div class="cart-confirm d-flex justify-content-center align-items-center mt-5">

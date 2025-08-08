@@ -15,6 +15,8 @@ function GetData(array $params):array{
             return GetCategories();
         case 'getsubcategories':
             return GetSubCategories($params);
+        case 'getallsubcategories':
+            return GetAllSubcategories();
         case 'getproductcard':
             return GetProductCards($params);
         case 'getproductdetail':
@@ -49,6 +51,8 @@ function GetData(array $params):array{
             return GetCommentReviewsById($params);
         case 'getcartproductsbyuserid':
             return GetCartProductsByUserId($params);
+        case 'getallproducts':
+            return GetAllProducts();
         default:
             return ['error' => 'Unknown action'];
     }
@@ -119,6 +123,11 @@ function GetCategories():array{
     return ['categories' => $categories, 'benchmark'=>$benchmark->GetBenchmark()];
 }
 
+/**
+ * Summary of GetSubCategories
+ * @param array $params
+ * @return array{benchmark: string, subcategories: SubCategory[]|array{error: string}}
+ */
 function GetSubCategories(array $params):array{
     global $db;
     $benchmark = new Benchmark("GetSubCategories");
@@ -133,6 +142,17 @@ function GetSubCategories(array $params):array{
     }
     $benchmark->EndBenchmark();
     return ['subcategories' => $subcategories, 'benchmark'=>$benchmark->GetBenchmark()];
+}
+
+
+function GetAllSubcategories():array{
+    global $db;
+    $benchmark = new Benchmark("GetAllSubcategories");
+    $benchmark->StartBenchmark();
+    $subcategories = SubCategory::GetAllSubcategories($db);
+    $benchmark->EndBenchmark();
+    return ['subcategories'=>$subcategories,'benchmark'=>$benchmark->GetBenchmark()];
+
 }
 
 function GetProductCards( array $params):array{
@@ -862,4 +882,15 @@ function GetCartProductsByUserId($params): array{
     $benchmark->EndBenchmark();
     return ['cartProductsDisplay'=>$cartProductsDisplay, 'benchmark'=>$benchmark->GetBenchmark()];
 
+}
+
+
+function GetAllProducts():array{
+    global $db;
+    $benchmark = new Benchmark("GetAllProducts");
+    $benchmark->StartBenchmark();
+
+    $products = Product::GetAllProducts($db);
+    $benchmark->EndBenchmark();
+    return ['products'=>$products, 'benchmark'=>$benchmark->GetBenchmark()];
 }

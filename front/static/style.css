@@ -116,10 +116,14 @@ body,html{
 
 }
 
+.min-h-75vh{
+    min-height: 75vh;
+}
+
 #main {
     flex-grow: 1;
     display: flex;
-    justify-content: space-between; /* Changez center par space-between */
+    justify-content: space-between; 
     align-items: flex-start;
     gap: 40px;
     padding: 20px;
@@ -175,7 +179,9 @@ body,html{
     min-width: 0; /* Ajoutez ceci pour éviter les débordements */
 }
 
-
+.bg-color{
+    background-color: var(--background-color);
+}
 
 .center {
     flex: 1;
@@ -245,8 +251,10 @@ header-footer-bg-color{
 }
 
 
-.w-reviews{
-    width: 60vw;
+.w-reviews {
+    width: min(75vw, 1000px); /* Responsive avec maximum */
+    max-width: 100%; /* Empêche le débordement */
+    margin-bottom: 0.5rem; /* Espacement entre les éléments */
 }
 
 
@@ -380,7 +388,17 @@ a{
 .mw-80vw{
     max-width: 80vw;
 }
-
+.scroll-container {
+  max-height: 600px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-top: 0;
+  box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f1f1f1;
+}
 
 
 
@@ -637,9 +655,7 @@ cart-item{
         display: block;
     }
 
-    .w-reviews{
-        width:75vw;
-    }
+   
 
     
 
@@ -900,6 +916,11 @@ cart-item{
         margin-top: 20px;
     }
 
+    .scroll-container {
+        padding-top: 0.5rem;
+        max-height: 400px;
+    }
+
     .product-title {
         font-size: 1.5rem;
     }
@@ -928,6 +949,8 @@ cart-item{
     }
 }
 
+
+
 @media (max-width: 576px) {
     .size-btn {
         max-width:fit-content;
@@ -935,15 +958,19 @@ cart-item{
         height: 35px;
         font-size: 0.9rem;
     }
-    .w-reviews{
-        padding:0 !important;
-        
-    }
+    
+   
 
     .thumbnail {
         width: 50px;
         height: 50px;
         margin-right: 5px;
+    }
+}
+
+@media(max-width: 460px){
+    .ajust-after{
+        margin-top: 5rem !important;
     }
 }
 

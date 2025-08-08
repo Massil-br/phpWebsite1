@@ -19,6 +19,12 @@ class VariantImage{
         $this->position = $position;
         
     }
+    public function GetVariantId():int{
+        return $this->variant_id;
+    }
+    public function GetId(): int{
+        return $this->id;
+    }
 
     public function GetImageName(): string{
         return $this->image_name;

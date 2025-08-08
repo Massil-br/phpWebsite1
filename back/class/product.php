@@ -531,6 +531,26 @@ class Product{
         return $products;
 
     }
+
+    /**
+     * Summary of GetAllProducts
+     * @param Database $db
+     * @return Product[]
+     */
+    public static function GetAllProducts(Database $db):array{
+        $query = "SELECT * FROM `product`";
+        $results = $db->executeQuery($query);
+        $products = [];
+        if(empty($results)){
+            return $products;
+        }
+        foreach($results as $row){
+            $products[]= new Product($row['id'],$row['subcategory_id'],$row['name'],$row['description'], new DateTime($row['created_at']));
+        }
+        return $products;
+    }
+
+
     /**
      * Summary of GetProductsByCategoryWithFiltersAndSort
      * @param Database $db

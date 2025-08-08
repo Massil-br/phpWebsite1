@@ -42,7 +42,7 @@
                     <label for="">Confirmer le mot de passe</label>
                     <input type="password" name="passwordConfirm" required>
 
-                    <button type="submit" id="submit-button">S'inscrire</button>
+                    <button class="btn btn-primary my-3" type="submit" id="submit-button">S'inscrire</button>
                     <div id="registerMsg" class="mt-3 text-center"></div>
                     
                 </form>

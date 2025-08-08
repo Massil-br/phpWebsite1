@@ -70,7 +70,14 @@
                 <li>
                     <a class="nav-link active" aria-current="page" href="./register.php">S'inscrire</a>
                 </li>
+               
+
                 <?php  else:?>
+                <?php if($_SESSION['user']->GetRole() === 'admin'||$_SESSION['user']->GetRole() === 'dev'): ?>
+                    <li>
+                        <a class="nav-link active" aria-current="page" href="./adminDashboardHome.php">Admin</a>
+                    </li>
+                <?php endif;?>
                 <li>
                 <a class="nav-link active" aria-current="page" href="./profile.php"><?= $_SESSION['user']->getFirstName() ?></a>
                 </li>
